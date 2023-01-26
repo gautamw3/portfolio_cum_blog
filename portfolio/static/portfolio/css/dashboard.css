@@ -1,0 +1,110 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+body {
+  overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  margin-left: -15rem;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 15rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -15rem;
+  }
+}
+
+.dashboard-hr {
+  border: none;
+  height: 3px;
+  /* Set the hr color */
+  color: #0ae8f3; /* old IE */
+  background-color: #0ae8f3; /* Modern Browsers */
+}
+
+#user-profile-img {
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  margin-bottom: 18px;
+}
+
+img:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+.list-unstyled > li {
+  padding-left: 20px;
+}
+
+.list-unstyled > li > a {
+  color: #0e9266;
+}
+
+.profile-area{
+  position:relative;
+  display: block;
+  width: 150px;
+  margin: auto;
+}
+.profile-area img{
+  max-width:100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+.middle {
+  transition: .5s ease;
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+  background-color: rgba(0, 123, 255,.8);
+  z-index: 1;
+}
+.profile-area:hover .middle{
+  display:block !important  ;
+  z-index:1;
+}
+.text {
+  color: white;
+  font-size: 16px;
+  padding: 16px 32px;
+}

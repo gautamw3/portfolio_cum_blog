@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	{% load static %}
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="icon" href="{% static '/portfolio/img/favicon.png' %}" type="image/png">
+	<title>Portfolio cum Blog - {% block title %} {% endblock %}</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="{% static '/portfolio/css/bootstrap.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/vendors/linericon/style.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/vendors/owl-carousel/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/css/magnific-popup.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/vendors/nice-select/css/nice-select.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/vendors/animate-css/animate.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/vendors/flaticon/flaticon.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/css/toaster.min.css' %}">
+	<!-- main css -->
+	<link rel="stylesheet" href="{% static '/portfolio/css/style.css' %}">
+	<link rel="stylesheet" href="{% static '/portfolio/css/dashboard.css' %}">
+</head>
+
+<body>
+	<!--================Header Menu Area =================-->
+	<header class="header_area">
+		<div class="main_menu">
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<div class="container">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<a class="navbar-brand" href=""><img src="{% static '/portfolio/img/logo.png' %}" alt=""></a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+						<ul class="nav navbar-nav menu_nav justify-content-end">
+							<li class="nav-item active"><a class="nav-link" href=""><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="/about-us.php">About</a></li>
+							<li class="nav-item submenu dropdown">
+								<a class="nav-link" href="#">Portfolio</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="/portfolio.php">Portfolio</a></li>
+									<li class="nav-item"><a class="nav-link" href="/portfolio-details.php">Portrfolio Details</a>
+								</ul>
+							</li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Pages</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="/elements.php">Elements</a>
+								</ul>
+							</li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Blog</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="/blog.php">Blog</a></li>
+									<li class="nav-item"><a class="nav-link" href="/blog-details.php">Blog Details</a></li>
+								</ul>
+							</li>
+							<li class="nav-item"><a class="nav-link" href="/contact.php">Contact</a></li>
+							{% if request.user.is_authenticated %}
+								<li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user" aria-hidden="true"></i> Welcome,
+									{{request.user.first_name}}</a></li>
+								<li class="nav-item"><a class="nav-link" href="{% url 'user_logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+							{% else %}
+								<li class="nav-item"><a class="nav-link" onclick="$('#portfolioSignupModal').modal()" style="cursor: pointer !important;"><i class="fa fa-user-plus" aria-hidden="true"></i> Signup</a></li>
+								<li class="nav-item"><a class="nav-link" onclick="$('#portfolioSigninModal').modal()" style="cursor: pointer !important;"><i class="fa fa-sign-in" aria-hidden="true"></i> Signin</a></li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</header>
+	<!--================Header Menu Area =================-->
+
+	{% block pagecontent %} {% endblock %}
+
+<!--================ Start Footer Area =================-->
+	<footer class="footer_area section_gap">
+		<div class="container">
+			<div class="row footer_inner justify-content-center">
+				<div class="col-lg-6 text-center">
+					<aside class="f_widget social_widget">
+						<div class="f_logo">
+							<img src="{% static '/portfolio/img/logo.png' %}" alt="">
+						</div>
+						<div class="f_title">
+							<h4>Follow Me</h4>
+						</div>
+						<ul class="list">
+							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+							<li><a href="#"><i class="fa fa-behance"></i></a></li>
+						</ul>
+					</aside>
+					<div class="copyright">
+						<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!--================End Footer Area =================-->
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="{% static '/portfolio/js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static '/portfolio/js/popper.js' %}"></script>
+	<script src="{% static '/portfolio/js/bootstrap.min.js' %}"></script>
+	<script src="{% static '/portfolio/js/stellar.js' %}"></script>
+	<script src="{% static '/portfolio/js/jquery.magnific-popup.min.js' %}"></script>
+	<script src="{% static '/portfolio/vendors/nice-select/js/jquery.nice-select.min.js' %}"></script>
+	<script src="{% static '/portfolio/vendors/isotope/imagesloaded.pkgd.min.js' %}"></script>
+	<script src="{% static '/portfolio/vendors/isotope/isotope-min.js' %}"></script>
+	<script src="{% static '/portfolio/vendors/owl-carousel/owl.carousel.min.js' %}"></script>
+	<script src="{% static '/portfolio/js/jquery.ajaxchimp.min.js' %}"></script>
+	<script src="{% static '/portfolio/js/mail-script.js' %}"></script>
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="{% static '/portfolio/js/gmaps.min.js' %}"></script>
+	<script src="{% static '/portfolio/js/theme.js' %}"></script>
+	<script src="{% static '/portfolio/js/toaster.min.js' %}"></script>
+	<script src="{% static '/portfolio/js/portfolio_script.js' %}"></script>
+	<script> var SITE_ROOT = "http://127.0.0.1:8080" </script>
+</body>
+
+<!--=================== Signup Modal Starts ===================-->
+<div class="modal" id="portfolioSignupModal" data-backdrop="static">
+	<div class="modal-dialog modal-lg">
+    	<div class="modal-content">
+
+      	<!-- Modal Header -->
+      	<div class="modal-header">
+        	<h4 class="modal-title modalHeading">Signup</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+      	</div>
+
+      	<!-- Modal body -->
+      	<div class="modal-body">
+      		<div class="row" id="validationAlert" style="display: none">
+		        <div class="col-md-12">
+		        	<div class="alert alert-danger alert-dismissable">
+		            	<strong>error!</strong> Please fix the errors below
+		        	</div>
+		        </div>
+    		</div>
+    		<div class="row" id="existanceAlert" style="display: none">
+		        <div class="col-md-12">
+		        	<div class="alert alert-danger alert-dismissable">
+		            	<strong>error!</strong> <span id="existanceMessage"></span>
+		        	</div>
+		        </div>
+    		</div>
+	        <form id="portfolioSignupForm">
+				{% csrf_token %}
+	        	<div class="row">
+	        		<div class="col-md-6">
+			        	<div class="form-group">
+			    			<label for="firstName"><strong>First Name:</strong></label>
+			    			<input type="text" class="form-control" id="firstName" placeholder="Enter First Name" name="firstName" required>
+			  			</div>
+			  		</div>
+			  		<div class="col-md-6">
+			  			<div class="form-group">
+			    			<label for="lastName"><strong>Last Name:</strong></label>
+			    			<input type="text" class="form-control" id="lastName" placeholder="Enter Last Name" name="lastName" required>
+			  			</div>
+			  		</div>
+			  	</div>
+			  	<div class="row">
+	        		<div class="col-md-6">
+			  			<div class="form-group">
+			    			<label for="userMail"><strong>Email:</strong></label>
+			    			<input type="Email" class="form-control" id="userMail" placeholder="Enter Email" name="userMail" onkeyup="getValidateInputField($.trim($('#userMail').val()), 'userMail', '')" autocomplete="off" required>
+			    			<alert id="alert-userMail" style="display: none;color: red"><span><i class="fa fa-warning" aria-hidden="true"></i> Not a valid email id</span></alert>
+			  			</div>
+			  		</div>
+			  		<div class="col-md-6">
+			  			<div class="form-group">
+			    			<label for="userMobile"><strong>Mobile:</strong></label>
+			    			<input type="text" class="form-control" id="userMobile" placeholder="Enter Mobile *" name="userMobile" onkeyup="if (/\D/g.test(this.value)) this.value= this.value.replace(/\D/g,'');getValidateInputField($.trim($('#userMobile').val()), 'userMobile', '')" maxlength="15" autocomplete="off" required>
+			    			<alert id="alert-userMobile" style="display: none;color: red"><span><i class="fa fa-warning" aria-hidden="true"></i> Not a valid mobile number </span></alert>
+			  			</div>
+			  		</div>
+			  	</div>
+			  	<div class="row">
+			  		<div class="col-md-6">
+			  			<div class="form-group">
+					    	<label for="password"><strong>Password:</strong></label>
+					    	<input type="password" class="form-control" id="password" placeholder="Enter password *" name="password" onkeyup="return getValidateInputField($.trim($('#password').val()), 'password', '')" required>
+					    	<alert id="alert-password" style="display: none;color: red"><span><i class="fa fa-warning" aria-hidden="true"></i> Invalid Password </span></alert>
+					    </div>
+			  		</div>
+			  		<div class="col-md-6">
+			  			<div class="form-group">
+			    			<label for="passord_confirm"><strong>Confirm Password:</strong></label>
+			    			<input type="password" class="form-control" id="passord_confirm" placeholder="Confirm Password *" name="passord_confirm" onkeyup="return getValidateInputField($.trim($('#passord_confirm').val()), 'passord_confirm', '')" required>
+			    			<alert id="alert-passord_confirm" style="display: none;color: red"><span><i class="fa fa-warning" aria-hidden="true"></i> Password mismatch </span></alert>
+			  			</div>
+			  		</div>
+		  		</div>
+	  		    <button type="button" class="btn btn-primary btn-block" id="signupSubmit" onclick="return registerUser()">Submit</button>
+			</form>
+    	</div>
+	</div>
+  </div>
+</div>
+<!--=================== Signup Modal Ends ===================-->
+
+<!--=================== Signin Modal Starts ===================-->
+<div class="modal" id="portfolioSigninModal" data-backdrop="static">
+	<div class="modal-dialog modal-md">
+    	<div class="modal-content">
+
+      	<!-- Modal Header -->
+      	<div class="modal-header">
+        	<h4 class="modal-title modalHeadingSignIn">Signin</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+      	</div>
+
+      	<!-- Modal body -->
+      	<div class="modal-body">
+	        <form id="portfolioSigninForm">
+				{% csrf_token %}
+			  	<div class="row">
+			  		<div class="col-md-12">
+		        		<div class="form-group">
+			    			<label for="userMailSignIn"><strong>Email:</strong></label>
+			    			<input type="Email" class="form-control" id="userMailSignIn" placeholder="Enter Email" name="userMail" onkeyup="getValidateInputField($.trim($('#userMailSignIn').val()), 'userMailSignIn', '')" required>
+			    			<alert id="alert-userMailSignIn" style="display: none;color: red"><span><i class="fa fa-warning" aria-hidden="true"></i> Not a valid email id</span></alert>
+			  			</div>
+			  		</div>
+			  	</div>
+			  	<div class="row">
+			  		<div class="col-md-12">
+			  			<div class="form-group">
+					    	<label for="passwordSignIn"><strong>Password:</strong></label>
+					    	<input type="password" class="form-control" id="passwordSignIn" placeholder="Enter password *" name="password" required>
+					    	<p style="margin-top: 10px;">Forgot password?<a href="JavaScript:void(0)" onclick="$('#portfolioSigninModal').modal('hide');$('#forgotPasswordModal').modal()"> Click here</a></p>
+					    </div>
+					</div>
+			  	</div>
+	  		    <button type="button" class="btn btn-primary btn-block" id="loginSubmit" onclick="return loginUser()">Login</button>
+			</form>
+    	</div>
+	</div>
+  </div>
+</div>
+<!--=================== Signin Modal Ends ===================-->
+
+<!--=================== Forgot Password Modal Starts ===================-->
+<div class="modal" id="forgotPasswordModal" data-backdrop="static">
+	<div class="modal-dialog modal-md">
+    	<div class="modal-content">
+
+      	<!-- Modal Header -->
+      	<div class="modal-header">
+        	<h4 class="modal-title modalHeadingPassReset">Password Reset</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+      	</div>
+
+      	<!-- Modal body -->
+      	<div class="modal-body">
+      		<div class="row" id="validationAlertPassReset" style="display: none">
+		        <div class="col-md-12">
+		        	<div class="alert alert-danger alert-dismissable">
+		            	<strong>error!</strong> Wrong email or password
+		        	</div>
+		        </div>
+    		</div>
+	        <form id="portfolioPassResetForm">
+				{% csrf_token %}
+			  	<div class="row">
+			  		<div class="col-md-12">
+		        		<div class="form-group">
+			    			<label for="userMailPassReset"><strong>Email:</strong></label>
+			    			<input type="Email" class="form-control" id="userMailPassReset" placeholder="Enter Email *" name="userMail" onkeyup="getValidateInputField($.trim($('#userMailPassReset').val()), 'userMailPassReset', '')" required>
+			    			<alert id="alert-userMailPassReset" style="display: none;color: red"><span><i class="fa fa-warning" aria-hidden="true"></i> Not a valid email id</span></alert>
+			  			</div>
+			  		</div>
+			  	</div>
+	  		    <button type="button" class="btn btn-primary btn-block" id="passwordResetLinkRequest" onclick="return sendPasswordResetLink()">Submit</button>
+			</form>
+    	</div>
+	</div>
+  </div>
+</div>
+<!--=================== Forgot Password Modal Ends ===================-->
+
+<!--=================== Password Reset Modal Starts ===================-->
+<!-- <div class="modal" id="passwordResetModal" data-backdrop="static">
+	<div class="modal-dialog modal-md">
+    	<div class="modal-content"> -->
+
+      	<!-- Modal Header -->
+      	<!-- <div class="modal-header">
+        	<h4 class="modal-title modalHeadingPassReset">Password Reset</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+      	</div> -->
+
+      	<!-- Modal body -->
+      	<!-- <div class="modal-body">
+      		<div class="row" id="validationAlertPassReset" style="display: none">
+		        <div class="col-md-12">
+		        	<div class="alert alert-danger alert-dismissable">
+		            	<strong>error!</strong> Wrong email or password
+		        	</div>
+		        </div>
+    		</div>
+	        <form>
+			  	<div class="row">
+			  		<div class="col-md-12">
+		        		<div class="form-group">
+			    			<label for="resetPassword"><strong>New Password:</strong></label>
+			    			<input type="text" class="form-control" id="resetPassword" placeholder="Enter New Password *" name="resetPassword" onkeyup="return getValidateInputField($.trim($('#resetPassword').val()), 'resetPassword', '')" required>
+			    			<alert id="alert-resetPassword" style="display: none;color: red"><span><i class="fa fa-warning" aria-hidden="true"></i> Not a valid email id</span></alert>
+			  			</div>
+			  		</div>
+			  	</div>
+			  	<div class="row">
+			  		<div class="col-md-12">
+		        		<div class="form-group">
+			    			<label for="resetPasswordConfirm"><strong>New Password:</strong></label>
+			    			<input type="password" class="form-control" id="resetPasswordConfirm" placeholder="Confirm New Password *" name="resetPasswordConfirm" onkeyup="return getValidateInputField($.trim($('#resetPasswordConfirm').val()), 'resetPasswordConfirm', '')" required>
+			    			<alert id="alert-resetPasswordConfirm" style="display: none;color: red"><span><i class="fa fa-warning" aria-hidden="true"></i> Password mismatch </span></alert>
+			  			</div>
+			  		</div>
+			  	</div>
+	  		    <button type="button" class="btn btn-primary btn-block" id="passwordResetLinkRequest" onclick="return sendPasswordResetLink()">Submit</button>
+			</form>
+    	</div>
+	</div>
+  </div>
+</div> -->
+<!--=================== Password Reset Modal Ends ===================-->
+
+</html>
