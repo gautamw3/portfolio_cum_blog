@@ -1,0 +1,68 @@
+{% extends 'portfolio/base_templates/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block pagecontent %}
+{% load static %}
+
+<!--================ Start portfolio Banner Area =================-->
+	<section class="banner_area">
+		<div class="banner_inner d-flex align-items-center">
+			<div class="container">
+				<div class="banner_content text-right">
+					<h1>{{ banner_heading_pref }} Details</h1>
+					<div class="page_link">
+						<a href="{% url 'index' %}">Home</a>
+						<a href="#">Portfolio</a>
+						<a href="#">{{ page_details.breadcrumb_mid_item }}</a>
+						<a href="#" disabled>Details</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================ End Portfolio Banner Area =================-->
+
+	<!--================ Start Portfolio Details Area =================-->
+	<section class="portfolio_details_area section_gap">
+		<div class="container">
+			<div class="portfolio_details_inner">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="left_img">
+							<img class="img-fluid" src="{{ page_details.image }}" alt="">
+						</div>
+					</div>
+					<div class="offset-md-1 col-md-5">
+						<div class="portfolio_right_text mt-30">
+							<h4>{{ page_details.heading }}</h4>
+							<p>{{ page_details.summary }}</p>
+							<ul class="list">
+								<li>
+									<span>Rating</span>:
+									{% for each_item in page_details.rating %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+<!--									<i class="fa fa-star"></i>-->
+<!--									<i class="fa fa-star"></i>-->
+<!--									<i class="fa fa-star"></i>-->
+<!--									<i class="fa fa-star"></i>-->
+								</li>
+								<li><span>Experience</span>: {{ page_details.total_experience }}</li>
+								<li><span>Using since</span>: {{ page_details.using_since }}</li>
+								<li><span>Completed</span>: 17 Aug 2018</li>
+							</ul>
+							<ul class="list social_details">
+								<li><a href="{{ page_details.linkedin }}" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a></li>
+								<li><a href="{{ page_details.tweeter }}" target="_blank"><i class="fa fa-twitter fa-2x"></i></a></li>
+								<li><a href="{{ page_details.instagram }}" target="_blank"><i class="fa fa-instagram fa-2x"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<p>{{ page_details.description }}</p>
+			</div>
+		</div>
+	</section>
+	<!--================ Start Portfolio Details Area =================-->
+
+{% endblock %}
+
