@@ -197,7 +197,7 @@ function getValidateInputField(inputValue, inputId, referenced) {
     let emailPattern = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
   	let strongPasswordPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
   	let mediumPasswordPattern = mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-  	if(inputId == "userMail" || inputId == 'userMailPassReset' || inputId == 'userMailSignIn') {
+  	if(inputId == "userMail" || inputId == 'userMailPassReset' || inputId == 'userMailSignIn' || inputId == 'new_client_email') {
   		if(emailPattern.test(inputValue.trim()) == false) {
   			if(referenced) {
   				return false;
@@ -402,4 +402,45 @@ function ajax_file_upload(file_obj) {
             }
         });
     }
+}
+
+function submitNewClient() {
+    let new_client_email = $.trim($("#new_client_email").val());
+    let csrfmiddlewaretoken = $.trim($("input[name=csrfmiddlewaretoken]").val());
+    let isEmailValidated = false;
+    if(new_client_email == "") {
+        $("#new_client_email").css("border", "1px solid red");
+    } else {
+        isEmailValidated = getValidateInputField(new_client_email, "new_client_email", true);
+        if(isEmailValidated) {
+          $("#new_client_email").css("border", ""), $("#new_client_email").next(alert).hide();
+          isEmailValidated = true;
+        } else {
+          $("#new_client_email").next(alert).show();
+        }
+    }
+    if(isEmailValidated) {
+        $("#new_lead_form_btn").addClass('active').attr('disabled', 'disabled').text('loading...');
+        $.ajax({
+          type: 'POST',
+          url: SITE_ROOT + '/new_client_feed/',
+          data: $.param({
+              'new_client_email': new_client_email,
+              'csrfmiddlewaretoken':csrfmiddlewaretoken
+          }),
+          dataType: 'json',
+          success: function(results) {
+            toastr[results.response](results.responseMessage, results.responseMessageInfo);
+            if(results.response == 'success') {
+              $("#new_client_email").val('');
+            } else {
+              $("#new_lead_form_btn").removeClass('active');
+              $("#new_lead_form_btn").removeAttr('disabled');
+              $("#new_lead_form_btn").text('Subscribe');
+            }
+          }
+        });
+  } else {
+    return false;
+  }
 }

@@ -142,3 +142,36 @@ class UserSkill(models.Model):
     class Meta:
         verbose_name = 'User Skill'
         verbose_name_plural = 'User Skills'
+
+
+class Review(models.Model):
+    """
+    Stores and manages the customer reviews
+    """
+    reviewer_name = models.CharField(max_length=100, null=False, blank=False)
+    reviewer_rating = models.CharField(max_length=1, null=False, blank=False, choices=UserSkill.STAR_RATINGS)
+    review_description = models.TextField(default=f'Amazing service. Gautam has no doubt exceptional skill set and the'
+                                                  ' enough work experience to deliver what is expected by his client.')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.reviewer_name
+
+    class Meta:
+        verbose_name = 'Customer Review'
+        verbose_name_plural = 'Customer Reviews'
+
+
+class NewClient(models.Model):
+    """ Stores the email addresses of the new clients who came across the application and shown interest """
+    client_email = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.client_email
+
+    class Meta:
+        verbose_name = 'Client email'
+        verbose_name_plural = 'Client emails'

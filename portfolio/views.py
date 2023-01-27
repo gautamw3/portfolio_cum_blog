@@ -2,7 +2,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, reverse, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .models import PortfolioUser, UserSkill, Skill, SkillCategory, PortfolioUserSocialMediaLink
+from .models import (PortfolioUser, UserSkill, Skill, SkillCategory, PortfolioUserSocialMediaLink,
+                     Review, NewClient)
+
 
 
 class GlobalResponse:
@@ -62,6 +64,15 @@ def index(request):
             obj_user = get_global_user(request)
             obj_portfolio_user = PortfolioUser.objects.get(user__id=obj_user.id)
         obj_user_skills = UserSkill.objects.filter(user__id=obj_user.id)
+        obj_customer_reviews = Review.objects.all()
+        customer_reviews = []
+        for each_review in obj_customer_reviews:
+            customer_review = {
+                'reviewer': each_review.reviewer_name,
+                'rating': [i for i in range(int(each_review.get_reviewer_rating_display()))],
+                'description': each_review.review_description
+            }
+            customer_reviews.append(customer_review)
         skills = {}
         for each_item in obj_user_skills:
             if each_item.skill_category.get_category_name_display() in skills:
@@ -100,7 +111,8 @@ def index(request):
             'linkedin': obj_social_links.linkedin,
             'tweeter': obj_social_links.tweeter,
             'instagram': obj_social_links.instagram,
-            'skills': skills
+            'skills': skills,
+            'customer_reviews': customer_reviews
         }
     except Exception as err:
         context = {
@@ -216,9 +228,9 @@ def tech_details(request, tech_id):
                 obj_user = get_global_user(request)
             obj_tech_details = UserSkill.objects.get(user__id=obj_user.id, skill__id=tech_id)
             obj_user_social_link = PortfolioUserSocialMediaLink.objects.get(user_id=obj_user.user_portfolio.id)
-            context['page_details']['linkedin'] = obj_user_social_link.linkedin
-            context['page_details']['tweeter'] = obj_user_social_link.tweeter
-            context['page_details']['instagram'] = obj_user_social_link.instagram
+            context['linkedin'] = obj_user_social_link.linkedin
+            context['tweeter'] = obj_user_social_link.tweeter
+            context['instagram'] = obj_user_social_link.instagram
             breadcrumb_mid_item_cat_list = obj_tech_details.skill_category.get_category_name_display().split()
             if len(breadcrumb_mid_item_cat_list) > 1:
                 context['page_details']['heading'] = f'{obj_tech_details.skill.category_item_name} ' \
@@ -240,3 +252,28 @@ def tech_details(request, tech_id):
         context['page_details'] = None
         context['exception'] = err.__str__()
     return render(request, template, context)
+
+
+def new_client_feed(request):
+    """
+    Stores the email address of the client who shown interest by submitting their email address
+    """
+    response_data = get_global_response(request)
+    try:
+        if request.method == 'POST':
+            client_email = request.POST['new_client_email']
+            obj_new_client_email = NewClient(client_email=client_email)
+            obj_new_client_email.save()
+            response_data['response'] = 'success'
+            response_data['responseMessage'] = 'We got that'
+            response_data['responseMessageInfo'] = 'Thanks for showing interest in availing our services'
+        else:
+            response_data['response'] = 'error'
+            response_data['responseMessage'] = 'Something went wrong'
+            response_data['responseMessageInfo'] = 'Invalid HTTP request'
+    except Exception as err:
+        pass
+        response_data['response'] = 'error'
+        response_data['responseMessage'] = err.__str__()
+        response_data['responseMessageInfo'] = 'Please try after sometime'
+    return JsonResponse(response_data)
