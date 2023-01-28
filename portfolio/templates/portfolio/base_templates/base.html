@@ -47,17 +47,17 @@
 								<a class="nav-link" href="#">Portfolio</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" href="{% url 'user_portfolio' %}">Portfolio</a></li>
-									<li class="nav-item"><a class="nav-link" href="/portfolio-details.php">Portrfolio Details</a>
+									<li class="nav-item"><a class="nav-link" href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 8 %} {% endif %}">Profile Details</a>
 								</ul>
 							</li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Blog</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="/blog.php">Blog</a></li>
-									<li class="nav-item"><a class="nav-link" href="/blog-details.php">Blog Details</a></li>
-								</ul>
-							</li>
+<!--							<li class="nav-item submenu dropdown">-->
+<!--								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+<!--								 aria-expanded="false">Blog</a>-->
+<!--								<ul class="dropdown-menu">-->
+<!--									<li class="nav-item"><a class="nav-link" href="/blog.php">Blog</a></li>-->
+<!--									<li class="nav-item"><a class="nav-link" href="/blog-details.php">Blog Details</a></li>-->
+<!--								</ul>-->
+<!--							</li>-->
 							<li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}">Contact</a></li>
 							{% if request.user.is_authenticated %}
 								<li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user" aria-hidden="true"></i> Welcome,
@@ -90,9 +90,10 @@
 							<h4>Follow Me</h4>
 						</div>
 						<ul class="list">
-							<li><a href="{{ linkedin }}" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-							<li><a href="{{ tweeter }}" target="_blank"><i class="fa fa-twitter"></i></a></li>
-							<li><a href="{{ instagram }}" target="_blank"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="{{ github }}" target="_blank"><i class="fa fa-github fa-2x"></i></a></li>
+							<li><a href="{{ linkedin }}" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a></li>
+							<li><a href="{{ tweeter }}" target="_blank"><i class="fa fa-twitter fa-2x"></i></a></li>
+							<li><a href="{{ instagram }}" target="_blank"><i class="fa fa-instagram fa-2x"></i></a></li>
 						</ul>
 					</aside>
 					<div class="copyright">

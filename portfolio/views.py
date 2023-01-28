@@ -110,6 +110,7 @@ def index(request):
             'headline': headline,
             'profile_photo': profile_photo,
             'about': about,
+            'github': obj_social_links.github,
             'linkedin': obj_social_links.linkedin,
             'tweeter': obj_social_links.tweeter,
             'instagram': obj_social_links.instagram,
@@ -230,6 +231,7 @@ def tech_details(request, tech_id):
                 obj_user = get_global_user(request)
             obj_tech_details = UserSkill.objects.get(user__id=obj_user.id, skill__id=tech_id)
             obj_user_social_link = PortfolioUserSocialMediaLink.objects.get(user_id=obj_user.user_portfolio.id)
+            context['github'] = obj_user_social_link.github
             context['linkedin'] = obj_user_social_link.linkedin
             context['tweeter'] = obj_user_social_link.tweeter
             context['instagram'] = obj_user_social_link.instagram
@@ -313,6 +315,7 @@ def contact_us(request):
         context['work_days'] = obj_user.user_portfolio.get_work_days_display()
         context['work_shift'] = obj_user.user_portfolio.get_work_shift_display()
         obj_user_social_link = PortfolioUserSocialMediaLink.objects.get(user_id=obj_user.user_portfolio.id)
+        context['github'] = obj_user_social_link.github
         context['linkedin'] = obj_user_social_link.linkedin
         context['tweeter'] = obj_user_social_link.tweeter
         context['instagram'] = obj_user_social_link.instagram
@@ -349,6 +352,7 @@ def about_me(request):
                 }
                 customer_reviews.append(customer_review)
             obj_user_social_link = PortfolioUserSocialMediaLink.objects.get(user_id=obj_user.user_portfolio.id)
+            context['github'] = obj_user_social_link.github
             context['linkedin'] = obj_user_social_link.linkedin
             context['tweeter'] = obj_user_social_link.tweeter
             context['instagram'] = obj_user_social_link.instagram
@@ -400,7 +404,83 @@ def user_portfolio(request):
                             }
                         }
                     ]
+            context['heading'] = obj_user.user_portfolio.heading
+            context['headline'] = obj_user.user_portfolio.headline
             context['skills'] = skills
+            context['github'] = obj_social_links.github
+            context['linkedin'] = obj_social_links.linkedin
+            context['tweeter'] = obj_social_links.tweeter
+            context['instagram'] = obj_social_links.instagram
+        else:
+            context['error'] = 'Invalid HTTP method detected'
+    except Exception as err:
+        context['exception'] = err.__str__()
+    return render(request, template, context)
+
+
+def user_profile_details(request, user_id):
+    """
+    Loads user profile details page
+    """
+    template = 'portfolio/profile_details.html'
+    context = {
+        'page_title': 'Profile details'
+    }
+    try:
+        if request.method == 'GET':
+            obj_portfolio_user = PortfolioUser.objects.get(user_id=user_id)
+            obj_user_skills = UserSkill.objects.filter(user__id=user_id)
+            obj_social_links = PortfolioUserSocialMediaLink.objects.get(user_id=obj_portfolio_user.id)
+            skills = {}
+            for each_item in obj_user_skills:
+                rating = int(each_item.get_rating_out_of_five_display())
+                if rating == 5:
+                    progress_bar_color = 1
+                elif rating == 4:
+                    progress_bar_color = 7
+                elif rating == 3:
+                    progress_bar_color = 4
+                elif rating == 2:
+                    progress_bar_color = 3
+                else:
+                    progress_bar_color = 2
+                if each_item.skill_category.get_category_name_display() in skills:
+                    skills[each_item.skill_category.get_category_name_display()].append(
+                        {
+                            each_item.skill.category_item_name: {
+                                'id': each_item.skill.id,
+                                'summary': each_item.summary,
+                                'description': each_item.description,
+                                'logo': each_item.skill.category_item_image.url,
+                                'total_experience_in_year': each_item.get_total_experience_in_year_display(),
+                                'rating_out_of_five': rating * 20,
+                                'progress_bar_color': progress_bar_color
+                            }
+                        }
+                    )
+                else:
+                    skills[each_item.skill_category.get_category_name_display()] = [
+                        {
+                            each_item.skill.category_item_name: {
+                                'id': each_item.skill.id,
+                                'summary': each_item.summary,
+                                'description': each_item.description,
+                                'logo': each_item.skill.category_item_image.url,
+                                'total_experience_in_year': each_item.get_total_experience_in_year_display(),
+                                'rating_out_of_five': rating * 20,
+                                'progress_bar_color': progress_bar_color
+                            }
+                        }
+                    ]
+            context['role'] = obj_portfolio_user.role
+            context['profile_short_description'] = obj_portfolio_user.profile_short_description
+            context['mobile'] = obj_portfolio_user.mobile
+            context['email'] = obj_portfolio_user.user.email
+            context['about'] = obj_portfolio_user.about
+            context['profile_photo'] = obj_portfolio_user.profile_photo.url
+            context['user_first_name'] = obj_portfolio_user.user.first_name
+            context['skills'] = skills
+            context['github'] = obj_social_links.github
             context['linkedin'] = obj_social_links.linkedin
             context['tweeter'] = obj_social_links.tweeter
             context['instagram'] = obj_social_links.instagram
@@ -408,4 +488,5 @@ def user_portfolio(request):
             context['error'] = 'Invalid HTTP method detected'
     except Exception as err:
         print("EXCEPTION=====>", err.__str__())
+        context['exception'] = err.__str__()
     return render(request, template, context)

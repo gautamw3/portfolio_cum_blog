@@ -19,6 +19,8 @@ class PortfolioUser(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_portfolio')
+    role = models.CharField(max_length=100, null=False, blank=False)
+    profile_short_description = models.TextField()
     mobile = models.CharField(max_length=10, null=False, blank=False)
     heading = models.CharField(max_length=100, null=False, blank=False)
     headline = models.CharField(max_length=222, null=False, blank=False)
@@ -60,6 +62,7 @@ class PortfolioUserSocialMediaLink(models.Model):
     Stores and manages various social media links associated with a user
     """
     user = models.ForeignKey(PortfolioUser, on_delete=models.CASCADE, related_name='user_social_links')
+    github = models.CharField(max_length=222)
     linkedin = models.CharField(max_length=222)
     tweeter = models.CharField(max_length=222)
     instagram = models.CharField(max_length=222)
@@ -67,7 +70,7 @@ class PortfolioUserSocialMediaLink(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.user.user.first_name} {self.user.user.last_name} | LinkedIn: {self.linkedin} | Tweeter: {self.tweeter} ' \
+        return f'{self.user.user.first_name} {self.user.user.last_name} | Github: {self.github} | LinkedIn: {self.linkedin} | Tweeter: {self.tweeter} ' \
                f'| Instagram: {self.instagram}'
 
     class Meta:

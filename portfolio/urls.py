@@ -12,5 +12,6 @@ urlpatterns = [
     path('contact_us/', portfolio_view.contact_us, name='contact_us'),
     path('about_me/', portfolio_view.about_me, name='about_me'),
     path('user_portfolio/', portfolio_view.user_portfolio, name='user_portfolio'),
+    path('user_profile_details/<int:user_id>', portfolio_view.user_profile_details, name='user_profile_details'),
     path('froala_editor/',include('froala_editor.urls'))
 ]

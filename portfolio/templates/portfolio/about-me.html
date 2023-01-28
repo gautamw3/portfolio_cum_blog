@@ -38,8 +38,14 @@
 					</div>
 					<div class="mb-50 wow fadeIn" data-wow-duration=".8s">
 						<p>{{ about|safe }}</p>
+						<ul class="list social_details">
+							<li><a href="{{ github }}" target="_blank"><i class="fa fa-github fa-2x"></i></a></li>
+							<li><a href="{{ linkedin }}" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a></li>
+							<li><a href="{{ tweeter }}" target="_blank"><i class="fa fa-twitter fa-2x"></i></a></li>
+							<li><a href="{{ instagram }}" target="_blank"><i class="fa fa-instagram fa-2x"></i></a></li>
+						</ul>
 					</div>
-					<a href="#" class="primary-btn">More Info</a>
+					<a href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 8 %} {% endif %}" class="primary-btn">More Info</a>
 				</div>
 			</div>
 		</div>

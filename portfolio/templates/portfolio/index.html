@@ -79,8 +79,6 @@
 						{% for key, values in skills.items %}
 							<li data-filter=".{{ key|cut:' ' }}">{{key}}</li>
 						{% endfor %}
-<!--						<li data-filter=".work">Creative Work </li>-->
-<!--						<li data-filter=".web">Web Design</li>-->
 					</ul>
 				</div>
 			</div>
@@ -97,90 +95,12 @@
 									<a href="{% url 'tech_details' value_one.id %}">
 										<h4>{{key_one}}</h4>
 									</a>
-<!--								<p>Client Project</p>-->
 								</div>
 							</div>
 						{% endfor %}
 					{% endfor %}
 				</div>
 			{% endfor %}
-<!--			<div class="col-lg-3 col-sm-6 col-sm-12 brand work grid-item">-->
-<!--				<div class="projects_item">-->
-<!--					<img class="img-fluid w-100" src="{% static '/portfolio/img/works/work2.jpg' %}" alt="">-->
-<!--					<div class="projects_text">-->
-<!--						<a href="portfolio-details.html">-->
-<!--							<h4>2D Vinyl Design</h4>-->
-<!--						</a>-->
-<!--						<p>Client Project</p>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="col-lg-3 col-sm-6 work grid-item">-->
-<!--				<div class="projects_item">-->
-<!--					<img class="img-fluid w-100" src="{% static '/portfolio/img/works/work3.jpg' %}" alt="">-->
-<!--					<div class="projects_text">-->
-<!--						<a href="portfolio-details.html">-->
-<!--							<h4>2D Vinyl Design</h4>-->
-<!--						</a>-->
-<!--						<p>Client Project</p>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="col-lg-6 col-sm-6 brand work grid-item">-->
-<!--				<div class="projects_item">-->
-<!--					<img class="img-fluid w-100" src="{% static '/portfolio/img/works/work5.jpg' %}" alt="">-->
-<!--					<div class="projects_text">-->
-<!--						<a href="portfolio-details.html">-->
-<!--							<h4>2D Vinyl Design</h4>-->
-<!--						</a>-->
-<!--						<p>Client Project</p>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="col-lg-6 col-sm-6 brand web grid-item">-->
-<!--				<div class="projects_item">-->
-<!--					<img class="img-fluid w-100" src="{% static '/portfolio/img/works/work4.jpg' %}" alt="">-->
-<!--					<div class="projects_text">-->
-<!--						<a href="portfolio-details.html">-->
-<!--							<h4>2D Vinyl Design</h4>-->
-<!--						</a>-->
-<!--						<p>Client Project</p>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="col-lg-6 col-sm-6 brand work web grid-item">-->
-<!--				<div class="projects_item">-->
-<!--					<img class="img-fluid w-100" src="{% static '/portfolio/img/works/work8.jpg' %}" alt="">-->
-<!--					<div class="projects_text">-->
-<!--						<a href="portfolio-details.html">-->
-<!--							<h4>2D Vinyl Design</h4>-->
-<!--						</a>-->
-<!--						<p>Client Project</p>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="col-lg-3 col-sm-6 brand work web grid-item">-->
-<!--				<div class="projects_item">-->
-<!--					<img class="img-fluid w-100" src="{% static '/portfolio/img/works/work6.jpg' %}" alt="">-->
-<!--					<div class="projects_text">-->
-<!--						<a href="portfolio-details.html">-->
-<!--							<h4>2D Vinyl Design</h4>-->
-<!--						</a>-->
-<!--						<p>Client Project</p>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="col-lg-3 col-sm-6 brand work web grid-item">-->
-<!--				<div class="projects_item">-->
-<!--					<img class="img-fluid w-100" src="{% static '/portfolio/img/works/work7.jpg' %}" alt="">-->
-<!--					<div class="projects_text">-->
-<!--						<a href="portfolio-details.html">-->
-<!--							<h4>2D Vinyl Design</h4>-->
-<!--						</a>-->
-<!--						<p>Client Project</p>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
 		</div>
 	</div>
 </section>
@@ -200,7 +120,7 @@
 				<div class="mb-50 wow fadeIn" data-wow-duration=".8s">
 					<p>{{ about|safe }}</p>
 				</div>
-				<a href="#" class="primary-btn">More Info</a>
+				<a href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 8 %} {% endif %}" class="primary-btn">More Info</a>
 			</div>
 		</div>
 	</div>
