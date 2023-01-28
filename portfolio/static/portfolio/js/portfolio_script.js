@@ -20,11 +20,6 @@ $(document).ready(function() {
 	  "hideMethod": "fadeOut"
 	}
 
-  // Get user basic details
-  if($("#dashboardContent").length) {
-    loadUserBasicDetails();
-  }
-
   <!-- Menu Toggle Script -->
   if($("#menu-toggle").length) {
     $("#menu-toggle").click(function(e) {
@@ -32,20 +27,26 @@ $(document).ready(function() {
       $("#wrapper").toggleClass("toggled");
     });
   }
-  
-  // Show Password Reset Modal
-  // let getCurrentUrl = window.location.href;
-  // alert(getCurrentUrl);
-  // let arrCurrentUrlItem = getCurrentUrl.split("?q=")
-  // alert(arrCurrentUrlItem[0]+" ^ "+arrCurrentUrlItem[1]);
-  // let arrQueryStringItem = arrCurrentUrlItem[1].split("/");
-  // alert(arrQueryStringItem[0]+" & "+arrQueryStringItem[1]+" & "+arrQueryStringItem[2]);
-  // let userId = window.atob(arrQueryStringItem[0]);
-  // alert(userId);
-  // let message = window.atob(arrQueryStringItem[1]);
-  // let authHash = window.atob(arrQueryStringItem[2]);
-  // alert(userId+" ^ "+message+" ^ "+authHash);
+
+    if ($("#success").length != 0) {
+        toastr['success']('Query form submitted successfully', 'Thanks & wait for our response');
+        $("#id_client_name, #id_client_email, #id_subject, #id_file_supporting_the_message, #id_message").val('');
+    }
+    if ($("#error").length != 0) {
+        toastr['error']('There are some exceptions within the form input', 'Please fix the errors displayed');
+    }
+
 });
+
+function showSignupModal() {
+    $("#portfolioSignupModal").modal('show');
+    $("#portfolioSigninModal").modal('hide');
+}
+
+function showLoginModal() {
+    $("#portfolioSigninModal").modal('show');
+    $("#portfolioSignupModal").modal('hide');
+}
 
 /*****************************
 * Loads user's basic details *
@@ -431,12 +432,11 @@ function submitNewClient() {
           dataType: 'json',
           success: function(results) {
             toastr[results.response](results.responseMessage, results.responseMessageInfo);
+            $("#new_lead_form_btn").removeClass('active');
+            $("#new_lead_form_btn").removeAttr('disabled');
+            $("#new_lead_form_btn").text('Subscribe');
             if(results.response == 'success') {
               $("#new_client_email").val('');
-            } else {
-              $("#new_lead_form_btn").removeClass('active');
-              $("#new_lead_form_btn").removeAttr('disabled');
-              $("#new_lead_form_btn").text('Subscribe');
             }
           }
         });

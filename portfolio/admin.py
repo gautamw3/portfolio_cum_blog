@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     PortfolioUser, SkillCategory, Skill, UserSkill, PortfolioUserSocialMediaLink,
-    Review, NewClient
+    Review, NewClient, PortfolioUserAddress, ClientLead
 )
 
 # Register your models here.
@@ -13,3 +13,5 @@ admin.site.register(UserSkill)
 admin.site.register(PortfolioUserSocialMediaLink)
 admin.site.register(Review)
 admin.site.register(NewClient)
+admin.site.register(PortfolioUserAddress)
+admin.site.register(ClientLead)

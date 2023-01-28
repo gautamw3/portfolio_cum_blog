@@ -1,0 +1,80 @@
+{% extends 'portfolio/base_templates/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block pagecontent %}
+{% load static %}
+
+<!--================ About Banner Area =================-->
+<style>
+	.owl-dots {
+		display:none;
+	}
+</style>
+
+	<section class="banner_area">
+		<div class="banner_inner d-flex align-items-center">
+			<div class="container">
+				<div class="banner_content text-right">
+					<h1>About Me</h1>
+					<div class="page_link">
+						<a href="{% url 'index' %}">Home</a>
+						<a href="#" disabled>About</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End About Banner Area =================-->
+
+	<!--================ Start About Area =================-->
+	<section class="about-area section_gap gray-bg">
+		<div class="container">
+			<div class="row align-items-center justify-content-between">
+				<div class="col-lg-5 about-left">
+					<img class="img-fluid" src="{{ profile_photo }}" alt="">
+				</div>
+				<div class="col-lg-6 col-md-12 about-right">
+					<div class="main-title text-left">
+						<h1>about myself</h1>
+					</div>
+					<div class="mb-50 wow fadeIn" data-wow-duration=".8s">
+						<p>{{ about|safe }}</p>
+					</div>
+					<a href="#" class="primary-btn">More Info</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================ End About Area =================-->
+
+	<!--================ Start Testimonial Area =================-->
+{% if request.user.is_authenticated is not True %}
+	<div class="section_gap testimonial_area">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-7 text-left">
+					<div class="active_testimonial owl-carousel" data-slider-id="1">
+					<!-- single testimonial -->
+					{% for each_review in customer_reviews %}
+						<div class="single_testimonial">
+							<div class="testimonial_head">
+								<img src="{% static '/portfolio/img/quote.png' %}" alt="">
+								<h4>{{ each_review.reviewer }}</h4>
+								<div class="review">
+									{% for each_rating_item in each_review.rating %}
+										<i class="fa fa-star"></i>
+									{% endfor %}
+								</div>
+							</div>
+						<div class="testimonial_content">
+							<p>{{ each_review.description }}</p>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+{% endif %}
+	<!--================ End Testimonial Area =================-->
+{% endblock %}

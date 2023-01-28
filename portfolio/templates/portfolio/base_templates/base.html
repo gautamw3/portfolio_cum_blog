@@ -3,6 +3,7 @@
 
 <head>
 	{% load static %}
+	{{ form.media }}
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -40,12 +41,12 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav justify-content-end">
-							<li class="nav-item active"><a class="nav-link" href=""><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-							<li class="nav-item"><a class="nav-link" href="/about-us.php">About</a></li>
+							<li class="nav-item active"><a class="nav-link" href="{% url 'index' %}"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="{% url 'about_me' %}">About</a></li>
 							<li class="nav-item submenu dropdown">
 								<a class="nav-link" href="#">Portfolio</a>
 								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="/portfolio.php">Portfolio</a></li>
+									<li class="nav-item"><a class="nav-link" href="{% url 'user_portfolio' %}">Portfolio</a></li>
 									<li class="nav-item"><a class="nav-link" href="/portfolio-details.php">Portrfolio Details</a>
 								</ul>
 							</li>
@@ -57,14 +58,14 @@
 									<li class="nav-item"><a class="nav-link" href="/blog-details.php">Blog Details</a></li>
 								</ul>
 							</li>
-							<li class="nav-item"><a class="nav-link" href="/contact.php">Contact</a></li>
+							<li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}">Contact</a></li>
 							{% if request.user.is_authenticated %}
 								<li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user" aria-hidden="true"></i> Welcome,
 									{{request.user.first_name}}</a></li>
 								<li class="nav-item"><a class="nav-link" href="{% url 'user_logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
 							{% else %}
-								<li class="nav-item"><a class="nav-link" onclick="$('#portfolioSignupModal').modal()" style="cursor: pointer !important;"><i class="fa fa-user-plus" aria-hidden="true"></i> Signup</a></li>
-								<li class="nav-item"><a class="nav-link" onclick="$('#portfolioSigninModal').modal()" style="cursor: pointer !important;"><i class="fa fa-sign-in" aria-hidden="true"></i> Signin</a></li>
+								<li class="nav-item"><a class="nav-link" onclick="return showSignupModal()" style="cursor: pointer !important;"><i class="fa fa-user-plus" aria-hidden="true"></i> Signup</a></li>
+								<li class="nav-item"><a class="nav-link" onclick="return showLoginModal()" style="cursor: pointer !important;"><i class="fa fa-sign-in" aria-hidden="true"></i> Signin</a></li>
 							{% endif %}
 						</ul>
 					</div>

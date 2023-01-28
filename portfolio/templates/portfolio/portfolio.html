@@ -1,0 +1,66 @@
+{% extends 'portfolio/base_templates/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block pagecontent %}
+{% load static %}
+<!--================ Start portfolio Banner Area =================-->
+	<section class="banner_area">
+		<div class="banner_inner d-flex align-items-center">
+			<div class="container">
+				<div class="banner_content text-right">
+					<h1>My Portfolio</h1>
+					<div class="page_link">
+						<a href="{% url 'index' %}">Home</a>
+						<a href="#" disabled>Portfolio</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================ End Portfolio Banner Area =================-->
+
+	<!--================ Start Portfolio Area =================-->
+	<section class="section_gap portfolio_area" id="work">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="main-title">
+					<h1>{{heading}}</h1>
+					<p>{{headline}}</p>
+				</div>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-lg-10">
+					<div class="projects_fillter">
+						<ul class="filter list">
+							<li class="active" data-filter="*">All Categories</li>
+							{% for key, values in skills.items %}
+								<li data-filter=".{{ key|cut:' ' }}">{{key}}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="projects_inner row grid">
+				<div class="grid-sizer col-sm-6 col-md-3 col-lg-3"></div>
+				{% for key, values in skills.items %}
+					<div class="col-lg-6 col-sm-6 col-sm-12 {{ key|cut:' ' }} grid-item">
+					{% for each_value in values %}
+						{% for key_one, value_one in each_value.items %}
+							<div class="projects_item">
+								<img class="img-fluid w-100" src="{{ value_one.logo }}" alt="">
+								<div class="projects_text">
+									<a href="{% url 'tech_details' value_one.id %}">
+										<h4>{{key_one}}</h4>
+									</a>
+								</div>
+							</div>
+						{% endfor %}
+					{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	<!--================ End Portfolio Area =================-->
+{% endblock %}

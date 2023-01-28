@@ -2,9 +2,11 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, reverse, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .models import (PortfolioUser, UserSkill, Skill, SkillCategory, PortfolioUserSocialMediaLink,
-                     Review, NewClient)
-
+from .models import (
+    PortfolioUser, UserSkill, Skill, SkillCategory, PortfolioUserSocialMediaLink, Review, NewClient,
+    PortfolioUserAddress, ClientLead
+)
+from .forms import ContactUs
 
 
 class GlobalResponse:
@@ -277,3 +279,133 @@ def new_client_feed(request):
         response_data['responseMessage'] = err.__str__()
         response_data['responseMessageInfo'] = 'Please try after sometime'
     return JsonResponse(response_data)
+
+
+def contact_us(request):
+    """
+    Loads contact us page
+    """
+    template = 'portfolio/contact_us.html'
+    context = {
+        'page_title': 'Contact us'
+    }
+    try:
+        if request.method == 'POST':
+            form = ContactUs(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                context['response'] = 'success'
+            else:
+                context['response'] = 'error'
+        else:
+            form = ContactUs()
+
+        if request.user.is_authenticated:
+            obj_user = User.objects.get(pk=request.user.id)
+        else:
+            obj_user = get_global_user(request)
+        obj_user_address = PortfolioUserAddress.objects.get(user_id=obj_user.user_portfolio.id)
+        context['country'] = obj_user_address.country
+        context['state'] = obj_user_address.state
+        context['city'] = obj_user_address.city
+        context['mobile'] = obj_user.user_portfolio.mobile
+        context['email'] = obj_user.email
+        context['work_days'] = obj_user.user_portfolio.get_work_days_display()
+        context['work_shift'] = obj_user.user_portfolio.get_work_shift_display()
+        obj_user_social_link = PortfolioUserSocialMediaLink.objects.get(user_id=obj_user.user_portfolio.id)
+        context['linkedin'] = obj_user_social_link.linkedin
+        context['tweeter'] = obj_user_social_link.tweeter
+        context['instagram'] = obj_user_social_link.instagram
+        context['form'] = form
+    except Exception as err:
+        context['exception'] = err.__str__()
+    return render(request, template, context)
+
+
+def about_me(request):
+    """
+    Renders the about page
+    """
+    template = 'portfolio/about-me.html'
+    context = {
+        "page_title": "About me",
+    }
+    try:
+        if request.method == "GET":
+            if request.user.is_authenticated:
+                user_id = request.user.id
+                obj_user = User.objects.get(pk=user_id)
+            else:
+                obj_user = get_global_user(request)
+            context['about'] = obj_user.user_portfolio.about
+            context['profile_photo'] = obj_user.user_portfolio.profile_photo.url
+            obj_customer_reviews = Review.objects.all()
+            customer_reviews = []
+            for each_review in obj_customer_reviews:
+                customer_review = {
+                    'reviewer': each_review.reviewer_name,
+                    'rating': [i for i in range(int(each_review.get_reviewer_rating_display()))],
+                    'description': each_review.review_description
+                }
+                customer_reviews.append(customer_review)
+            obj_user_social_link = PortfolioUserSocialMediaLink.objects.get(user_id=obj_user.user_portfolio.id)
+            context['linkedin'] = obj_user_social_link.linkedin
+            context['tweeter'] = obj_user_social_link.tweeter
+            context['instagram'] = obj_user_social_link.instagram
+            context['customer_reviews'] = customer_reviews
+        else:
+            context['error'] = 'Invalid HTTP method detected'
+    except Exception as err:
+        context['exception'] = err.__str__()
+    return render(request, template, context)
+
+
+def user_portfolio(request):
+    """
+    Loads the portfolio page
+    """
+    template = 'portfolio/portfolio.html'
+    context = {
+        'page_title': 'User Portfolio'
+    }
+    try:
+        if request.method == 'GET':
+            if request.user.is_authenticated:
+                obj_user = User.objects.get(pk=request.user.id)
+            else:
+                obj_user = get_global_user(request)
+            obj_user_skills = UserSkill.objects.filter(user__id=obj_user.id)
+            obj_social_links = PortfolioUserSocialMediaLink.objects.get(user_id=obj_user.user_portfolio.id)
+            skills = {}
+            for each_item in obj_user_skills:
+                if each_item.skill_category.get_category_name_display() in skills:
+                    skills[each_item.skill_category.get_category_name_display()].append(
+                        {
+                            each_item.skill.category_item_name: {
+                                'id': each_item.skill.id,
+                                'summary': each_item.summary,
+                                'description': each_item.description,
+                                'logo': each_item.skill.category_item_image.url
+                            }
+                        }
+                    )
+                else:
+                    skills[each_item.skill_category.get_category_name_display()] = [
+                        {
+                            each_item.skill.category_item_name: {
+                                'id': each_item.skill.id,
+                                'summary': each_item.summary,
+                                'description': each_item.description,
+                                'logo': each_item.skill.category_item_image.url
+                            }
+                        }
+                    ]
+            context['skills'] = skills
+            context['linkedin'] = obj_social_links.linkedin
+            context['tweeter'] = obj_social_links.tweeter
+            context['instagram'] = obj_social_links.instagram
+        else:
+            context['error'] = 'Invalid HTTP method detected'
+    except Exception as err:
+        print("EXCEPTION=====>", err.__str__())
+    return render(request, template, context)

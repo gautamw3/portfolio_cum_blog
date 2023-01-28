@@ -1,5 +1,5 @@
 {% extends 'portfolio/base_templates/base.html' %}
-{% block title %} {{page_title}} {% endblock %}
+{% block title %} {{ page_title }} {% endblock %}
 {% block pagecontent %}
 {% load static %}
 <!--================Home Banner Area =================-->
@@ -20,7 +20,7 @@
 						{% endif %}
 					</h1>
 					<h3>Personal portfolio Website</h3>
-					<a href="#" class="primary-btn">Hire Me</a>
+					<a href="{% url 'contact_us' %}" class="primary-btn">Hire Me</a>
 				</div>
 			</div>
 		</div>
@@ -36,7 +36,7 @@
 						{% endif %}
 					</h1>
 					<h3>Personal portfolio Website</h3>
-					<a href="#" class="primary-btn">Hire Me</a>
+					<a href="{% url 'contact_us' %}" class="primary-btn">Hire Me</a>
 				</div>
 			</div>
 		</div>
@@ -52,7 +52,7 @@
 						{% endif %}
 					</h1>
 					<h3>Personal portfolio Website</h3>
-					<a href="#" class="primary-btn">Hire Me</a>
+					<a href="{% url 'contact_us' %}" class="primary-btn">Hire Me</a>
 				</div>
 			</div>
 		</div>
@@ -198,7 +198,7 @@
 					<h1>About me</h1>
 				</div>
 				<div class="mb-50 wow fadeIn" data-wow-duration=".8s">
-					<p>{{ about }}</p>
+					<p>{{ about|safe }}</p>
 				</div>
 				<a href="#" class="primary-btn">More Info</a>
 			</div>
