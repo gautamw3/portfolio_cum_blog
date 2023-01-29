@@ -90,6 +90,9 @@ class SkillCategory(models.Model):
         ('MCHL', 'Machine learning'),
         ('NLPR', 'Natural language processing'),
         ('WEBT', 'Web Technologies'),
+        ('DVPS', 'DevOps'),
+        ('VCS', 'Version Control System'),
+        ('AGIL', 'Agile Development Tools')
     )
 
     category_name = models.CharField(max_length=4, choices=SKILL_CATEGORIES)
@@ -228,3 +231,24 @@ class ClientLead(models.Model):
     class Meta:
         verbose_name = 'Client lead'
         verbose_name_plural = 'Client leads'
+
+
+class ClientProject(models.Model):
+    """
+    Stores and manages all the information about the client projects user has done so far
+    """
+    user = models.ForeignKey(PortfolioUser, on_delete=models.CASCADE)
+    project_title = models.CharField(max_length=100)
+    client_name = models.CharField(max_length=100)
+    project_url = models.URLField(null=True, blank=True)
+    tools_and_technologies_used = models.ManyToManyField(UserSkill, related_name='tools_and_technologies_used')
+    project_description = FroalaField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user.user.first_name} {self.user.user.first_name} | {self.project_title} | {self.client_name}'
+
+    class Meta:
+        verbose_name = 'Client project'
+        verbose_name_plural = 'Client projects'
