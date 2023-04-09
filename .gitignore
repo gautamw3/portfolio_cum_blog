@@ -129,7 +129,3 @@ dmypy.json
 .pyre/
 
 .idea/
-
-# Migrations
-_migrations/*
-!_migrations/__init__.py
