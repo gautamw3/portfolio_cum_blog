@@ -6,6 +6,7 @@ from .models import (
     PortfolioUser, UserSkill, PortfolioUserSocialMediaLink, Review, NewClient, PortfolioUserAddress, ClientProject
 )
 from .forms import ContactUs
+from portfolio_cum_blog import settings
 
 
 class GlobalResponse:
@@ -28,12 +29,12 @@ class GlobalUser:
     Returns global user object
     """
     def __init__(self, user_model):
-        self.pk = 8
+        self.pk = settings.DEFAULT_USER
         self.user_model = user_model
         self.user_obj = None
 
     def get_user_obj(self):
-        self.user_obj = self.user_model.objects.get(pk=8)
+        self.user_obj = self.user_model.objects.get(pk=self.pk)
         return self.user_obj
 
 
