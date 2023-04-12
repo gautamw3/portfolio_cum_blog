@@ -9,7 +9,6 @@ from .forms import ContactUs
 from portfolio_cum_blog import settings
 
 
-
 class GlobalResponse:
     """
     Returns global response object
