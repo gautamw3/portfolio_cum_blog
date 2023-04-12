@@ -119,15 +119,19 @@ def get_customer_reviews():
 
 
 def get_social_media_links(portfolio_user_id):
-    obj_social_media_links = PortfolioUserSocialMediaLink.objects.get(user_id=portfolio_user_id)
+    try:
+        obj_social_media_links = PortfolioUserSocialMediaLink.objects.get(user_id=portfolio_user_id)
+    except Exception as err:
+        obj_social_media_links = None
     return obj_social_media_links
 
 
 def embed_social_media_links_to_context(context, obj_social_media_links):
-    context['github'] = obj_social_media_links.github
-    context['linkedin'] = obj_social_media_links.linkedin
-    context['tweeter'] = obj_social_media_links.tweeter
-    context['instagram'] = obj_social_media_links.instagram
+    if obj_social_media_links is not None:
+        context['github'] = obj_social_media_links.github
+        context['linkedin'] = obj_social_media_links.linkedin
+        context['tweeter'] = obj_social_media_links.tweeter
+        context['instagram'] = obj_social_media_links.instagram
     return context
 
 
