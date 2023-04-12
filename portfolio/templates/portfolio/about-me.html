@@ -45,7 +45,7 @@
 							<li><a href="{{ instagram }}" target="_blank"><i class="fa fa-instagram fa-3x"></i></a></li>
 						</ul>
 					</div>
-					<a href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 8 %} {% endif %}" class="primary-btn">More Info</a>
+					<a href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 2 %} {% endif %}" class="primary-btn">More Info</a>
 				</div>
 			</div>
 		</div>

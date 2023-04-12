@@ -47,7 +47,7 @@
 								<a class="nav-link" href="#">Portfolio</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" href="{% url 'user_portfolio' %}">Portfolio</a></li>
-									<li class="nav-item"><a class="nav-link" href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 8 %} {% endif %}">Profile Details</a>
+									<li class="nav-item"><a class="nav-link" href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 2 %} {% endif %}">Profile Details</a>
 								</ul>
 							</li>
 <!--							<li class="nav-item submenu dropdown">-->
@@ -126,7 +126,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="{% static '/portfolio/js/theme.js' %}"></script>
 	<script src="{% static '/portfolio/js/toaster.min.js' %}"></script>
 	<script src="{% static '/portfolio/js/portfolio_script.js' %}"></script>
-	<script> var SITE_ROOT = "http://127.0.0.1:8080" </script>
+	<script> var SITE_ROOT = "http://65.0.91.2" </script>
 </body>
 
 <!--=================== Signup Modal Starts ===================-->

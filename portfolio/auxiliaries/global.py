@@ -28,7 +28,7 @@ class GlobalUser:
     Returns global user object
     """
     def __init__(self, user_model):
-        self.pk = 8
+        self.pk = 2
         self.user_model = user_model
         self.user_obj = None
 

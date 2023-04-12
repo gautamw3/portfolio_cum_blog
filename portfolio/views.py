@@ -6,6 +6,8 @@ from .models import (
     PortfolioUser, UserSkill, PortfolioUserSocialMediaLink, Review, NewClient, PortfolioUserAddress, ClientProject
 )
 from .forms import ContactUs
+from portfolio_cum_blog import settings
+
 
 
 class GlobalResponse:
@@ -28,12 +30,12 @@ class GlobalUser:
     Returns global user object
     """
     def __init__(self, user_model):
-        self.pk = 8
+        self.pk = settings.DEFAULT_USER
         self.user_model = user_model
         self.user_obj = None
 
     def get_user_obj(self):
-        self.user_obj = self.user_model.objects.get(pk=8)
+        self.user_obj = self.user_model.objects.get(pk=self.pk)
         return self.user_obj
 
 
@@ -138,7 +140,7 @@ def index(request):
             obj_portfolio_user = PortfolioUser.objects.get(pk=obj_user.user_portfolio.id)
         else:
             obj_user = get_global_user(request)
-            obj_portfolio_user = PortfolioUser.objects.get(user__id=obj_user.id)
+            obj_portfolio_user = PortfolioUser.objects.get(pk=obj_user.user_portfolio.id)
         customer_reviews = get_customer_reviews()
         skills = get_user_skills(obj_user.id)
         heading = obj_portfolio_user.heading
@@ -450,7 +452,6 @@ def user_profile_details(request, user_id):
                         'project_description': each_client_project.project_description
                     }
                 )
-            print("CLIENT PROJECT=====>", client_project_list)
             context['client_project_list'] = client_project_list
             context['role'] = obj_portfolio_user.role
             context['profile_short_description'] = obj_portfolio_user.profile_short_description
@@ -464,6 +465,5 @@ def user_profile_details(request, user_id):
         else:
             context['error'] = 'Invalid HTTP method detected'
     except Exception as err:
-        print("EXCEPTION=====>", err.__str__())
         context['exception'] = err.__str__()
     return render(request, template, context)

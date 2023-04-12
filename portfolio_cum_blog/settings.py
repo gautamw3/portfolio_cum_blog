@@ -145,7 +145,7 @@ USE_TZ = str(os.environ.get('USE_TZ')) == '1'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = os.environ.get('STATIC_URL')
+STATIC_URL = os.path.join(BASE_DIR, os.environ.get('STATIC_URL'))
 
 STATIC_ROOT = os.path.join(BASE_DIR, os.environ.get('STATIC_ROOT'))
 
@@ -155,8 +155,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, os.environ.get('STATIC_ROOT'))
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Base url to serve media files
-MEDIA_URL = os.environ.get('MEDIA_URL')
+MEDIA_URL = os.path.join(BASE_DIR, os.environ.get('MEDIA_URL'))
 # Path where media is stored
 MEDIA_ROOT = os.path.join(BASE_DIR, os.environ.get('MEDIA_ROOT'))
 
 CRISPY_TEMPLATE_PACK = os.environ.get('CRISPY_TEMPLATE_PACK')
+
+DEFAULT_USER = os.environ.get('DEFAULT_USER')
