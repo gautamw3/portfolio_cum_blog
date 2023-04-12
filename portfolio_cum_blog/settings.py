@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'froala_editor',
-    'storages'
+    'storages',
 ]
 
 MIDDLEWARE = [
