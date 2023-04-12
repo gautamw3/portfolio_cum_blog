@@ -63,7 +63,7 @@
 					{% for each_review in customer_reviews %}
 						<div class="single_testimonial">
 							<div class="testimonial_head">
-								<img src="{% static '/portfolio/img/quote.png' %}" alt="">
+								<img src="{% static 'portfolio/img/quote.png' %}" alt="">
 								<h4>{{ each_review.reviewer }}</h4>
 								<div class="review">
 									{% for each_rating_item in each_review.rating %}
