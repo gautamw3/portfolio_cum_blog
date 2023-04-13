@@ -120,7 +120,7 @@
 				<div class="mb-50 wow fadeIn" data-wow-duration=".8s">
 					<p>{{ about|safe }}</p>
 				</div>
-				<a href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 2 %} {% endif %}" class="primary-btn">More Info</a>
+				<a href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 8 %} {% endif %}" class="primary-btn">More Info</a>
 			</div>
 		</div>
 	</div>
