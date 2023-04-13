@@ -289,7 +289,7 @@ def tech_details(request, tech_id):
             context['page_details']['description'] = obj_tech_details.description
             context['page_details']['rating'] = [i for i in range(int(obj_tech_details.rating_out_of_five))]
             context['page_details']['total_experience'] = obj_tech_details.get_total_experience_in_year_display()
-            context['page_details']['using_since'] = obj_tech_details.using_since
+            context['page_details']['last_used'] = obj_tech_details.last_used
             context['page_details']['image'] = obj_tech_details.skill.category_item_image.url
         else:
             context['error'] = f'Invalid request method: {request.method}!'

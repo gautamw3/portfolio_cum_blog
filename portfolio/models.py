@@ -168,7 +168,7 @@ class UserSkill(models.Model):
     description = FroalaField()
     rating_out_of_five = models.CharField(max_length=1, null=False, blank=False, choices=STAR_RATINGS)
     total_experience_in_year = models.CharField(max_length=10, null=False, blank=False, choices=TOTAL_EXPERIENCE)
-    using_since = models.DateField()
+    last_used = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
