@@ -2,11 +2,13 @@ from django.http import JsonResponse
 from django.shortcuts import render, reverse, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
+from django.template.loader import get_template
+from portfolio_cum_blog import settings
 from .models import (
     PortfolioUser, UserSkill, PortfolioUserSocialMediaLink, Review, NewClient, PortfolioUserAddress, ClientProject
 )
 from .forms import ContactUs
-from portfolio_cum_blog import settings
 
 
 class GlobalResponse:
@@ -324,6 +326,20 @@ def new_client_feed(request):
     return JsonResponse(response_data)
 
 
+def send_new_client_lead_mail(email_data):
+    template = 'portfolio/email_templates/new_client_lead.html'
+    message_to_attach = get_template(template).render(email_data)
+    email_message = EmailMessage(
+        "New client lead",
+        message_to_attach,
+        settings.APPLICATION_EMAIL,
+        [email_data['client_email']],
+        reply_to=[settings.APPLICATION_EMAIL]
+    )
+    email_message.content_subtype = 'html'
+    email_message.send(fail_silently=False)
+
+
 def contact_us(request):
     """
     Loads contact us page
@@ -337,6 +353,13 @@ def contact_us(request):
             form = ContactUs(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
+                email_data = {
+                    'client_name': request.POST['client_name'],
+                    'client_email': request.POST['client_email'],
+                    'subject': request.POST['subject'],
+                    'message': request.POST['message'],
+                }
+                send_new_client_lead_mail(email_data)
                 context['response'] = 'success'
             else:
                 context['response'] = 'error'
@@ -347,16 +370,20 @@ def contact_us(request):
             obj_user = User.objects.get(pk=request.user.id)
         else:
             obj_user = get_global_user(request)
-        obj_user_address = PortfolioUserAddress.objects.get(user_id=obj_user.user_portfolio.id)
+        try:
+            obj_user_address = PortfolioUserAddress.objects.get(user_id=obj_user.user_portfolio.id)
+        except PortfolioUserAddress.DoesNotExist:
+            obj_user_address = None
         obj_social_media_links = get_social_media_links(obj_user.user_portfolio.id)
         context = embed_social_media_links_to_context(context, obj_social_media_links)
-        context['country'] = obj_user_address.country
-        context['state'] = obj_user_address.state
-        context['city'] = obj_user_address.city
-        context['mobile'] = obj_user.user_portfolio.mobile
-        context['email'] = obj_user.email
-        context['work_days'] = obj_user.user_portfolio.get_work_days_display()
-        context['work_shift'] = obj_user.user_portfolio.get_work_shift_display()
+        if obj_user_address is not None:
+            context['country'] = obj_user_address.country
+            context['state'] = obj_user_address.state
+            context['city'] = obj_user_address.city
+            context['mobile'] = obj_user.user_portfolio.mobile
+            context['email'] = obj_user.email
+            context['work_days'] = obj_user.user_portfolio.get_work_days_display()
+            context['work_shift'] = obj_user.user_portfolio.get_work_shift_display()
         context['form'] = form
     except Exception as err:
         context['exception'] = err.__str__()

@@ -1,6 +1,7 @@
 from django.forms import ModelForm, TextInput
 from .models import ClientLead
 from froala_editor.widgets import FroalaEditor
+from ckeditor.fields import RichTextField
 
 
 class ContactUs(ModelForm):
@@ -14,5 +15,5 @@ class ContactUs(ModelForm):
             'client_name': TextInput(attrs={'placeholder': 'Your name'}),
             'client_email': TextInput(attrs={'placeholder': 'Your email'}),
             'subject': TextInput(attrs={'placeholder': 'Subject line'}),
-            'message': FroalaEditor,
+            'message': RichTextField(config_name='default'),
         }

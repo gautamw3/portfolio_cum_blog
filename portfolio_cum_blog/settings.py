@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'froala_editor',
     'storages',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -177,3 +178,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, os.environ.get('MEDIA_ROOT'))
 CRISPY_TEMPLATE_PACK = os.environ.get('CRISPY_TEMPLATE_PACK')
 
 DEFAULT_USER = os.environ.get('DEFAULT_USER')
+
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+APPLICATION_EMAIL = f"{os.environ.get('EMAIL_SYSTEM_ADMIN')}{os.environ.get('APPLICATION_EMAIL')}"
+DEFAULT_FROM_EMAIL = f"{os.environ.get('EMAIL_SYSTEM_ADMIN')}{os.environ.get('DEFAULT_FROM_EMAIL')}"

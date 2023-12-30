@@ -24,7 +24,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <div class="contact_info">
+                    {% if country and state and city %}
+                        <div class="contact_info">
                         <div class="info_item">
                             <i class="lnr lnr-home"></i>
                             <h6>{{ state }}, {{ country }}</h6>
@@ -41,7 +42,7 @@
                             <p>Send us your query anytime!</p>
                         </div>
                     </div>
-                    <div class="row">
+                        <div class="row">
                         <ul class="list social_details">
 							<li><a href="{{ github }}" target="_blank"><i class="fa fa-github fa-2x"></i></a></li>
 							<li><a href="{{ linkedin }}" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a></li>
@@ -49,6 +50,7 @@
 							<li><a href="{{ instagram }}" target="_blank"><i class="fa fa-instagram fa-2x"></i></a></li>
 						</ul>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="col-lg-9">
                     <form class="row contact_form" action="{% url 'contact_us' %}" method="post" enctype="multipart/form-data" id="contact_form">
@@ -65,15 +67,13 @@
                                 {{ form.subject|as_crispy_field }}
                             </div>
                             <div class="form-group">
+                                {{ form.message|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
                                 {{ form.file_supporting_the_message|as_crispy_field }}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                {{ form.message|as_crispy_field }}
-                            </div>
-                        </div>
-                        <div class="col-md-12 text-right">
+                        <div class="col-md-12 text-left">
                             <button type="submit" value="submit" class="primary-btn"><span>Send Message</span></button>
                         </div>
                     </form>
