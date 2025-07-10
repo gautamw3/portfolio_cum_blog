@@ -1,65 +1,81 @@
-My Portfolio Cum Blog Website
+# My Portfolio Cum Blog Website
+
 Welcome to my personal portfolio and blog website! This project showcases my work, shares my thoughts, and demonstrates my skills in full-stack web development.
 
-Table of Contents
-About
-Features
-Tech Stack
-Getting Started
-Project Structure
-Contributing
-License
-Contact
-About
+## Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## About
+
 This website serves as both my professional portfolio and a blogging platform. It highlights my projects, experience, and allows me to publish articles on topics I’m passionate about.
 
-Features
-Responsive, modern design
-User authentication and profiles
-Blog creation, editing, and commenting
-Project showcase section
-Interactive UI with AJAX features
-Admin panel for content management
-Tech Stack
-Programming Language: Python
-Framework: Django
-Database: PostgreSQL
-Frontend: Bootstrap, JavaScript, jQuery, SCSS/CSS, HTML
-AJAX: For dynamic content updates
-Others: Docker (optional for containerization), Shell scripting
-Getting Started
+## Features
+
+- Responsive, modern design
+- User authentication and profiles
+- Blog creation, editing, and commenting
+- Project showcase section
+- Interactive UI with AJAX features
+- Admin panel for content management
+
+## Tech Stack
+
+- **Programming Language:** Python
+- **Framework:** Django
+- **Database:** PostgreSQL
+- **Frontend:** Bootstrap, JavaScript, jQuery, SCSS/CSS, HTML
+- **AJAX:** For dynamic content updates
+- **Others:** Docker (optional for containerization), Shell scripting
+
+## Getting Started
+
 To run this project locally, follow these steps:
 
-Clone the repository
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/gautamw3/portfolio_cum_blog.git
+   cd portfolio_cum_blog
+   ```
 
-bash
-git clone https://github.com/gautamw3/portfolio_cum_blog.git
-cd portfolio_cum_blog
-Create a virtual environment and activate it
+2. **Create a virtual environment and activate it**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
 
-bash
-python3 -m venv venv
-source venv/bin/activate
-Install dependencies
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-bash
-pip install -r requirements.txt
-Configure the database
+4. **Configure the database**
 
-Update your database settings in settings.py with your PostgreSQL credentials.
-Apply migrations
+   - Update your database settings in `settings.py` with your PostgreSQL credentials.
 
-bash
-python manage.py migrate
-Run the development server
+5. **Apply migrations**
+   ```bash
+   python manage.py migrate
+   ```
 
-bash
-python manage.py runserver
-Access the site
+6. **Run the development server**
+   ```bash
+   python manage.py runserver
+   ```
 
-Open http://localhost:8000 in your browser.
-Project Structure
-Code
+7. **Access the site**
+   - Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+## Project Structure
+
+```
 portfolio_cum_blog/
 │
 ├── blog/                # Blog app
@@ -69,12 +85,17 @@ portfolio_cum_blog/
 ├── manage.py
 ├── requirements.txt
 └── ...
-Contributing
+```
+
+## Contributing
+
 Contributions are welcome! Please open an issue or submit a pull request with improvements or suggestions.
 
-License
-This project is licensed under the MIT License.
+## License
 
-Contact
-GitHub: gautamw3
-Email: your-email@example.com
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact
+
+- **GitHub:** [gautamw3](https://github.com/gautamw3)
+- **Email:** gautamkr.bee@gmail.com
