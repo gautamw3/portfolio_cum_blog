@@ -98,4 +98,3 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contact
 
 - **GitHub:** [gautamw3](https://github.com/gautamw3)
-- **Email:** gautamkr.bee@gmail.com
