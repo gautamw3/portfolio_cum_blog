@@ -23,16 +23,22 @@ click==8.2.1
     # via
     #   -r requirements.in
     #   pip-tools
+crispy-bootstrap4==2025.6
+    # via -r requirements.in
 django==4.2
     # via
     #   -r requirements.in
+    #   crispy-bootstrap4
     #   django-ckeditor-5
+    #   django-crispy-forms
     #   django-js-asset
     #   django-storages
 django-ckeditor-5==0.2.18
     # via -r requirements.in
-django-crispy-forms==1.14.0
-    # via -r requirements.in
+django-crispy-forms==2.4
+    # via
+    #   -r requirements.in
+    #   crispy-bootstrap4
 django-dotenv==1.4.2
     # via -r requirements.in
 django-froala-editor==4.5.2
