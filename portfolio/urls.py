@@ -4,6 +4,7 @@ from froala_editor import views
 
 urlpatterns = [
     path('', portfolio_view.index, name='index'),
+    path('check_input_existence/', portfolio_view.check_input_existence, name='check_input_existence'),
     path('user_signup/', portfolio_view.user_signup, name='user_signup'),
     path('user_login/', portfolio_view.user_login, name='user_login'),
     path('user_logout/', portfolio_view.user_logout, name='user_logout'),

@@ -211,7 +211,7 @@ def user_signup(request):
             response_data['response'] = 'warning'
             response_data['responseMessage'] = 'Registration Failed'
             response_data['responseMessageInfo'] = 'Invalid input/please check if each and every mandatory details' \
-                                                   'were provided or not!'
+                                                   ' were provided or not!'
     except Exception as err:
         response_data['response'] = 'error'
         response_data['responseMessage'] = 'Registration Failed'
@@ -359,12 +359,13 @@ def contact_us(request):
                     'subject': request.POST['subject'],
                     'message': request.POST['message'],
                 }
-                send_new_client_lead_mail(email_data)
+                # send_new_client_lead_mail(email_data)
                 context['response'] = 'success'
             else:
                 context['response'] = 'error'
         else:
             form = ContactUs()
+            print("############################: ", form.fields)
 
         if request.user.is_authenticated:
             obj_user = User.objects.get(pk=request.user.id)
@@ -387,6 +388,7 @@ def contact_us(request):
         context['form'] = form
     except Exception as err:
         context['exception'] = err.__str__()
+    print(context, "###############################")
     return render(request, template, context)
 
 
@@ -497,3 +499,38 @@ def user_profile_details(request, user_id):
     except Exception as err:
         context['exception'] = err.__str__()
     return render(request, template, context)
+
+
+def check_input_existence(request):
+    if request.method != 'GET':
+        return JsonResponse({
+            'response': False,
+            'responseMessage': 'Invalid HTTP method',
+            'responseMessageInfo': 'Only GET requests are allowed'
+        })
+    try:
+        input_value = request.GET.get('inputValue')
+        input_type = request.GET.get('inputField')
+        if not input_value or not input_type:
+            return JsonResponse({
+                'response': False,
+                'responseMessage': 'Missing parameters',
+                'responseMessageInfo': 'inputValue and inputField are required'
+            })
+        if input_type == 'email':
+            exists = User.objects.filter(email=input_value).exists()
+        elif input_type == 'mobile':
+            exists = PortfolioUser.objects.filter(mobile=input_value).exists()
+        else:
+            return JsonResponse({
+                'response': False,
+                'responseMessage': 'Invalid input type',
+                'responseMessageInfo': 'inputField must be email or mobile'
+            })
+        return JsonResponse({'response': exists, 'responseMessage': 'Input existence checked successfully'})
+    except Exception as err:
+        return JsonResponse({
+            'response': False,
+            'responseMessage': str(err),
+            'responseMessageInfo': 'An error occurred while checking input existence'
+        })

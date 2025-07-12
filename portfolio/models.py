@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from froala_editor.fields import FroalaField
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class PortfolioUser(models.Model):
@@ -25,7 +25,7 @@ class PortfolioUser(models.Model):
     mobile = models.CharField(max_length=10, null=False, blank=False)
     heading = models.CharField(max_length=100, null=False, blank=False)
     headline = models.CharField(max_length=222, null=False, blank=False)
-    about = RichTextField(null=True, blank=True)
+    about = CKEditor5Field(null=True, blank=True)
     profile_photo = models.ImageField(upload_to='portfolio/profile_photo')
     work_days = models.CharField(max_length=1, choices=WORK_DAYS)
     work_shift = models.CharField(max_length=1, choices=WORK_SHIFT)
@@ -166,7 +166,7 @@ class UserSkill(models.Model):
     skill_category = models.ForeignKey(SkillCategory, on_delete=models.CASCADE, related_name='skill_category')
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='skill_desc')
     summary = models.CharField(max_length=222, null=False, blank=False)
-    description = RichTextField(null=True, blank=True)
+    description = CKEditor5Field(null=True, blank=True)
     rating_out_of_five = models.CharField(max_length=1, null=False, blank=False, choices=STAR_RATINGS)
     total_experience_in_year = models.CharField(max_length=10, null=False, blank=False, choices=TOTAL_EXPERIENCE)
     last_used = models.DateField()
@@ -188,7 +188,7 @@ class Review(models.Model):
     """
     reviewer_name = models.CharField(max_length=100, null=False, blank=False)
     reviewer_rating = models.CharField(max_length=1, null=False, blank=False, choices=UserSkill.STAR_RATINGS)
-    review_description = RichTextField(null=True, blank=True)
+    review_description = CKEditor5Field(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -221,7 +221,7 @@ class ClientLead(models.Model):
     client_name = models.CharField(max_length=100, null=False, blank=False)
     client_email = models.EmailField(max_length=100, null=False, blank=False)
     subject = models.CharField(null=False, blank=False, max_length=222)
-    message = RichTextField(null=True, blank=True)
+    message = CKEditor5Field(null=True, blank=True)
     file_supporting_the_message = models.FileField(upload_to='portfolio/client_lead', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -243,7 +243,7 @@ class ClientProject(models.Model):
     client_name = models.CharField(max_length=100)
     project_url = models.URLField(null=True, blank=True)
     tools_and_technologies_used = models.ManyToManyField(UserSkill, related_name='tools_and_technologies_used')
-    project_description = RichTextField(null=True, blank=True)
+    project_description = CKEditor5Field(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

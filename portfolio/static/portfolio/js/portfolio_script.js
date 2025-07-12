@@ -1,5 +1,5 @@
 /**********************************
-* Cofigure toastr js notification *
+* Configure toaster js notification *
 **********************************/
 $(document).ready(function() {
 	toastr.options = {
@@ -92,7 +92,7 @@ function verifyMobile() {
 /*****************************************************************
 * This function handles the user registration within the system. *
 *****************************************************************/
-function registerUser() {
+async function registerUser() {
     let submitButton = $("#signupSubmit");
     let submitButtonText = $("#signupSubmit").text();
     let csrfmiddlewaretoken = $("input[name=csrfmiddlewaretoken]").val();
@@ -104,89 +104,85 @@ function registerUser() {
     let confirmPassword = $.trim($("#passord_confirm").val());
     let isEmailValidated, isMobileValidated, isPasswordValidated, isConfirmPasswordValidated;
 
-    if($("#existanceAlert").is(":visible")) {
-      return false;
+    if (firstName == "") {
+        $("#firstName").css("border", "1px solid red");
     }
-
-    if(firstName == "") {
-    	$("#firstName").css("border", "1px solid red");
+    if (lastName == "") {
+        $("#lastName").css("border", "1px solid red");
     }
-    if(lastName == "") {
-    	$("#lastName").css("border", "1px solid red");
-    }
-    if(userMail == "") {
-    	$("#userMail").css("border", "1px solid red");
+    if (userMail == "") {
+        $("#userMail").css("border", "1px solid red");
     } else {
-    	isEmailValidated = getValidateInputField(userMail, "userMail", true);
-    	if(isEmailValidated) {
-    		$("#userMail").css("border", ""), $("#userMail").next(alert).hide();
-    	} else {
-    		$("#userMail").next(alert).show();
-    	}
-      var ifEmailExists = checkInputExistance(userMail, 'userMail', 'email');
-      if(ifEmailExists == 1) {
-        return false;
-      }
+        isEmailValidated = getValidateInputField(userMail, "userMail", true);
+        if (isEmailValidated) {
+            $("#userMail").css("border", ""), $("#userMail").next(alert).hide();
+        } else {
+            $("#userMail").next(alert).show();
+        }
+        let ifEmailExists = await checkInputExistence(userMail, 'userMail', 'email');
+        if (ifEmailExists) {
+            return false;
+        }
     }
-    if(userMobile == "") {
-    	$("#userMobile").css("border", "1px solid red");
+    if (userMobile == "") {
+        $("#userMobile").css("border", "1px solid red");
     } else {
-    	isMobileValidated = getValidateInputField(userMobile, "userMobile", true);
-    	if(isMobileValidated) {
-    		$("#userMobile").css("border", ""), $("#userMobile").next(alert).hide();
-    	} else {
-    		$("#userMobile").next(alert).show();
-    	}
-      var ifMobileExists = checkInputExistance(userMobile, 'userMobile', 'mobile');
-      if(ifMobileExists == 1) {
-        return false;
-      }
+        isMobileValidated = getValidateInputField(userMobile, "userMobile", true);
+        if (isMobileValidated) {
+            $("#userMobile").css("border", ""), $("#userMobile").next(alert).hide();
+        } else {
+            $("#userMobile").next(alert).show();
+        }
+        let ifMobileExists = await checkInputExistence(userMobile, 'userMobile', 'mobile');
+        if (ifMobileExists) {
+            return false;
+        }
     }
-    if(password == "") {
-    	$("#password").css("border", '1px solid red');
+    if (password == "") {
+        $("#password").css("border", '1px solid red');
     } else {
-    	isPasswordValidated = getValidateInputField(password, "password", true);
-    	if(isPasswordValidated) {
-    		$("#password").css("border", ""), $("#password").next(alert).hide();
-    	} else {
-    		$("#password").next(alert).show();
-    	}
+        isPasswordValidated = getValidateInputField(password, "password", true);
+        if (isPasswordValidated) {
+            $("#password").css("border", ""), $("#password").next(alert).hide();
+        } else {
+            $("#password").next(alert).show();
+        }
     }
-    if(confirmPassword == "") {
-    	$("#passord_confirm").css("border", '1px solid red');
+    if (confirmPassword == "") {
+        $("#passord_confirm").css("border", '1px solid red');
     } else {
-    	isConfirmPasswordValidated = getValidateInputField(confirmPassword, "passord_confirm", true);
-    	if(isConfirmPasswordValidated) {
-    		$("#passord_confirm").css("border", ""), $("#passord_confirm").next(alert).hide();
-    	} else {
-    		$("#passord_confirm").next(alert).show();
-    	}
+        isConfirmPasswordValidated = getValidateInputField(confirmPassword, "passord_confirm", true);
+        if (isConfirmPasswordValidated) {
+            $("#passord_confirm").css("border", ""), $("#passord_confirm").next(alert).hide();
+        } else {
+            $("#passord_confirm").next(alert).show();
+        }
     }
-    if(firstName != '' && lastName != '' && isEmailValidated && isMobileValidated && isPasswordValidated && isConfirmPasswordValidated) {
-    	$("#validationAlert").hide();
-    	submitButton.addClass('active').attr('disabled', 'disabled').text("loading...");
-    	$.ajax({
-    		type:"post",
-    		url:SITE_ROOT+"/user_signup/",
-            dataTpe:'json',
-    		data:$.param({
-    		    'firstName':firstName,
-    		    'lastName':lastName,
-    		    'userMail':userMail,
-    		    'userMobile':userMobile,
-    		    'password':password,
-    		    'csrfmiddlewaretoken':csrfmiddlewaretoken
-    		}),
-    		success:function(results) {
-    			toastr[results.response](results.responseMessage, results.responseMessageInfo);
-    			submitButton.removeClass('active').removeAttr('disabled').text(submitButtonText);
-    			if(results.response == "success") {
-    				setTimeout(function() { window.location.assign(SITE_ROOT); }, 5000);
-    			}
-    		}
-    	});	
+    if (firstName != '' && lastName != '' && isEmailValidated && isMobileValidated && isPasswordValidated && isConfirmPasswordValidated) {
+        $("#validationAlert").hide();
+        submitButton.addClass('active').attr('disabled', 'disabled').text("loading...");
+        $.ajax({
+            type: "post",
+            url: SITE_ROOT + "/user_signup/",
+            dataTpe: 'json',
+            data: $.param({
+                'firstName': firstName,
+                'lastName': lastName,
+                'userMail': userMail,
+                'userMobile': userMobile,
+                'password': password,
+                'csrfmiddlewaretoken': csrfmiddlewaretoken
+            }),
+            success: function (results) {
+                toastr[results.response](results.responseMessage, results.responseMessageInfo);
+                submitButton.removeClass('active').removeAttr('disabled').text(submitButtonText);
+                if (results.response == "success") {
+                    setTimeout(function () { window.location.assign(SITE_ROOT); }, 5000);
+                }
+            }
+        });
     } else {
-    	$("#validationAlert").show();
+        $("#validationAlert").show();
     }
 }
 
@@ -271,25 +267,34 @@ function getValidateInputField(inputValue, inputId, referenced) {
 * and reports for the availability for the same                  *
 *****************************************************************/
 
-function checkInputExistance(inputValue, inputId, inputField) {
-  if(inputValue != '' && inputField != '') {
-    $.ajax({
-      type: 'POST',
-      url: SITE_ROOT+'/check-input-existance.php',
-      data: $.param({'inputValue': inputValue, 'inputField': inputField}),
-      dataType: 'json',
-      success:function(results) {
-        if(results == 1) {
-          $("#existanceMessage").text("User with the provided " +inputField+ " already exists.");
-          $("#existanceAlert").show();
-          $("#"+inputId).css('border', '1px solid red');
-        } else {
-          $("#existanceAlert").hide();
-          $("#"+inputId).css('border', '');
+function checkInputExistence(inputValue, inputId, inputField) {
+  if (inputValue != '' && inputField != '') {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'GET',
+        url: SITE_ROOT + '/check_input_existence/',
+        data: $.param({ 'inputValue': inputValue, 'inputField': inputField }),
+        dataType: 'json',
+        success: function (results) {
+          console.log(results);
+          if (results.response) {
+            $("#existanceMessage").text("User with the provided " + inputField + " already exists.");
+            $("#existanceAlert").show();
+            $("#" + inputId).css('border', '1px solid red');
+          } else {
+            $("#existanceAlert").hide();
+            $("#" + inputId).css('border', '');
+          }
+          resolve(results.response);
+        },
+        error: function (xhr, status, error) {
+          console.error("Error occurred: ", error);
+          reject(error);
         }
-        return results;
-      }
+      });
     });
+  } else {
+    return Promise.resolve(false);
   }
 }
 
