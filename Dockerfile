@@ -1,16 +1,22 @@
-FROM python:3.9.16-slim
+FROM python:3.12-slim
 
-COPY . /app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
 WORKDIR /app
 
-# Create the virtual environment and install all the dependencies
-RUN python3 -m venv /opt/venv
-RUN /opt/venv/bin/pip install pip --upgrade pip && /opt/venv/bin/pip install wheel &&  \
-    /opt/venv/bin/pip install -r requirements.txt
+# 🛠️ Install system packages including netcat
+RUN apt-get update && apt-get install -y \
+    gcc libpq-dev netcat-openbsd && \
+    apt-get clean
 
-# Engage the application entrypoint and run the application server
-RUN chmod +x entrypoint.sh
-CMD ["/app/entrypoint.sh"]
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
+COPY . .
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
+ENTRYPOINT ["/entrypoint.sh"]
 
+EXPOSE 8000
