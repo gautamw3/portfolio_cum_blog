@@ -10,10 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
 import os
-
-# import portfolio_cum_blog.storage_backends
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,11 +39,18 @@ if not DEBUG:
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    AWS_LOCATION = os.environ.get('AWS_LOCATION')
-    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-    STATICFILES_STORAGE = os.environ.get('STATICFILES_STORAGE')
-    DEFAULT_FILE_STORAGE = os.environ.get('DEFAULT_FILE_STORAGE')
-
+    AWS_STATIC_LOCATION = os.environ.get('AWS_STATIC_LOCATION')
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+    AWS_MEDIA_LOCATION = os.environ.get('AWS_MEDIA_LOCATION')
+    MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)
+    STATICFILES_STORAGE = "portfolio_cum_blog.storage_backends.StaticStorage"
+    DEFAULT_FILE_STORAGE = "portfolio_cum_blog.storage_backends.MediaStorage"
+else:
+    # - Local Config
+    STATIC_URL = os.environ.get('STATIC_URL')
+    STATIC_ROOT = os.path.join(BASE_DIR, os.environ.get('STATIC_ROOT'))
+    MEDIA_URL = os.path.join(BASE_DIR, os.environ.get('MEDIA_URL'))
+    MEDIA_ROOT = os.path.join(BASE_DIR, os.environ.get('MEDIA_ROOT'))
 # Application definition
 
 INSTALLED_APPS = [
@@ -159,22 +164,10 @@ USE_I18N = str(os.environ.get('USE_I18N')) == '1'
 
 USE_TZ = str(os.environ.get('USE_TZ')) == '1'
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = os.environ.get('STATIC_URL')
-STATIC_ROOT = os.path.join(BASE_DIR, os.environ.get('STATIC_ROOT'))
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Base url to serve media files
-MEDIA_URL = os.path.join(BASE_DIR, os.environ.get('MEDIA_URL'))
-# Path where media is stored
-MEDIA_ROOT = os.path.join(BASE_DIR, os.environ.get('MEDIA_ROOT'))
 
 CRISPY_TEMPLATE_PACK = os.environ.get('CRISPY_TEMPLATE_PACK')
 
@@ -217,7 +210,7 @@ customColorPalette = [
 ]
 
 CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
-CKEDITOR_5_FILE_STORAGE = "path_to_storage.CustomStorage" # optional
+CKEDITOR_5_FILE_STORAGE = "portfolio_cum_blog.storage_backends.MediaStorage" # optional
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': {
