@@ -127,7 +127,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="{% static 'portfolio/js/theme.js' %}"></script>
 	<script src="{% static 'portfolio/js/toaster.min.js' %}"></script>
 	<script src="{% static 'portfolio/js/portfolio_script.js' %}"></script>
-	<script> var SITE_ROOT = "http://127.0.0.1:8080" </script>
+	<script> var SITE_ROOT = "{{ request.scheme }}://{{ request.get_host }}" </script>
 </body>
 
 <!--=================== Signup Modal Starts ===================-->

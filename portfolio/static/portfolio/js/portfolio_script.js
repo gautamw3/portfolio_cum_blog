@@ -54,7 +54,7 @@ function showLoginModal() {
 function loadUserBasicDetails() {
   $.ajax({
     type: 'POST',
-    url: SITE_ROOT+'/load-user-basic-details.php',
+    url: SITE_ROOT + '/load-user-basic-details.php',
     data: $.param({}),
     dataType: 'html',
     success:function(results) {
@@ -163,7 +163,7 @@ async function registerUser() {
         submitButton.addClass('active').attr('disabled', 'disabled').text("loading...");
         $.ajax({
             type: "post",
-            url: SITE_ROOT + "/user_signup/",
+            url:  SITE_ROOT + "/user_signup/",
             dataTpe: 'json',
             data: $.param({
                 'firstName': firstName,
