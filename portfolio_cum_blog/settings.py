@@ -179,8 +179,8 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
-APPLICATION_EMAIL = f"{os.environ.get('EMAIL_SYSTEM_ADMIN')}{os.environ.get('APPLICATION_EMAIL')}"
-DEFAULT_FROM_EMAIL = f"{os.environ.get('EMAIL_SYSTEM_ADMIN')}{os.environ.get('DEFAULT_FROM_EMAIL')}"
+APPLICATION_EMAIL = os.environ.get('APPLICATION_EMAIL')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
 customColorPalette = [
     {

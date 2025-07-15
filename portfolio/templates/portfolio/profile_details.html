@@ -2,146 +2,183 @@
 {% block title %} {{ page_title }} {% endblock %}
 {% block pagecontent %}
 {% load static %}
-<!--================ Start portfolio Banner Area =================-->
-	<section class="banner_area">
-		<div class="banner_inner d-flex align-items-center">
-			<div class="container">
-				<div class="banner_content text-right">
-					<h1>{% if request.user.is_authenticated %} {{ request.user.first_name }}'s {% else %} {{ user_first_name }}'s {% endif %} Profile Details</h1>
-					<div class="page_link">
-						<a href="{% url 'index' %}">Home</a>
-						<a href="{% url 'about_me' %}">About</a>
-						<a href="#" disabled>Details</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!--================ End Portfolio Banner Area =================-->
+<style>
+.profile-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+.profile-photo-col {
+  flex: 0 0 auto;
+  width: 200px;
+}
+.profile-photo-col img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+.profile-info-col {
+  flex: 1;
+  min-width: 250px;
+  padding-top: 0;
+}
+</style>
 
-	<!--================ Start Portfolio Details Area =================-->
-	<section class="portfolio_details_area section_gap">
-		<div class="container">
-			<div class="portfolio_details_inner">
-				<div class="row">
-					<div class="col-md-12 col-lg-12 col-sm-12">
-						<div class="main-title">
-							<h1>My profile snapshot</h1>
-						</div>
-					</div>
+<!--================ Start Profile Banner Area =================-->
+<section class="banner_area modern-banner">
+    <div class="banner_inner d-flex align-items-center justify-content-center">
+        <div class="container text-center">
+            <h1 class="display-4 text-white">Contact Me</h1>
+            <nav class="breadcrumb-wrapper">
+                <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="{% url 'about_me' %}" class="breadcrumb-link">About</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">Details</span>
+            </nav>
+        </div>
+    </div>
+</section>
+<!--================ End Profile Banner Area =================-->
+
+<!--================ Start Profile Details Area =================-->
+<section class="portfolio_details_area section_gap bg-light py-5">
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="mb-3" style="text-decoration: underline;">My Profile Snapshot</h2>
+        </div>
+
+        <div class="row gx-5 gy-4 align-items-center mb-5">
+			<div class="row profile-section mb-5">
+				<div class="profile-photo-col">
+					<img src="{{ profile_photo }}" alt="{{ user_first_name }}" title="{{ user_first_name }}">
 				</div>
-			</div>
-			<div class="portfolio_details_inner">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="left_img" style="margin-top: 52px;">
-							<img class="img-fluid" src="{{ profile_photo }}" alt="{{ user_first_name }}" title="{{ user_first_name }}" style="width: 400px;height: 420px;">
-						</div>
-					</div>
-					<div class="offset-md-1 col-md-5">
-						<div class="portfolio_right_text mt-30">
-							<h4>{{ role }}</h4>
-							<p>{{ profile_short_description }}</p>
-							<ul class="list">
-								<li><span>Mobile</span>:{{ mobile }}</li>
-								<li><span>Email</span>:{{ email }}</li>
-							</ul>
-							<ul class="list social_details">
-								<li><a href="{{ github }}" target="_blank"><i class="fa fa-github fa-2x"></i></a></li>
-								<li><a href="{{ linkedin }}" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a></li>
-								<li><a href="{{ tweeter }}" target="_blank"><i class="fa fa-twitter fa-2x"></i></a></li>
-								<li><a href="{{ instagram }}" target="_blank"><i class="fa fa-instagram fa-2x"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="portfolio_details_inner">
-				<div class="row">
-					<div class="col-md-12 col-lg-12 col-sm-12">
-						<div class="main-title">
-							<h1>A brief introduction</h1>
-						</div>
-						<p>{{ about|safe }}</p>
-					</div>
-				</div>
-			</div>
-			<div class="portfolio_details_inner">
-				<div class="row">
-					<div class="col-md-12 col-lg-12 col-sm-12">
-						<div class="main-title">
-							<h1>Technical capabilities</h1>
-						</div>
-						{% for key, values in skills.items %}
-							<div class="section-top-border">
-								<h3 class="mb-30 title_color">{{ key }}</h3>
-								<div class="progress-table-wrap">
-									<div class="progress-table">
-										<div class="table-head">
-											<div class="country">Technology</div>
-											<div class="visit">Total years of experience</div>
-											<div class="percentage">Confidence</div>
-										</div>
-										{% for each_value in values %}
-											{% for key_one, value_one in each_value.items %}
-												<div class="table-row">
-													<div class="country"> <img src="{{ value_one.logo }}" alt="{{key_one}}" style="width:50px;height:30px;">{{key_one}}</div>
-													<div class="visit">{{ value_one.total_experience_in_year }}</div>
-													<div class="percentage">
-														<div class="progress">
-															<div class="progress-bar color-{{ value_one.progress_bar_color }}" role="progressbar" style="width: {{ value_one.rating_out_of_five }}%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-														</div>
-													</div>
-												</div>
-											{% endfor %}
-										{% endfor %}
-									</div>
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-			<div class="portfolio_details_inner">
-				<div class="row">
-					<div class="col-md-12 col-lg-12 col-sm-12">
-						<div class="main-title">
-							<h1>Client projects</h1>
-						</div>
-						<div class="section-top-border">
-<!--							<h3 class="mb-30 title_color">Table</h3>-->
-							<div class="progress-table-wrap">
-								<div class="progress-table">
-									<div class="table-head">
-										<div class="serial">Title</div>
-										<div class="country">Client</div>
-										<div class="visit">URL</div>
-										<div class="percentage">Technologies used</div>
-										<div class="serial">Description</div>
-									</div>
-									{% for each_project in client_project_list %}
-										<div class="table-row">
-											<div class="serial">{{ each_project.project_title }}</div>
-											<div class="country">{{ each_project.client_name }}</div>
-											<div class="visit"><a href="{{ each_project.project_url }}" target="_blank"></a></div>
-											<div class="percentage">
-												<div class="progress">
-													<div class="progress-bar color-1" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0"
-									 aria-valuemax="100"></div>
-												</div>
-											</div>
-											<div class="serial">
-												{{ each_project.project_description|safe }}
-											</div>
-										</div>
-									{% endfor %}
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+		  	<div class="profile-info-col">
+				<h4 class="fw-bold text-primary">{{ role }}</h4>
+				<p class="text-muted">{{ profile_short_description }}</p>
+				<div class="mb-3">
+                    <span class="d-inline-block me-4">
+                        <i class="fas fa-phone-alt me-2 text-primary"></i><span class="text-dark"> {{ mobile }}</span>
+                    </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="d-inline-block">
+                        <i class="fas fa-envelope me-2 text-primary"></i><span class="text-dark"> {{ email }}</span>
+                    </span>
+					<ul class="list-inline social_details mt-4">
+                        <li class="list-inline-item"><a href="{{ github }}" target="_blank"><i class="fa-brands fa-github fa-2x"></i></a></li>
+                        <li class="list-inline-item"><a href="{{ linkedin }}" target="_blank"><i class="fa-brands fa-linkedin fa-2x"></i></a></li>
+                        <li class="list-inline-item"><a href="{{ tweeter }}" target="_blank"><i class="fa-brands fa-twitter fa-2x"></i></a></li>
+                        <li class="list-inline-item"><a href="{{ instagram }}" target="_blank"><i class="fa-brands fa-instagram fa-2x"></i></a></li>
+                    </ul>
+                </div>
+		  </div>
 		</div>
-	</section>
-	<!--================ End Portfolio Details Area =================-->
+
+        </div>
+
+        <div class="mb-5">
+            <h3 class="mb-3">A Brief Introduction</h3>
+            <p class="text-muted">{{ about|safe }}</p>
+        </div>
+
+        <div class="mb-5">
+            <h3 class="mb-4">Technical Capabilities</h3>
+            {% for key, values in skills.items %}
+            <div class="mb-4">
+                <h5 class="text-primary">{{ key }}</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover align-middle text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Technology</th>
+                                <th>Experience</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for each_value in values %}
+                                {% for key_one, value_one in each_value.items %}
+                                    <tr>
+                                        <td class="text-start">
+                                            <img src="{{ value_one.logo }}" alt="{{ key_one }}" style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;"> {{ key_one }}
+                                        </td>
+                                        <td>{{ value_one.total_experience_in_year }}</td>
+                                        <td>
+                                            <div class="progress" style="height: 16px;">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ value_one.rating_out_of_five }}%;" aria-valuenow="{{ value_one.rating_out_of_five }}" aria-valuemin="0" aria-valuemax="100">{{ value_one.rating_out_of_five }}%</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <h3 class="mb-4">Client Projects</h3>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-striped table-hover align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Title</th>
+                            <th>Client</th>
+                            <th>URL</th>
+                            <th>Technologies</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for each_project in client_project_list %}
+                        <tr>
+                            <td>{{ each_project.project_title }}</td>
+                            <td>{{ each_project.client_name }}</td>
+                            <td><a href="{{ each_project.project_url }}" target="_blank">Link</a></td>
+                            <td>
+                                <div class="progress" style="height: 16px;">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">80%</div>
+                                </div>
+                            </td>
+                            <td class="text-start">{{ each_project.project_description|safe }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Inventory Management System</td>
+                            <td>Acme Corp</td>
+                            <td><a href="#" target="_blank">Link</a></td>
+                            <td>
+                                <div class="progress" style="height: 16px;">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">70%</div>
+                                </div>
+                            </td>
+                            <td class="text-start">Built a scalable inventory solution integrated with real-time analytics.</td>
+                        </tr>
+                        <tr>
+                            <td>Customer Feedback Portal</td>
+                            <td>Beta Ltd</td>
+                            <td><a href="#" target="_blank">Link</a></td>
+                            <td>
+                                <div class="progress" style="height: 16px;">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%</div>
+                                </div>
+                            </td>
+                            <td class="text-start">Developed a modern UI-based feedback system using React and Django.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!--================ End Profile Details Area =================-->
 {% endblock %}

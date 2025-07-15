@@ -3,86 +3,80 @@
 {% block pagecontent %}
 {% load static %}
 {% load crispy_forms_tags %}
-  <!--================ Start Contact Banner Area =================-->
-    <section class="banner_area">
-        <div class="banner_inner d-flex align-items-center">
-            <div class="container">
-                <div class="banner_content text-right">
-                    <h1>Contact Me</h1>
-                    <div class="page_link">
-                        <a href="{% url 'index' %}">Home</a>
-                        <a href="#">Contact</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--================ End Contact Banner Area =================-->
 
-    <!--================Contact Area =================-->
-    <section class="contact_area section_gap">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    {% if country and state and city %}
-                        <div class="contact_info">
-                        <div class="info_item">
-                            <i class="lnr lnr-home"></i>
-                            <h6>{{ state }}, {{ country }}</h6>
-                            <p>{{ city }}</p>
-                        </div>
-                        <div class="info_item">
-                            <i class="lnr lnr-phone-handset"></i>
-                            <h6><a href="#">{{ mobile }}</a></h6>
-                            <p>{{ work_days }}, {{ work_shift }}</p>
-                        </div>
-                        <div class="info_item">
-                            <i class="lnr lnr-envelope"></i>
-                            <h6><a href="#">{{ email }}</a></h6>
-                            <p>Send us your query anytime!</p>
-                        </div>
+<!--================ Start Contact Banner Area =================-->
+<section class="banner_area modern-banner">
+    <div class="banner_inner d-flex align-items-center justify-content-center">
+        <div class="container text-center">
+            <h1 class="display-4 text-white">Contact Us</h1>
+            <nav class="breadcrumb-wrapper">
+                <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">Contact</span>
+            </nav>
+        </div>
+    </div>
+</section>
+<!--================ End Contact Banner Area =================-->
+
+<!--================ Contact Area =================-->
+<section class="contact_area section_gap bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-5">
+                {% if country and state and city %}
+                <div class="contact_info p-4 bg-white shadow rounded">
+                    <div class="info_item mb-4">
+                        <i class="lnr lnr-home fa-2x mb-2"></i>
+                        <h6 class="mb-1">{{ state }}, {{ country }}</h6>
+                        <p class="mb-0">{{ city }}</p>
                     </div>
-                        <div class="row">
-                        <ul class="list social_details">
-							<li><a href="{{ github }}" target="_blank"><i class="fa fa-github fa-2x"></i></a></li>
-							<li><a href="{{ linkedin }}" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a></li>
-							<li><a href="{{ tweeter }}" target="_blank"><i class="fa fa-twitter fa-2x"></i></a></li>
-							<li><a href="{{ instagram }}" target="_blank"><i class="fa fa-instagram fa-2x"></i></a></li>
-						</ul>
+                    <div class="info_item mb-4">
+                        <i class="lnr lnr-phone-handset fa-2x mb-2"></i>
+                        <h6 class="mb-1"><a href="#">{{ mobile }}</a></h6>
+                        <p class="mb-0">{{ work_days }}, {{ work_shift }}</p>
                     </div>
-                    {% endif %}
+                    <div class="info_item mb-4">
+                        <i class="lnr lnr-envelope fa-2x mb-2"></i>
+                        <h6 class="mb-1"><a href="#">{{ email }}</a></h6>
+                        <p class="mb-0">Send us your query anytime!</p>
+                    </div>
+                    <ul class="list-inline social_details mt-4">
+                        <li class="list-inline-item"><a href="{{ github }}" target="_blank"><i class="fa-brands fa-github fa-lg"></i></a></li>
+                        <li class="list-inline-item"><a href="{{ linkedin }}" target="_blank"><i class="fa-brands fa-linkedin fa-lg"></i></a></li>
+                        <li class="list-inline-item"><a href="{{ tweeter }}" target="_blank"><i class="fa-brands fa-twitter fa-lg"></i></a></li>
+                        <li class="list-inline-item"><a href="{{ instagram }}" target="_blank"><i class="fa-brands fa-instagram fa-lg"></i></a></li>
+                    </ul>
                 </div>
-                <div class="col-lg-9">
-                    <form class="row contact_form" action="{% url 'contact_us' %}" method="post" enctype="multipart/form-data" id="contact_form">
+                {% endif %}
+            </div>
+            <div class="col-lg-8">
+                <div class="p-4 bg-white shadow rounded">
+                    <form class="row g-3" action="{% url 'contact_us' %}" method="post" enctype="multipart/form-data" id="contact_form">
                         {% csrf_token %}
-                        <div class="col-md-6">
-                            <input type="hidden" id="{{ response }}">
-                            <div class="form-group">
-                                {{ form.client_name|as_crispy_field }}
-                            </div>
-                            <div class="form-group">
-                                {{ form.client_email|as_crispy_field }}
-                            </div>
-                            <div class="form-group">
-                                {{ form.subject|as_crispy_field }}
-                            </div>
-                            <div class="form-group">
-                                {{ form.message|as_crispy_field }}
-                            </div>
-                            <div class="form-group">
-                                {{ form.file_supporting_the_message|as_crispy_field }}
-                            </div>
-                        </div>
-                        <div class="col-md-12 text-left">
-                            <button type="submit" value="submit" class="primary-btn"><span>Send Message</span></button>
+                        <input type="hidden" id="{{ response }}">
+                        <div class="col-md-6">{{ form.client_name|as_crispy_field }}</div>
+                        <div class="col-md-6">{{ form.client_email|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ form.subject|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ form.message|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ form.file_supporting_the_message|as_crispy_field }}</div>
+                        <div class="col-md-12 text-start">
+                            <button type="submit" value="submit" class="btn btn-primary px-4 py-2"><span>Send Message</span></button>
                         </div>
                     </form>
                 </div>
             </div>
-            <div id="mapBox" class="mapBox" data-lat="40.701083" data-lon="-74.1522848" data-zoom="13" data-info="PO Box CT16122 Collins Street West, Victoria 8007, Australia."
-                data-mlat="40.701083" data-mlon="-74.1522848">
-            </div>
         </div>
-    </section>
-    <!--================Contact Area =================-->
+
+        <div class="mt-5" id="mapBox" class="mapBox"
+            data-lat="40.701083"
+            data-lon="-74.1522848"
+            data-zoom="13"
+            data-info="PO Box CT16122 Collins Street West, Victoria 8007, Australia."
+            data-mlat="40.701083"
+            data-mlon="-74.1522848">
+        </div>
+    </div>
+</section>
+<!--================ End Contact Area =================-->
 {% endblock %}

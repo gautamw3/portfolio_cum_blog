@@ -36,6 +36,79 @@ $(document).ready(function() {
         toastr['error']('There are some exceptions within the form input', 'Please fix the errors displayed');
     }
 
+    // Init MixItUp
+    if($('#mix-container').length == 1) {
+      const containerEl = document.querySelector('#mix-container');
+      const mixer = mixitup(containerEl, {
+        selectors: {
+          target: '.mix'
+        },
+        animation: {
+          duration: 300
+        }
+      });
+    }
+
+	  // Active class toggle for filter buttons
+	  const filterButtons = document.querySelectorAll('.portfolio-filter-btn');
+	  filterButtons.forEach(btn => {
+		btn.addEventListener('click', function() {
+		  filterButtons.forEach(b => b.classList.remove('active'));
+		  this.classList.add('active');
+		});
+	  });
+
+    const glideElement = document.querySelector('.glide');
+    if (glideElement) {
+        const glide = new Glide(glideElement, {
+            type: 'carousel',
+            startAt: 0,
+            perView: 1,
+            gap: 30,
+            autoplay: 5000,
+            hoverpause: true,
+            animationDuration: 800,
+            animationTimingFunc: 'ease-in-out'
+          });
+
+          glide.on(['mount.after', 'run.after'], () => {
+            document.querySelectorAll('.testimonial-card').forEach(card => {
+              card.classList.remove('active');
+            });
+
+            const activeSlide = document.querySelector('.glide__slide--active .testimonial-card');
+            if (activeSlide) {
+              setTimeout(() => activeSlide.classList.add('active'), 50);
+            }
+          });
+        glide.mount();
+    }
+
+      const swiper = new Swiper('.new-banner-slider', {
+		loop: true,
+		autoplay: {
+		  delay: 5000,
+		  disableOnInteraction: false,
+		},
+		effect: 'fade',
+		pagination: {
+		  el: '.swiper-pagination',
+		  clickable: true,
+		},
+		navigation: {
+		  nextEl: '.swiper-button-next',
+		  prevEl: '.swiper-button-prev',
+		},
+	  });
+
+      document.addEventListener('scroll', function () {
+        const header = document.querySelector('.custom-header');
+        if (window.scrollY > 50) {
+          header.style.background = 'rgba(0, 0, 0, 1)';
+        } else {
+          header.style.background = 'rgba(0, 0, 0, 0.9)';
+        }
+      });
 });
 
 function showSignupModal() {
@@ -159,7 +232,7 @@ async function registerUser() {
         }
     }
     if (firstName != '' && lastName != '' && isEmailValidated && isMobileValidated && isPasswordValidated && isConfirmPasswordValidated) {
-        $("#validationAlert").hide();
+        $("#validationAlert").addClass('d-none');
         submitButton.addClass('active').attr('disabled', 'disabled').text("loading...");
         $.ajax({
             type: "post",
@@ -182,7 +255,7 @@ async function registerUser() {
             }
         });
     } else {
-        $("#validationAlert").show();
+        $("#validationAlert").removeClass('d-none');
     }
 }
 
@@ -199,13 +272,13 @@ function getValidateInputField(inputValue, inputId, referenced) {
   			if(referenced) {
   				return false;
   			} else {
-  				$("#"+inputId).next(alert).show();
+  				$("#alert-" + inputId).removeClass('d-none');
   			}
   		} else {
   			if(referenced) {
   				return true;
   			} else {
-  				$("#"+inputId).next(alert).hide();
+  				$("#alert-" + inputId).addClass('d-none');
   			}
   		}
   	}
@@ -214,13 +287,13 @@ function getValidateInputField(inputValue, inputId, referenced) {
   			if(referenced) {
   				return false;
   			} else {
-  				$("#"+inputId).next(alert).show();
+  				$("#alert-" + inputId).removeClass('d-none');
   			}
   		} else {
   			if(referenced) {
   				return true;
   			} else {
-  				$("#"+inputId).next(alert).hide();
+  				$("#alert-" + inputId).addClass('d-none');
   			}	
   		}
   	}
@@ -235,13 +308,13 @@ function getValidateInputField(inputValue, inputId, referenced) {
   			if(referenced) {
   				return false;
   			} else {
-  				$("#"+inputId).next(alert).show();
+  				$("#alert-" + inputId).removeClass('d-none');
   			}
   		} else {
   			if(referenced) {
   				return true;
   			} else {
-  				$("#"+inputId).next(alert).hide();
+  				$("#alert-" + inputId).addClass('d-none');
   			}
   		}
   	}
@@ -250,20 +323,20 @@ function getValidateInputField(inputValue, inputId, referenced) {
   			if(referenced) {
   				return true;
   			} else {
-  				$("#"+inputId).next(alert).hide();
+  				$("#alert-" + inputId).addClass('d-none');
   			} 
   		} else {
   			if(referenced) {
   				return false;
   			} else {
-  				$("#"+inputId).next(alert).show();
+  				$("#alert-" + inputId).removeClass('d-none');
   			}
   		}
   	}
 }
 
 /*****************************************************************
-* Checks the existance of the email and mobile within the system *
+* Checks the existence of the email and mobile within the system *
 * and reports for the availability for the same                  *
 *****************************************************************/
 
@@ -279,10 +352,10 @@ function checkInputExistence(inputValue, inputId, inputField) {
           console.log(results);
           if (results.response) {
             $("#existanceMessage").text("User with the provided " + inputField + " already exists.");
-            $("#existanceAlert").show();
+            $("#existenceAlert").removeClass('d-none');
             $("#" + inputId).css('border', '1px solid red');
           } else {
-            $("#existanceAlert").hide();
+            $("#existenceAlert").addClass('d-none');
             $("#" + inputId).css('border', '');
           }
           resolve(results.response);
@@ -309,7 +382,7 @@ function sendPasswordResetLink() {
   } else {
     isEmailValidated = getValidateInputField(userMailPassReset, "userMailPassReset", true);
     if(isEmailValidated) {
-      $("#userMailPassReset").css("border", ""), $("#userMailPassReset").next(alert).hide();
+      $("#userMailPassReset").css("border", ""), $("#alert-userMailPassReset").addClass('d-none');
       $("#passwordResetLinkRequest").addClass('active').attr('disabled', 'disabled').text("loading...");
       $.ajax({
         type: 'POST',
@@ -318,7 +391,7 @@ function sendPasswordResetLink() {
         dataType: 'json',
         success: function(results) {
           toastr[results.response](results.responseMessage, results.responseMessageInfo);
-          $("#2[passwordResetLinkRequest").removeClass('active').removeAttr('disabled').text('Submit');
+          $("#passwordResetLinkRequest").removeClass('active').removeAttr('disabled').text('Submit');
         }
       });
     } else {
@@ -341,17 +414,16 @@ function loginUser() {
   } else {
     isEmailValidated = getValidateInputField(userMailSignIn, "userMailSignIn", true);
     if(isEmailValidated) {
-      $("#userMailSignIn").css("border", ""), $("#userMailSignIn").next(alert).hide();
+      $("#userMailSignIn").css("border", ""), $("#alert-userMailSignIn").addClass('d-none');
       isEmailValidated = true;
     } else {
-      $("#userMailSignIn").next(alert).show();
+      $("#alert-userMailSignIn").removeClass('d-none');
     }
   }
   if(passwordSignIn == "") {
       $("#passwordSignIn").css("border", '1px solid red');
-      $("#passwordSignIn").next(alert).show();
   } else {
-    $("#passwordSignIn").css("border", ""), $("#passwordSignIn").next(alert).hide();
+    $("#passwordSignIn").css("border", "");
   }
   if(isEmailValidated && passwordSignIn != '') {
     $("#loginSubmit").addClass('active').attr('disabled', 'disabled').text('loading...');
@@ -376,46 +448,12 @@ function loginUser() {
   }
 }
 
-var fileobj;
-function upload_file(e) {
-    e.preventDefault();
-    fileobj = e.dataTransfer.files[0];
-    ajax_file_upload(fileobj);
-}
- 
-function file_explorer() {
-    document.getElementById('selectfile').click();
-    document.getElementById('selectfile').onchange = function() {
-        fileobj = document.getElementById('selectfile').files[0];
-        ajax_file_upload(fileobj);
-    };
-}
- 
-function ajax_file_upload(file_obj) {
-    if(file_obj != undefined) {
-        var form_data = new FormData();                  
-        form_data.append('file', file_obj);
-        $("#drag_upload_file").fadeTo(1000, 0.4);
-        $.ajax({
-            type: 'POST',
-            url: 'ajax.php',
-            contentType: false,
-            processData: false,
-            data: form_data,
-            success:function(response) {
-                alert(response);
-                $('#selectfile').val('');
-            }
-        });
-    }
-}
-
 function submitNewClient() {
     let new_client_email = $.trim($("#new_client_email").val());
     let csrfmiddlewaretoken = $.trim($("input[name=csrfmiddlewaretoken]").val());
     let isEmailValidated = false;
     if(new_client_email == "") {
-        $("#new_client_email").css("border", "1px solid red");
+        $("#new_client_email").css("border", "1px solid red").focus();
     } else {
         isEmailValidated = getValidateInputField(new_client_email, "new_client_email", true);
         if(isEmailValidated) {

@@ -2,85 +2,142 @@
 {% block title %} {{ page_title }} {% endblock %}
 {% block pagecontent %}
 {% load static %}
-
-<!--================ About Banner Area =================-->
 <style>
-	.owl-dots {
-		display:none;
-	}
-</style>
+	.social-section {
+    margin-top: 2rem;
+}
 
-	<section class="banner_area">
-		<div class="banner_inner d-flex align-items-center">
-			<div class="container">
-				<div class="banner_content text-right">
-					<h1>About Me</h1>
-					<div class="page_link">
-						<a href="{% url 'index' %}">Home</a>
-						<a href="#" disabled>About</a>
-					</div>
-				</div>
+.social-label {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.social-details {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.social-details .list-inline-item {
+    margin: 0 10px;
+}
+
+.social-link {
+    color: #555;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-link:hover {
+    color: #007bff;
+    transform: scale(1.1);
+}
+</style>
+	<!--================ Start About Banner Area =================-->
+	<section class="banner_area modern-banner">
+		<div class="banner_inner d-flex align-items-center justify-content-center">
+			<div class="container text-center">
+				<h1 class="display-4 text-white">About Me</h1>
+				<nav class="breadcrumb-wrapper">
+					<a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
+					<span class="breadcrumb-separator">/</span>
+					<span class="breadcrumb-current">About</span>
+				</nav>
 			</div>
 		</div>
 	</section>
-	<!--================End About Banner Area =================-->
+	<!--================ End About Banner Area =================-->
 
 	<!--================ Start About Area =================-->
-	<section class="about-area section_gap gray-bg">
-		<div class="container">
-			<div class="row align-items-center justify-content-between">
-				<div class="col-lg-5 about-left" style="margin-top: -850px;">
-					<img class="img-fluid" src="{{ profile_photo }}" alt="">
-				</div>
-				<div class="col-lg-6 col-md-12 about-right">
-					<div class="main-title text-left">
-						<h1>about myself</h1>
-					</div>
-					<div class="mb-50 wow fadeIn" data-wow-duration=".8s">
-						<p>{{ about|safe }}</p>
-						<ul class="list social_details">
-							<li><a href="{{ github }}" target="_blank"><i class="fa fa-github fa-3x"></i></a></li>
-							<li><a href="{{ linkedin }}" target="_blank"><i class="fa fa-linkedin fa-3x"></i></a></li>
-							<li><a href="{{ tweeter }}" target="_blank"><i class="fa fa-twitter fa-3x"></i></a></li>
-							<li><a href="{{ instagram }}" target="_blank"><i class="fa fa-instagram fa-3x"></i></a></li>
+	<section class="about-section py-5 bg-light">
+	  <div class="container">
+		  <div class="row justify-content-between">
+			  <!-- Profile Photo aligned to top -->
+			  <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+				  <div class="profile-photo-container">
+					  <img
+						  class="profile-photo"
+						  src="{{ profile_photo }}"
+						  alt="{{ request.user.first_name }}"
+						  title="{{ request.user.first_name }}"
+					  >
+				  </div>
+			  </div>
+			  <!-- About Text -->
+			  <div class="col-lg-6 col-md-12">
+				  <div class="section-title mb-4">
+					  <h2>About Me</h2>
+				  </div>
+				  <div class="about-text mb-4">
+					  <p>{{ about|safe }}</p>
+					  <div class="social-section">
+<!--						<h3 class="social-label">Follow Me</h3>-->
+						<ul class="list-inline social-details">
+							<li class="list-inline-item">
+								<a href="{{ github }}" target="_blank" class="social-link">
+									<i class="fa-brands fa-github fa-2x"></i>
+								</a>
+							</li>
+							<li class="list-inline-item">
+								<a href="{{ linkedin }}" target="_blank" class="social-link">
+									<i class="fa-brands fa-linkedin fa-2x"></i>
+								</a>
+							</li>
+							<li class="list-inline-item">
+								<a href="{{ tweeter }}" target="_blank" class="social-link">
+									<i class="fa-brands fa-twitter fa-2x"></i>
+								</a>
+							</li>
+							<li class="list-inline-item">
+								<a href="{{ instagram }}" target="_blank" class="social-link">
+									<i class="fa-brands fa-instagram fa-2x"></i>
+								</a>
+							</li>
 						</ul>
 					</div>
-					<a href="{% if request.user.is_authenticated %} {% url 'user_profile_details' request.user.id %} {% else %} {% url 'user_profile_details' 8 %} {% endif %}" class="primary-btn">More Info</a>
-				</div>
-			</div>
-		</div>
+				  </div>
+				  <a href="{% if request.user.is_authenticated %}{% url 'user_profile_details' request.user.id %}{% else %}{% url 'user_profile_details' 1 %}{% endif %}" class="btn btn-primary">
+					  More Info
+				  </a>
+			  </div>
+		  </div>
+	  </div>
 	</section>
 	<!--================ End About Area =================-->
 
 	<!--================ Start Testimonial Area =================-->
-{% if request.user.is_authenticated is not True %}
-	<div class="section_gap testimonial_area">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-lg-7 text-left">
-					<div class="active_testimonial owl-carousel" data-slider-id="1">
-					<!-- single testimonial -->
-					{% for each_review in customer_reviews %}
-						<div class="single_testimonial">
-							<div class="testimonial_head">
-								<img src="{% static 'portfolio/img/quote.png' %}" alt="">
-								<h4>{{ each_review.reviewer }}</h4>
-								<div class="review">
-									{% for each_rating_item in each_review.rating %}
-										<i class="fa fa-star"></i>
-									{% endfor %}
-								</div>
-							</div>
-						<div class="testimonial_content">
-							<p>{{ each_review.description }}</p>
-						</div>
-					</div>
-					{% endfor %}
-				</div>
+	<div class="glide">
+	  <!-- Slider Track -->
+	  <div class="glide__track" data-glide-el="track">
+		<ul class="glide__slides">
+		{% for each_review in customer_reviews %}
+		  <!-- Testimonial 1 -->
+		  <li class="glide__slide">
+			<div class="testimonial-card fade-in">
+			  <p class="testimonial-text">
+				  <i class="fas fa-quote-left" style="color: #ccc; margin-right: 8px;"></i>
+				  {{ each_review.description|striptags }}
+				  <i class="fas fa-quote-right" style="color: #ccc; margin-left: 8px;"></i>
+			  </p>
+			  <div class="testimonial-stars">
+				  {% for each_rating_item in each_review.rating %}
+					<i class="fas fa-star"></i>
+				  {% endfor %}
+			  </div>
+			  <h5 class="testimonial-author">— {{ each_review.reviewer }}</h5>
 			</div>
-		</div>
-		</div>
+		  </li>
+		{% endfor %}
+		</ul>
+	  </div>
+
+	  <!-- Pagination Dots -->
+	  <div class="glide__bullets text-center mt-3" data-glide-el="controls[nav]">
+		  {% for each_review in customer_reviews %}
+			<button class="glide__bullet" data-glide-dir="={{forloop.counter0}}"></button>
+		  {% endfor %}
+	  </div>
 	</div>
-{% endif %}
 	<!--================ End Testimonial Area =================-->
 {% endblock %}
