@@ -9,6 +9,7 @@ from .models import (
     PortfolioUser, UserSkill, PortfolioUserSocialMediaLink, Review, NewClient, PortfolioUserAddress, ClientProject
 )
 from .forms import ContactUs
+from .constants import *
 
 
 class GlobalResponse:
@@ -108,7 +109,7 @@ def get_user_skills(user_id):
 
 
 def get_customer_reviews():
-    obj_customer_reviews = Review.objects.all()
+    obj_customer_reviews = Review.objects.raw('SELECT * FROM portfolio_review ORDER BY RANDOM() LIMIT 5;')
     customer_reviews = []
     for each_review in obj_customer_reviews:
         customer_review = {
@@ -151,7 +152,7 @@ def index(request):
         heading = obj_portfolio_user.heading
         headline = obj_portfolio_user.headline
         about = obj_portfolio_user.about
-        profile_photo = obj_portfolio_user.profile_photo.url
+        profile_photo = obj_portfolio_user.profile_photo.url if obj_portfolio_user.profile_photo else "#"
         obj_social_media_links = get_social_media_links(obj_portfolio_user.id)
         context = {
             'page_title': 'Home',
@@ -204,14 +205,14 @@ def user_signup(request):
                 response_data['responseMessage'] = 'You have been registered successfully'
                 response_data['responseMessageInfo'] = 'Redirecting to the dashboard'
             else:
-                response_data['response'] = 'error'
+                response_data['response'] = 'warning'
                 response_data['responseMessage'] = 'Registration Failed'
-                response_data['responseMessageInfo'] = f'Invalid HTTP method {request.method}'
+                response_data['responseMessageInfo'] = 'Invalid input/please check if each and every mandatory details' \
+                                                       ' were provided or not!'
         else:
-            response_data['response'] = 'warning'
+            response_data['response'] = 'error'
             response_data['responseMessage'] = 'Registration Failed'
-            response_data['responseMessageInfo'] = 'Invalid input/please check if each and every mandatory details' \
-                                                   ' were provided or not!'
+            response_data['responseMessageInfo'] = f'Invalid HTTP method {request.method}'
     except Exception as err:
         response_data['response'] = 'error'
         response_data['responseMessage'] = 'Registration Failed'
@@ -330,7 +331,7 @@ def send_new_client_lead_mail(email_data):
     template = 'portfolio/email_templates/new_client_lead.html'
     message_to_attach = get_template(template).render(email_data)
     email_message = EmailMessage(
-        "New client lead",
+        SUB_CLIENT_LEAD_EMAIL,
         message_to_attach,
         settings.APPLICATION_EMAIL,
         [email_data['client_email']],
@@ -359,13 +360,12 @@ def contact_us(request):
                     'subject': request.POST['subject'],
                     'message': request.POST['message'],
                 }
-                # send_new_client_lead_mail(email_data)
+                send_new_client_lead_mail(email_data)
                 context['response'] = 'success'
             else:
                 context['response'] = 'error'
         else:
             form = ContactUs()
-            print("############################: ", form.fields)
 
         if request.user.is_authenticated:
             obj_user = User.objects.get(pk=request.user.id)
@@ -388,7 +388,6 @@ def contact_us(request):
         context['form'] = form
     except Exception as err:
         context['exception'] = err.__str__()
-    print(context, "###############################")
     return render(request, template, context)
 
 
@@ -408,16 +407,8 @@ def about_me(request):
             else:
                 obj_user = get_global_user(request)
             context['about'] = obj_user.user_portfolio.about
-            context['profile_photo'] = obj_user.user_portfolio.profile_photo.url
-            obj_customer_reviews = Review.objects.all()
-            customer_reviews = []
-            for each_review in obj_customer_reviews:
-                customer_review = {
-                    'reviewer': each_review.reviewer_name,
-                    'rating': [i for i in range(int(each_review.get_reviewer_rating_display()))],
-                    'description': each_review.review_description
-                }
-                customer_reviews.append(customer_review)
+            context['profile_photo'] = obj_user.user_portfolio.profile_photo.url if obj_user.user_portfolio.profile_photo else "#"
+            customer_reviews = get_customer_reviews()
             obj_social_media_links = get_social_media_links(obj_user.user_portfolio.id)
             context = embed_social_media_links_to_context(context, obj_social_media_links)
             context['customer_reviews'] = customer_reviews
