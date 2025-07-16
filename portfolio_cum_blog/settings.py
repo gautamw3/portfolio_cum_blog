@@ -132,6 +132,14 @@ if DB_IS_AVAIL and DATABASE_READY:
             'PORT': DB_PORT,
         }
     }
+else:
+    # ✅ Default fallback: SQLite for local dev / tests (pytest will use this)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
