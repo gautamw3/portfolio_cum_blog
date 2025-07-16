@@ -46,6 +46,7 @@ jobs:
               "cd /home/ubuntu/my_django_project/portfolio_cum_blog",
               "git pull origin main",
               "source ../env_app/bin/activate",
+              "pip install -U pip",
               "pip install -r requirements.txt",
               "python manage.py migrate",
               "python manage.py collectstatic --noinput",

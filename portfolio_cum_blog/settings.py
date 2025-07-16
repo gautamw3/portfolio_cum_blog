@@ -26,16 +26,15 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(os.environ.get('DEBUG')) == '1'
 
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',') if os.environ.get('ALLOWED_HOSTS') else []
+
 if DEBUG:
-    ALLOWED_HOSTS = ["*"]
     # - Local Config
     STATIC_URL = os.environ.get('STATIC_URL')
     STATIC_ROOT = os.path.join(BASE_DIR, os.environ.get('STATIC_ROOT'))
     MEDIA_URL = os.path.join(BASE_DIR, os.environ.get('MEDIA_URL'))
     MEDIA_ROOT = os.path.join(BASE_DIR, os.environ.get('MEDIA_ROOT'))
 else:
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
-
     # - S3 Config
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -288,7 +287,7 @@ CKEDITOR_5_CONFIGS = {
 
 # Define a constant in settings.py to specify file upload permissions
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated",
+
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-
