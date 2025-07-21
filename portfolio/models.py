@@ -83,8 +83,7 @@ class SkillCategory(models.Model):
     Model which stores all the skills category
     """
     SKILL_CATEGORIES = (
-        ('PLBE', 'Backend Programming languages'),
-        ('PLFE', 'Frontend Programming languages'),
+        ('PLBE', 'Programming languages'),
         ('DBMS', 'Databases'),
         ('OPRS', 'Operating systems'),
         ('MCHL', 'Machine learning'),
