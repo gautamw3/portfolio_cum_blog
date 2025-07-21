@@ -58,30 +58,32 @@ $(document).ready(function() {
 		});
 	  });
 
-    const glideElement = document.querySelector('.glide');
-    if (glideElement) {
-        const glide = new Glide(glideElement, {
-            type: 'carousel',
-            startAt: 0,
-            perView: 1,
-            gap: 30,
-            autoplay: 5000,
-            hoverpause: true,
-            animationDuration: 800,
-            animationTimingFunc: 'ease-in-out'
-          });
+    if($(".glide__slide").length > 0) {
+        const glideElement = document.querySelector('.glide');
+        if (glideElement) {
+            const glide = new Glide(glideElement, {
+                type: 'carousel',
+                startAt: 0,
+                perView: 1,
+                gap: 30,
+                autoplay: 5000,
+                hoverpause: true,
+                animationDuration: 800,
+                animationTimingFunc: 'ease-in-out'
+              });
 
-          glide.on(['mount.after', 'run.after'], () => {
-            document.querySelectorAll('.testimonial-card').forEach(card => {
-              card.classList.remove('active');
-            });
+              glide.on(['mount.after', 'run.after'], () => {
+                document.querySelectorAll('.testimonial-card').forEach(card => {
+                  card.classList.remove('active');
+                });
 
-            const activeSlide = document.querySelector('.glide__slide--active .testimonial-card');
-            if (activeSlide) {
-              setTimeout(() => activeSlide.classList.add('active'), 50);
-            }
-          });
-        glide.mount();
+                const activeSlide = document.querySelector('.glide__slide--active .testimonial-card');
+                if (activeSlide) {
+                  setTimeout(() => activeSlide.classList.add('active'), 50);
+                }
+              });
+            glide.mount();
+        }
     }
 
       const swiper = new Swiper('.new-banner-slider', {

@@ -34,7 +34,7 @@
 <section class="banner_area modern-banner">
     <div class="banner_inner d-flex align-items-center justify-content-center">
         <div class="container text-center">
-            <h1 class="display-4 text-white">Contact Me</h1>
+            <h1 class="display-4 text-white">Profile Details</h1>
             <nav class="breadcrumb-wrapper">
                 <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
                 <span class="breadcrumb-separator">/</span>
@@ -62,7 +62,7 @@
 				</div>
 		  	<div class="profile-info-col">
 				<h4 class="fw-bold text-primary">{{ role }}</h4>
-				<p class="text-muted">{{ profile_short_description }}</p>
+                <div class="about-text mb-4">{{ profile_short_description|safe }} </div>
 				<div class="mb-3">
                     <span class="d-inline-block me-4">
                         <i class="fas fa-phone-alt me-2 text-primary"></i><span class="text-dark"> {{ mobile }}</span>
@@ -82,10 +82,10 @@
 
         </div>
 
-        <div class="mb-5">
-            <h3 class="mb-3">A Brief Introduction</h3>
-            <p class="text-muted">{{ about|safe }}</p>
-        </div>
+<!--        <div class="mb-5">-->
+<!--            <h3 class="mb-3">A Brief Introduction</h3>-->
+<!--            <p class="text-muted">{{ about|safe }}</p>-->
+<!--        </div>-->
 
         <div class="mb-5">
             <h3 class="mb-4">Technical Capabilities</h3>

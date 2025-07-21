@@ -50,6 +50,11 @@ else:
     STATICFILES_STORAGE = "portfolio_cum_blog.storage_backends.StaticStorage"
     DEFAULT_FILE_STORAGE = "portfolio_cum_blog.storage_backends.MediaStorage"
 
+    # SSL Configuration
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -287,7 +292,3 @@ CKEDITOR_5_CONFIGS = {
 
 # Define a constant in settings.py to specify file upload permissions
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated",
-
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True

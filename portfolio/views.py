@@ -6,7 +6,8 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from portfolio_cum_blog import settings
 from .models import (
-    PortfolioUser, UserSkill, PortfolioUserSocialMediaLink, Review, NewClient, PortfolioUserAddress, ClientProject
+    PortfolioUser, UserSkill, PortfolioUserSocialMediaLink, Review, NewClient, PortfolioUserAddress, ClientProject,
+    Resume
 )
 from .forms import ContactUs
 from .constants import *
@@ -154,11 +155,16 @@ def index(request):
         about = obj_portfolio_user.about
         profile_photo = obj_portfolio_user.profile_photo.url if obj_portfolio_user.profile_photo else "#"
         obj_social_media_links = get_social_media_links(obj_portfolio_user.id)
+        obj_resume = Resume.objects.filter(user_id=obj_portfolio_user.id).first()
+        resume_url = "#"
+        if obj_resume:
+            resume_url = obj_resume.resume_file.url
         context = {
             'page_title': 'Home',
             'heading': heading,
             'headline': headline,
             'profile_photo': profile_photo,
+            'resume_url': resume_url,
             'about': about,
             'skills': skills,
             'customer_reviews': customer_reviews
@@ -477,7 +483,7 @@ def user_profile_details(request, user_id):
                 )
             context['client_project_list'] = client_project_list
             context['role'] = obj_portfolio_user.role
-            context['profile_short_description'] = obj_portfolio_user.profile_short_description
+            context['profile_short_description'] = obj_portfolio_user.about
             context['mobile'] = obj_portfolio_user.mobile
             context['email'] = obj_portfolio_user.user.email
             context['about'] = obj_portfolio_user.about

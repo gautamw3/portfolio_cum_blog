@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from froala_editor.fields import FroalaField
 from django_ckeditor_5.fields import CKEditor5Field
 
 
@@ -253,3 +252,20 @@ class ClientProject(models.Model):
     class Meta:
         verbose_name = 'Client project'
         verbose_name_plural = 'Client projects'
+
+
+class Resume(models.Model):
+    """
+    Stores and manages the resume of the user
+    """
+    user = models.ForeignKey(PortfolioUser, on_delete=models.CASCADE, related_name='user_resume')
+    resume_file = models.FileField(upload_to='portfolio/resume')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user.user.first_name} {self.user.user.last_name} | Resume'
+
+    class Meta:
+        verbose_name = 'Resume'
+        verbose_name_plural = 'Resumes'
