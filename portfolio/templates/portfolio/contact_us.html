@@ -3,7 +3,17 @@
 {% block pagecontent %}
 {% load static %}
 {% load crispy_forms_tags %}
+<style>
+    .social_details a {
+  color: #000;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+.social_details a:hover {
+  color: #0d6efd;
+  transform: scale(1.2);
+}
 
+</style>
 <!--================ Start Contact Banner Area =================-->
 <section class="banner_area modern-banner">
     <div class="banner_inner d-flex align-items-center justify-content-center">
@@ -21,62 +31,94 @@
 
 <!--================ Contact Area =================-->
 <section class="contact_area section_gap bg-light py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 mb-5">
-                {% if country and state and city %}
-                <div class="contact_info p-4 bg-white shadow rounded">
-                    <div class="info_item mb-4">
-                        <i class="lnr lnr-home fa-2x mb-2"></i>
-                        <h6 class="mb-1">{{ state }}, {{ country }}</h6>
-                        <p class="mb-0">{{ city }}</p>
-                    </div>
-                    <div class="info_item mb-4">
-                        <i class="lnr lnr-phone-handset fa-2x mb-2"></i>
-                        <h6 class="mb-1"><a href="#">{{ mobile }}</a></h6>
-                        <p class="mb-0">{{ work_days }}, {{ work_shift }}</p>
-                    </div>
-                    <div class="info_item mb-4">
-                        <i class="lnr lnr-envelope fa-2x mb-2"></i>
-                        <h6 class="mb-1"><a href="#">{{ email }}</a></h6>
-                        <p class="mb-0">Send us your query anytime!</p>
-                    </div>
-                    <ul class="list-inline social_details mt-4">
-                        <li class="list-inline-item"><a href="{{ github }}" target="_blank"><i class="fa-brands fa-github fa-lg"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ linkedin }}" target="_blank"><i class="fa-brands fa-linkedin fa-lg"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ tweeter }}" target="_blank"><i class="fa-brands fa-twitter fa-lg"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ instagram }}" target="_blank"><i class="fa-brands fa-instagram fa-lg"></i></a></li>
-                    </ul>
-                </div>
-                {% endif %}
-            </div>
-            <div class="col-lg-8">
-                <div class="p-4 bg-white shadow rounded">
-                    <form class="row g-3" action="{% url 'contact_us' %}" method="post" enctype="multipart/form-data" id="contact_form">
-                        {% csrf_token %}
-                        <input type="hidden" id="{{ response }}">
-                        <div class="col-md-6">{{ form.client_name|as_crispy_field }}</div>
-                        <div class="col-md-6">{{ form.client_email|as_crispy_field }}</div>
-                        <div class="col-md-12">{{ form.subject|as_crispy_field }}</div>
-                        <div class="col-md-12">{{ form.message|as_crispy_field }}</div>
-                        <div class="col-md-12">{{ form.file_supporting_the_message|as_crispy_field }}</div>
-                        <div class="col-md-12 text-start">
-                            <button type="submit" value="submit" class="btn btn-primary px-4 py-2"><span>Send Message</span></button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row align-items-start">
 
-        <div class="mt-5" id="mapBox" class="mapBox"
-            data-lat="40.701083"
-            data-lon="-74.1522848"
-            data-zoom="13"
-            data-info="PO Box CT16122 Collins Street West, Victoria 8007, Australia."
-            data-mlat="40.701083"
-            data-mlon="-74.1522848">
+      <!-- Contact Info Card -->
+      <div class="col-lg-4 mb-5 d-flex align-items-stretch">
+        <div class="contact_info p-4 bg-white shadow rounded w-100">
+
+          <!-- Address -->
+          <div class="info_item d-flex align-items-start mb-4">
+            <i class="lnr lnr-home fa-2x me-3 mt-1"></i>
+            <div>
+              <h6 class="fw-bold mb-1">{{ state }}, {{ country }}</h6>
+              <p class="text-muted mb-0">{{ city }}</p>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="info_item d-flex align-items-start mb-4">
+            <i class="lnr lnr-phone-handset fa-2x me-3 mt-1"></i>
+            <div>
+              <h6 class="fw-bold mb-1"><a href="tel:{{ mobile }}" class="text-dark text-decoration-none">{{ mobile }}</a></h6>
+              <p class="text-muted mb-0">{{ work_days }}, {{ work_shift }}</p>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="info_item d-flex align-items-start mb-4">
+            <i class="lnr lnr-envelope fa-2x me-3 mt-1"></i>
+            <div>
+              <h6 class="fw-bold mb-1"><a href="mailto:{{ email }}" class="text-dark text-decoration-none">{{ email }}</a></h6>
+              <p class="text-muted mb-0">Send us your query anytime!</p>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <ul class="list-inline social_details mt-4 d-flex gap-3">
+            <li class="list-inline-item">
+              <a href="{{ github }}" target="_blank" class="text-dark"><i class="fa-brands fa-github fa-xl"></i></a>
+            </li>
+            <li class="list-inline-item">
+              <a href="{{ linkedin }}" target="_blank" class="text-dark"><i class="fa-brands fa-linkedin fa-xl"></i></a>
+            </li>
+            <li class="list-inline-item">
+              <a href="{{ twitter }}" target="_blank" class="text-dark"><i class="fa-brands fa-twitter fa-xl"></i></a>
+            </li>
+            <li class="list-inline-item">
+              <a href="{{ instagram }}" target="_blank" class="text-dark"><i class="fa-brands fa-instagram fa-xl"></i></a>
+            </li>
+          </ul>
+
         </div>
+      </div>
+
+      <!-- Client Leads Form -->
+      <div class="col-lg-8 d-flex align-items-stretch">
+        <div class="p-4 bg-white shadow rounded w-100">
+          <h3 class="fw-bold mb-4 text-primary">Client Leads Form</h3>
+          <p class="text-muted mb-4">Kindly fill out the form below. We'll connect with you shortly!</p>
+
+          <form class="row g-3" action="{% url 'contact_us' %}" method="post" enctype="multipart/form-data" id="contact_form">
+            {% csrf_token %}
+            <input type="hidden" id="{{ response }}">
+            <div class="col-md-6">{{ form.client_name|as_crispy_field }}</div>
+            <div class="col-md-6">{{ form.client_email|as_crispy_field }}</div>
+            <div class="col-md-12">{{ form.subject|as_crispy_field }}</div>
+            <div class="col-md-12">{{ form.message|as_crispy_field }}</div>
+            <div class="col-md-12">{{ form.file_supporting_the_message|as_crispy_field }}</div>
+            <div class="col-md-12 text-start">
+              <button type="submit" class="btn btn-primary px-4 py-2">
+                <span>Send Message</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
     </div>
+
+    <!-- MapBox (Optional) -->
+    <div class="mt-5" id="mapBox" class="mapBox"
+      data-lat="40.701083"
+      data-lon="-74.1522848"
+      data-zoom="13"
+      data-info="PO Box CT16122 Collins Street West, Victoria 8007, Australia."
+      data-mlat="40.701083"
+      data-mlon="-74.1522848">
+    </div>
+  </div>
 </section>
 <!--================ End Contact Area =================-->
 {% endblock %}
