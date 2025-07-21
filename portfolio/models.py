@@ -84,6 +84,7 @@ class SkillCategory(models.Model):
     """
     SKILL_CATEGORIES = (
         ('PLBE', 'Programming languages'),
+        ('FRME', 'Frameworks'),
         ('DBMS', 'Databases'),
         ('OPRS', 'Operating systems'),
         ('MCHL', 'Machine learning'),
