@@ -44,6 +44,8 @@ jobs:
             --timeout-seconds 300 \
             --parameters 'commands=[
               "cd /home/ubuntu/my_django_project/portfolio_cum_blog",
+              "git reset --hard origin/main",
+              "git clean -fd",
               "git pull origin main",
               "source ../env_app/bin/activate",
               "pip install -U pip",

@@ -468,3 +468,12 @@ body {
   margin-bottom: 1rem;
   text-align: justify;
 }
+
+.social_details a {
+  color: #000;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+.social_details a:hover {
+  color: #0d6efd;
+  transform: scale(1.2);
+}
