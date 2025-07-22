@@ -27,7 +27,6 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install -U pip
           pip install -r requirements.txt
 
       - name: Run Pytest
@@ -45,10 +44,9 @@ jobs:
             --timeout-seconds 300 \
             --parameters 'commands=[
               "cd /home/ubuntu/my_django_project/portfolio_cum_blog",
-              "git fetch origin",
-              "git checkout main",
               "git reset --hard origin/main",
               "git clean -fd",
+              "git pull origin main",
               "source ../env_app/bin/activate",
               "pip install -U pip",
               "pip install -r requirements.txt",
