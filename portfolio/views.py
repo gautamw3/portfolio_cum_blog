@@ -148,6 +148,8 @@ def index(request):
         else:
             obj_user = get_global_user(request)
             obj_portfolio_user = PortfolioUser.objects.get(pk=obj_user.user_portfolio.id)
+        email = obj_user.email
+        mobile = obj_portfolio_user.mobile
         customer_reviews = get_customer_reviews()
         skills = get_user_skills(obj_user.id)
         heading = obj_portfolio_user.heading
@@ -163,6 +165,8 @@ def index(request):
             'page_title': 'Home',
             'heading': heading,
             'headline': headline,
+            'email': email,
+            'mobile': mobile,
             'profile_photo': profile_photo,
             'resume_url': resume_url,
             'about': about,
