@@ -50,7 +50,7 @@ else:
     STATICFILES_STORAGE = "portfolio_cum_blog.storage_backends.StaticStorage"
     DEFAULT_FILE_STORAGE = "portfolio_cum_blog.storage_backends.MediaStorage"
 
-    # SSL Configuration
+    SSL Configuration
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

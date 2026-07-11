@@ -11,6 +11,10 @@ from .models import (
 )
 from .forms import ContactUs
 from .constants import *
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class GlobalResponse:
@@ -314,7 +318,7 @@ def tech_details(request, tech_id):
 
 def new_client_feed(request):
     """
-    Stores the email address of the client who shown interest by submitting their email address
+    Stores the email address of the client who shown interest in submitting their email address
     """
     response_data = get_global_response(request)
     try:

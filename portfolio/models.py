@@ -256,7 +256,7 @@ class ClientProject(models.Model):
 
 class Resume(models.Model):
     """
-    Stores and manages the resume of the user
+    Stores and manages the résumé of the user
     """
     user = models.ForeignKey(PortfolioUser, on_delete=models.CASCADE, related_name='user_resume')
     resume_file = models.FileField(upload_to='portfolio/resume')
