@@ -2,84 +2,70 @@
 {% block title %} {{ page_title }} {% endblock %}
 {% block pagecontent %}
 {% load static %}
-<style>
-.profile-section {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-}
-.profile-photo-col {
-  flex: 0 0 auto;
-  width: 200px;
-}
-.profile-photo-col img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
-  display: block;
-  padding-left: 5%;
-  padding-right: 5%;
-}
-.profile-info-col {
-  flex: 1;
-  min-width: 250px;
-  padding-top: 0;
-}
-</style>
 
 <!--================ Start Profile Banner Area =================-->
 <section class="banner_area modern-banner">
     <div class="banner_inner d-flex align-items-center justify-content-center">
         <div class="container text-center">
-            <h1 class="display-4 text-white">Profile Details</h1>
-            <nav class="breadcrumb-wrapper">
-                <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
-                <span class="breadcrumb-separator">/</span>
-                <a href="{% url 'about_me' %}" class="breadcrumb-link">About</a>
-                <span class="breadcrumb-separator">/</span>
-                <span class="breadcrumb-current">Details</span>
-            </nav>
+            <div class="banner-panel">
+                <span class="banner-kicker">Professional Snapshot</span>
+                <h1>Profile Details</h1>
+                <p class="banner-subtitle">{{ role|default:"Software Professional" }} • Experience, confidence, and delivery focus across core technologies.</p>
+                <ul class="banner-skill-tags">
+                    <li>Problem Solving</li>
+                    <li>Ownership</li>
+                    <li>Execution</li>
+                </ul>
+                <nav class="breadcrumb-wrapper">
+                    <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="{% url 'about_me' %}" class="breadcrumb-link">About</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">Details</span>
+                </nav>
+            </div>
         </div>
     </div>
 </section>
 <!--================ End Profile Banner Area =================-->
 
 <!--================ Start Profile Details Area =================-->
-<section class="portfolio_details_area section_gap bg-light py-5">
+<section class="portfolio_details_area section_gap profile-home-theme">
     <div class="container">
 
-        <div class="text-center mb-5">
-            <h2 class="mb-3" style="text-decoration: underline;">My Profile Snapshot</h2>
+        <div class="text-center mb-5 profile-home-heading">
+            <h2 class="mb-2">My Profile Snapshot</h2>
+            <p class="mb-0">A compact overview of role, contact, expertise, and confidence across technologies.</p>
         </div>
 
-        <div class="row gx-5 gy-4 align-items-center mb-5">
-			<div class="row profile-section mb-5">
-				<div class="profile-photo-col">
+        <div class="profile-shell profile-home-shell mb-5">
+			<div class="profile-home-topline">
+				<div class="profile-home-photo-frame">
 					<img src="{{ profile_photo }}" alt="{{ user_first_name }}" title="{{ user_first_name }}">
 				</div>
-		  	<div class="profile-info-col">
-				<h4 class="fw-bold text-primary">{{ role }}</h4>
-                <div class="about-text mb-4">{{ profile_short_description|safe }} </div>
-				<div class="mb-3">
-                    <span class="d-inline-block me-4">
-                        <i class="fas fa-phone-alt me-2 text-primary"></i><span class="text-dark"> {{ mobile }}</span>
-                    </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class="d-inline-block">
-                        <i class="fas fa-envelope me-2 text-primary"></i><span class="text-dark"> {{ email }}</span>
-                    </span>
-					<ul class="list-inline social_details mt-4">
-                        <li class="list-inline-item"><a href="{{ github }}" target="_blank"><i class="fa-brands fa-github fa-2x"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ linkedin }}" target="_blank"><i class="fa-brands fa-linkedin fa-2x"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ tweeter }}" target="_blank"><i class="fa-brands fa-twitter fa-2x"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ instagram }}" target="_blank"><i class="fa-brands fa-instagram fa-2x"></i></a></li>
-                    </ul>
-                </div>
-		  </div>
-		</div>
-
+				<div class="profile-home-topmeta">
+					<h4 class="fw-bold profile-home-role">{{ role }}</h4>
+					<div class="about-text mb-4">{{ profile_short_description|safe }}</div>
+					<div class="profile-home-contact">
+						<div class="profile-home-contact-list">
+							<div class="profile-home-contact-item">
+								<i class="fas fa-phone-alt"></i>
+								<span>{{ mobile }}</span>
+							</div>
+							<div class="profile-home-contact-item">
+								<i class="fas fa-envelope"></i>
+								<span>{{ email }}</span>
+							</div>
+						</div>
+						<ul class="list-inline social_details profile-home-social">
+							<li class="list-inline-item"><a href="{{ github }}" target="_blank" rel="noreferrer"><i class="fa-brands fa-github"></i></a></li>
+							<li class="list-inline-item"><a href="{{ linkedin }}" target="_blank" rel="noreferrer"><i class="fa-brands fa-linkedin"></i></a></li>
+							<li class="list-inline-item"><a href="{{ tweeter }}" target="_blank" rel="noreferrer"><i class="fa-brands fa-twitter"></i></a></li>
+							<li class="list-inline-item"><a href="{{ instagram }}" target="_blank" rel="noreferrer"><i class="fa-brands fa-instagram"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
         </div>
 
 <!--        <div class="mb-5">-->
@@ -87,14 +73,14 @@
 <!--            <p class="text-muted">{{ about|safe }}</p>-->
 <!--        </div>-->
 
-        <div class="mb-5">
+        <div class="mb-5 profile-home-skills-shell">
             <h3 class="mb-4">Technical Capabilities</h3>
             {% for key, values in skills.items %}
-            <div class="mb-4">
-                <h5 class="text-primary">{{ key }}</h5>
+            <div class="mb-4 profile-home-skill-group">
+                <h5 class="profile-home-skill-title">{{ key }}</h5>
                 <div class="table-responsive">
-                    <table class="table table-sm table-bordered table-hover align-middle text-center">
-                        <thead class="table-light">
+                    <table class="table table-sm table-bordered table-hover align-middle text-center profile-home-skills-table">
+                        <thead>
                             <tr>
                                 <th>Technology</th>
                                 <th>Experience</th>
@@ -105,13 +91,13 @@
                             {% for each_value in values %}
                                 {% for key_one, value_one in each_value.items %}
                                     <tr>
-                                        <td class="text-start">
-                                            <img src="{{ value_one.logo }}" alt="{{ key_one }}" style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;"> {{ key_one }}
+                                    <td class="text-start profile-home-tech-cell">
+                                        <img src="{{ value_one.logo }}" alt="{{ key_one }}"> {{ key_one }}
                                         </td>
                                         <td>{{ value_one.total_experience_in_year }}</td>
                                         <td>
-                                            <div class="progress" style="height: 16px;">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ value_one.rating_out_of_five }}%;" aria-valuenow="{{ value_one.rating_out_of_five }}" aria-valuemin="0" aria-valuemax="100">{{ value_one.rating_out_of_five }}%</div>
+                                        <div class="progress profile-home-progress">
+                                            <div class="progress-bar profile-home-progress-bar" role="progressbar" style="width: {{ value_one.rating_out_of_five }}%;" aria-valuenow="{{ value_one.rating_out_of_five }}" aria-valuemin="0" aria-valuemax="100">{{ value_one.rating_out_of_five }}%</div>
                                             </div>
                                         </td>
                                     </tr>
@@ -124,59 +110,41 @@
             {% endfor %}
         </div>
 
-<!--        <div>-->
-<!--            <h3 class="mb-4">Client Projects</h3>-->
-<!--            <div class="table-responsive">-->
-<!--                <table class="table table-sm table-bordered table-striped table-hover align-middle">-->
-<!--                    <thead class="table-dark text-center">-->
-<!--                        <tr>-->
-<!--                            <th>Title</th>-->
-<!--                            <th>Client</th>-->
-<!--                            <th>URL</th>-->
-<!--                            <th>Technologies</th>-->
-<!--                            <th>Description</th>-->
-<!--                        </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody class="text-center">-->
-<!--                        {% for each_project in client_project_list %}-->
-<!--                        <tr>-->
-<!--                            <td>{{ each_project.project_title }}</td>-->
-<!--                            <td>{{ each_project.client_name }}</td>-->
-<!--                            <td><a href="{{ each_project.project_url }}" target="_blank">Link</a></td>-->
-<!--                            <td>-->
-<!--                                <div class="progress" style="height: 16px;">-->
-<!--                                    <div class="progress-bar bg-info" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">80%</div>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td class="text-start">{{ each_project.project_description|safe }}</td>-->
-<!--                        </tr>-->
-<!--                        {% endfor %}-->
-<!--                        <tr>-->
-<!--                            <td>Inventory Management System</td>-->
-<!--                            <td>Acme Corp</td>-->
-<!--                            <td><a href="#" target="_blank">Link</a></td>-->
-<!--                            <td>-->
-<!--                                <div class="progress" style="height: 16px;">-->
-<!--                                    <div class="progress-bar bg-info" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">70%</div>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td class="text-start">Built a scalable inventory solution integrated with real-time analytics.</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>Customer Feedback Portal</td>-->
-<!--                            <td>Beta Ltd</td>-->
-<!--                            <td><a href="#" target="_blank">Link</a></td>-->
-<!--                            <td>-->
-<!--                                <div class="progress" style="height: 16px;">-->
-<!--                                    <div class="progress-bar bg-info" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%</div>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td class="text-start">Developed a modern UI-based feedback system using React and Django.</td>-->
-<!--                        </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="profile-home-projects-shell">
+            <h3 class="mb-4">Client Projects</h3>
+            {% if client_project_list %}
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-hover align-middle profile-home-projects-table">
+                    <thead class="text-center">
+                        <tr>
+                            <th>Title</th>
+                            <th>Client</th>
+                            <th>URL</th>
+                            <th>Technologies</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for each_project in client_project_list %}
+                        <tr>
+                            <td class="project-title">{{ each_project.project_title }}</td>
+                            <td>{{ each_project.client_name }}</td>
+                            <td class="text-center">
+                                <a href="{{ each_project.project_url }}" target="_blank" rel="noreferrer" class="project-link">Visit</a>
+                            </td>
+                            <td class="project-tech">{{ each_project.tools_and_technologies_used|join:", " }}</td>
+                            <td class="text-start project-description">{{ each_project.project_description|safe }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="profile-home-empty-state">
+                Client projects will be displayed here once available.
+            </div>
+            {% endif %}
+        </div>
 
     </div>
 </section>

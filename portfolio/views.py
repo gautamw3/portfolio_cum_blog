@@ -158,6 +158,7 @@ def index(request):
         skills = get_user_skills(obj_user.id)
         heading = obj_portfolio_user.heading
         headline = obj_portfolio_user.headline
+        role = obj_portfolio_user.role
         about = obj_portfolio_user.about
         profile_photo = obj_portfolio_user.profile_photo.url if obj_portfolio_user.profile_photo else "#"
         obj_social_media_links = get_social_media_links(obj_portfolio_user.id)
@@ -169,6 +170,7 @@ def index(request):
             'page_title': 'Home',
             'heading': heading,
             'headline': headline,
+            'role': role,
             'email': email,
             'mobile': mobile,
             'profile_photo': profile_photo,
@@ -376,6 +378,7 @@ def contact_us(request):
                 }
                 send_new_client_lead_mail(email_data)
                 context['response'] = 'success'
+                form = ContactUs()
             else:
                 context['response'] = 'error'
         else:
@@ -421,6 +424,7 @@ def about_me(request):
             else:
                 obj_user = get_global_user(request)
             context['about'] = obj_user.user_portfolio.about
+            context['role'] = obj_user.user_portfolio.role
             context['profile_photo'] = obj_user.user_portfolio.profile_photo.url if obj_user.user_portfolio.profile_photo else "#"
             customer_reviews = get_customer_reviews()
             obj_social_media_links = get_social_media_links(obj_user.user_portfolio.id)

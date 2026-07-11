@@ -8,29 +8,42 @@
 <section class="banner_area modern-banner">
     <div class="banner_inner d-flex align-items-center justify-content-center">
         <div class="container text-center">
-            <h1 class="display-4 text-white">Contact Us</h1>
-            <nav class="breadcrumb-wrapper">
-                <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
-                <span class="breadcrumb-separator">/</span>
-                <span class="breadcrumb-current">Contact</span>
-            </nav>
+            <div class="banner-panel">
+                <span class="banner-kicker">Let’s Collaborate</span>
+                <h1>Contact Us</h1>
+                <p class="banner-subtitle">Share your requirements and get a practical, execution-ready technology solution.</p>
+                <ul class="banner-skill-tags">
+                    <li>Consulting</li>
+                    <li>Delivery</li>
+                    <li>Support</li>
+                </ul>
+                <nav class="breadcrumb-wrapper">
+                    <a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">Contact</span>
+                </nav>
+            </div>
         </div>
     </div>
 </section>
 <!--================ End Contact Banner Area =================-->
 
 <!--================ Contact Area =================-->
-<section class="contact_area section_gap bg-light py-5">
+<section class="contact_area bg-light pt-5 pb-3">
   <div class="container">
+    {% if response == 'success' %}
+      <div id="success" class="d-none"></div>
+    {% elif response == 'error' %}
+      <div id="error" class="d-none"></div>
+    {% endif %}
     <div class="row align-items-start">
 
       <!-- Contact Info Card -->
-      <div class="col-lg-4 mb-5 d-flex align-items-stretch">
-        <div class="contact_info p-4 bg-white shadow rounded w-100">
+      <div class="col-lg-4 mb-4 mb-lg-0 d-flex align-items-stretch">
+        <div class="contact_info contact-form-shell w-100">
 
           <!-- Address -->
-          <div class="info_item d-flex align-items-start mb-4">
-            <i class="lnr lnr-home fa-2x me-3 mt-1"></i>
+          <div class="info_item mb-4">
             <div>
               <h6 class="fw-bold mb-1">{{ state }}, {{ country }}</h6>
               <p class="text-muted mb-0">{{ city }}</p>
@@ -38,8 +51,7 @@
           </div>
 
           <!-- Phone -->
-          <div class="info_item d-flex align-items-start mb-4">
-            <i class="lnr lnr-phone-handset fa-2x me-3 mt-1"></i>
+          <div class="info_item mb-4">
             <div>
               <h6 class="fw-bold mb-1"><a href="tel:{{ mobile }}" class="text-dark text-decoration-none">{{ mobile }}</a></h6>
               <p class="text-muted mb-0">{{ work_days }}, {{ work_shift }}</p>
@@ -47,8 +59,7 @@
           </div>
 
           <!-- Email -->
-          <div class="info_item d-flex align-items-start mb-4">
-            <i class="lnr lnr-envelope fa-2x me-3 mt-1"></i>
+          <div class="info_item mb-4">
             <div>
               <h6 class="fw-bold mb-1"><a href="mailto:{{ email }}" class="text-dark text-decoration-none">{{ email }}</a></h6>
               <p class="text-muted mb-0">Send us your query anytime!</p>
@@ -56,40 +67,41 @@
           </div>
 
           <!-- Social Links -->
-          <ul class="list-inline social_details mt-4 d-flex gap-3">
-            <li class="list-inline-item">
-              <a href="{{ github }}" target="_blank" class="text-dark"><i class="fa-brands fa-github fa-xl"></i></a>
-            </li>
-            <li class="list-inline-item">
-              <a href="{{ linkedin }}" target="_blank" class="text-dark"><i class="fa-brands fa-linkedin fa-xl"></i></a>
-            </li>
-            <li class="list-inline-item">
-              <a href="{{ twitter }}" target="_blank" class="text-dark"><i class="fa-brands fa-twitter fa-xl"></i></a>
-            </li>
-            <li class="list-inline-item">
-              <a href="{{ instagram }}" target="_blank" class="text-dark"><i class="fa-brands fa-instagram fa-xl"></i></a>
-            </li>
-          </ul>
+          <div class="contact-social-row mt-4">
+            <ul class="contact-social-list">
+              <li>
+                <a href="{{ github }}" target="_blank" class="text-dark"><i class="fa-brands fa-github fa-xl"></i></a>
+              </li>
+              <li>
+                <a href="{{ linkedin }}" target="_blank" class="text-dark"><i class="fa-brands fa-linkedin fa-xl"></i></a>
+              </li>
+              <li>
+                <a href="{{ tweeter }}" target="_blank" class="text-dark"><i class="fa-brands fa-twitter fa-xl"></i></a>
+              </li>
+              <li>
+                <a href="{{ instagram }}" target="_blank" class="text-dark"><i class="fa-brands fa-instagram fa-xl"></i></a>
+              </li>
+            </ul>
+          </div>
 
         </div>
       </div>
 
       <!-- Client Leads Form -->
       <div class="col-lg-8 d-flex align-items-stretch">
-        <div class="p-4 bg-white shadow rounded w-100">
-          <h3 class="fw-bold mb-4 text-primary">Client Leads Form</h3>
+        <div class="contact_info contact-form-shell w-100">
+          <h3 class="panel-title contact-card-title">Client Leads Form</h3>
           <p class="text-muted mb-4">Kindly fill out the form below. We'll connect with you shortly!</p>
 
           <form class="row g-3" action="{% url 'contact_us' %}" method="post" enctype="multipart/form-data" id="contact_form">
             {% csrf_token %}
-            <input type="hidden" id="{{ response }}">
             <div class="col-md-6">{{ form.client_name|as_crispy_field }}</div>
             <div class="col-md-6">{{ form.client_email|as_crispy_field }}</div>
             <div class="col-md-12">{{ form.subject|as_crispy_field }}</div>
             <div class="col-md-12">{{ form.message|as_crispy_field }}</div>
             <div class="col-md-12">{{ form.file_supporting_the_message|as_crispy_field }}</div>
             <div class="col-md-12 text-start">
-              <button type="submit" class="btn btn-primary px-4 py-2">
+              <button type="submit" id="clientLeadSubmitBtn" class="btn btn-primary px-4 py-2">
                 <span>Send Message</span>
               </button>
             </div>
@@ -99,16 +111,18 @@
 
     </div>
 
-    <!-- MapBox (Optional) -->
-    <div class="mt-5" id="mapBox" class="mapBox"
-      data-lat="40.701083"
-      data-lon="-74.1522848"
-      data-zoom="13"
-      data-info="PO Box CT16122 Collins Street West, Victoria 8007, Australia."
-      data-mlat="40.701083"
-      data-mlon="-74.1522848">
-    </div>
   </div>
 </section>
 <!--================ End Contact Area =================-->
+<script>
+  (function () {
+    const form = document.getElementById('contact_form');
+    const submitBtn = document.getElementById('clientLeadSubmitBtn');
+    if (!form || !submitBtn) return;
+    form.addEventListener('submit', function () {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Submitting...</span>';
+    });
+  })();
+</script>
 {% endblock %}

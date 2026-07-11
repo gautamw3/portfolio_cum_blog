@@ -1,176 +1,218 @@
 {% extends 'portfolio/base_templates/base.html' %}
-{% block title %} {{ page_title }} {% endblock %}
-{% block pagecontent %}
 {% load static %}
-<!--================Home Banner Area =================-->
-<section class="swiper new-banner-slider">
-  <div class="swiper-wrapper">
+{% block title %} {{ page_title }} {% endblock %}
 
-    <!-- Slide 1 -->
-    <div class="swiper-slide banner-slide" style="background-image: url({% static 'portfolio/img/banner/banner_1.jpg' %});">
-      <div class="overlay"></div>
-      <div class="banner-content">
-        <h2 class="animated-text">Crafting Ideas into Reality</h2>
-<!--        <a href="{% url 'contact_us' %}" class="primary-btn">Hire Me</a>-->
-        <a href="mailto:{{ email }}" class="primary-btn">Let's Connect</a>
-      </div>
-    </div>
+{% block pagecontent %}
+<style>
+  .premium-home {
+    --bg: #f8fbff;
+    --bg-soft: #eef4ff;
+    --surface: rgba(255, 255, 255, 0.92);
+    --surface-strong: rgba(255, 255, 255, 0.96);
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #2563eb;
+    --accent-2: #0ea5e9;
+    --radius: 22px;
+    --shadow: 0 22px 54px rgba(15, 23, 42, 0.1);
+    background:
+      radial-gradient(900px 400px at 10% -10%, rgba(37,99,235,.14), transparent 45%),
+      radial-gradient(700px 400px at 100% 10%, rgba(14,165,233,.12), transparent 50%),
+      linear-gradient(160deg, var(--bg), var(--bg-soft));
+    color: var(--text);
+  }
 
-    <!-- Slide 2 -->
-    <div class="swiper-slide banner-slide" style="background-image: url({% static 'portfolio/img/banner/banner_2.jpg' %});">
-      <div class="overlay"></div>
-      <div class="banner-content">
-        <h2 class="animated-text">Building Tomorrow's Tech Today</h2>
-<!--        <a href="{% url 'contact_us' %}" class="primary-btn">Hire Me</a>-->
-        <a href="mailto:{{ email }}" class="primary-btn">Let's Connect</a>
-      </div>
-    </div>
+  .premium-home .section-wrap { padding: 92px 0; }
+  .premium-home .glass {
+    background: var(--surface);
+    border: 1px solid rgba(226,232,240,.95);
+    border-radius: var(--radius);
+    backdrop-filter: blur(14px);
+    box-shadow: var(--shadow);
+  }
 
-    <!-- Slide 3 -->
-    <div class="swiper-slide banner-slide" style="background-image: url({% static 'portfolio/img/banner/banner_3.jpg' %});">
-      <div class="overlay"></div>
-      <div class="banner-content">
-        <h2 class="animated-text">Your Vision, My Code</h2>
-<!--        <a href="{% url 'contact_us' %}" class="primary-btn">Hire Me</a>-->
-        <a href="mailto:{{ email }}" class="primary-btn">Let's Connect</a>
-      </div>
-    </div>
-  </div>
+  .hero {
+    min-height: calc(100vh - 88px);
+    display: flex;
+    align-items: center;
+  }
 
-  <!-- Navigation -->
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
-</section>
-<!--================End Home Banner Area =================-->
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    font-weight: 900;
+    margin-bottom: 1rem;
+  }
 
-<!--================ Start Portfolio Area =================-->
-<section class="portfolio-section" style="background: linear-gradient(135deg, #100f0f, #0f214b);">
-	<div class="container">
-	  <!-- Heading -->
-	  <div class="portfolio-header container">
-		  <h2 class="portfolio-heading-title">{{ heading }}</h2>
-		  <p class="portfolio-heading-subtitle">{{ headline }}</p>
-	  </div>
+  .hero p { color: var(--muted); font-size: 1.06rem; max-width: 640px; }
+  .pill {
+    display: inline-flex;
+    gap: .4rem;
+    align-items: center;
+    padding: .45rem .85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(148,163,184,.35);
+    background: rgba(255,255,255,.75);
+    color: #334155;
+    font-size: .83rem;
+    margin-bottom: 1rem;
+  }
 
-	  <!-- Filter Buttons -->
-	  <div class="portfolio-filters">
-		  <button class="portfolio-filter-btn active" data-filter="all">All</button>
-		  {% for key, values in skills.items %}
-		  	<button class="portfolio-filter-btn" data-filter=".{{ key|cut:' ' }}">{{ key }}</button>
-		  {% endfor %}
-	  </div>
-	  <!-- Grid -->
-	  <div class="row" id="mix-container">
-		  {% for key, values in skills.items %}
-		  	{% for each_value in values %}
-		  		{% for key_one, value_one in each_value.items %}
-		  			<div class="col-12 col-sm-6 col-md-4 mix {{ key|cut:' ' }} mb-4">
-						<div class="portfolio-item">
-							<div class="portfolio-img-wrapper">
-								<img src="{{ value_one.logo }}" alt="{{ key_one }}">
-							</div>
-							<a href="{% url 'tech_details' value_one.id %}">
-								<h4 class="portfolio-title">{{ key_one }}</h4>
-							</a>
-						</div>
-					</div>
-		        {% endfor %}
-		    {% endfor %}
-		  {% endfor %}
-	  </div>
-  </div>
-</section>
-<!--================ End Portfolio Area =================-->
+  .hero-ctas .btn { border-radius: 999px; font-weight: 700; padding: .82rem 1.25rem; }
+  .btn-brand {
+    border: 0;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  .btn-ghost {
+    color: #1e3a8a;
+    border: 1px solid rgba(37,99,235,.25);
+    background: rgba(37,99,235,.08);
+  }
 
-<!--================ Start About Area =================-->
-<section class="about-section py-5 bg-light">
-  <div class="container">
-    <div class="row justify-content-between align-items-start">
+  .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 26px; }
+  .stat { padding: 16px; text-align: center; }
+  .stat h3 { margin: 0; font-size: 1.55rem; font-weight: 800; }
+  .stat p { margin: 0; color: var(--muted); font-size: .9rem; }
 
-      <!-- Profile Photo & Resume Button -->
-      <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
-        <div class="text-center mx-auto" style="max-width: 320px;">
+  .card-premium { padding: 20px; height: 100%; }
+  .card-premium img { width: 54px; height: 54px; object-fit: contain; margin-bottom: 12px; }
+  .card-premium h5 { margin-bottom: 4px; font-weight: 700; }
+  .card-premium small { color: var(--muted); }
 
-          <!-- Profile Photo with elegant border -->
-          <div style="
-            border: 3px solid #dce3ea;
-            border-radius: 12px;
-            padding: 10px;
-            background-color: #fff;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-          ">
-            <img
-              src="{{ profile_photo }}"
-              alt="{{ request.user.first_name }}"
-              title="{{ request.user.first_name }}"
-              class="img-fluid rounded"
-              style="width: 100%; height: auto;"
-            >
+  .about-box img {
+    width: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,.16);
+  }
+
+  .profile-role-script {
+    margin-top: 0.9rem;
+    text-align: center;
+    font-family: "Brush Script MT", "Lucida Handwriting", "Segoe Script", cursive;
+    font-size: clamp(1.35rem, 2.4vw, 1.95rem);
+    color: #1e3a8a;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .testimonial {
+    padding: 22px;
+    border-left: 3px solid rgba(56,189,248,.8);
+    color: #334155;
+  }
+
+  .section-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em; }
+  .section-head p { color: var(--muted); max-width: 700px; }
+
+  @media (max-width: 991px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .hero { min-height: auto; padding-top: 42px; padding-bottom: 24px; }
+  }
+</style>
+
+<div class="premium-home">
+  <!-- HERO -->
+  <section class="hero section-wrap">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-7 mb-4 mb-lg-0">
+          <span class="pill">● Premium Portfolio Template · 2026 Edition</span>
+          <h1>Designing elite digital products that perform.</h1>
+          <p>{{ headline }}</p>
+
+          <div class="hero-ctas mt-4 d-flex flex-wrap" style="gap:12px">
+            <a href="{% url 'user_portfolio' %}" class="btn btn-brand">Explore Portfolio</a>
+            <a href="mailto:{{ email }}" class="btn btn-ghost">Book a Discovery Call</a>
           </div>
 
-          <!-- Resume Button (separated visually) -->
-          <div class="mt-3" style="margin-top: 20px;">
-            <a href="{{ resume_url }}" target="_blank"
-               class="btn btn-outline-primary w-100 fw-semibold"
-               style="border-width: 2px;">
-              <i class="fas fa-file-download me-2" style="margin-right:10px"></i>Download Resume
-            </a>
+          <div class="stats-grid">
+            <div class="glass stat"><h3>50+</h3><p>Projects Delivered</p></div>
+            <div class="glass stat"><h3>99%</h3><p>Client Satisfaction</p></div>
+            <div class="glass stat"><h3>24/7</h3><p>Global Collaboration</p></div>
           </div>
+        </div>
 
+        <div class="col-lg-5">
+          <div class="glass p-3 about-box">
+            <img src="{{ profile_photo }}" alt="{{ request.user.first_name|default:'Profile' }}">
+            <div class="profile-role-script">{{ role|default:"Role / Designation" }}</div>
+          </div>
         </div>
       </div>
-
-      <!-- About Text -->
-      <div class="col-lg-6 col-md-12 d-flex flex-column justify-content-start">
-        <div class="section-title mb-4">
-          <h2>About Me</h2>
-        </div>
-        <div class="about-text mb-4">
-          {{ about|safe }}
-        </div>
-        <a href="{% if request.user.is_authenticated %}{% url 'user_profile_details' request.user.id %}{% else %}{% url 'user_profile_details' 1 %}{% endif %}" class="btn btn-primary mt-auto">
-          More Info
-        </a>
-      </div>
-
     </div>
-  </div>
-</section>
-<!--================ End About Area =================-->
+  </section>
 
-<!--================ Start Testimonial Area =================-->
-<div class="glide">
-  <!-- Slider Track -->
-  <div class="glide__track" data-glide-el="track">
-    <ul class="glide__slides">
-	{% for each_review in customer_reviews %}
-      <!-- Testimonial 1 -->
-      <li class="glide__slide">
-        <div class="testimonial-card fade-in">
-          <p class="testimonial-text">
-			  <i class="fas fa-quote-left" style="color: #ccc; margin-right: 8px;"></i>
-			  {{ each_review.description|striptags }}
-			  <i class="fas fa-quote-right" style="color: #ccc; margin-left: 8px;"></i>
-		  </p>
-          <div class="testimonial-stars">
-			  {% for each_rating_item in each_review.rating %}
-			  	<i class="fas fa-star"></i>
-			  {% endfor %}
+  <!-- SKILLS -->
+  <section class="section-wrap pt-0">
+    <div class="container">
+      <div class="section-head mb-4">
+        <h2>{{ heading }}</h2>
+        <p>Modern stack, scalable architecture, and clean execution across product, frontend, backend, cloud, and AI-enabled workflows.</p>
+      </div>
+
+      <div class="row">
+        {% for key, values in skills.items %}
+          {% for each_value in values %}
+            {% for key_one, value_one in each_value.items %}
+              <div class="col-md-6 col-lg-4 mb-4">
+                <a href="{% url 'tech_details' value_one.id %}" style="text-decoration:none;">
+                  <div class="glass card-premium">
+                    <img src="{{ value_one.logo }}" alt="{{ key_one }}">
+                    <h5>{{ key_one }}</h5>
+                    <small>{{ key }}</small>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT + CTA -->
+  <section class="section-wrap pt-0">
+    <div class="container">
+      <div class="row g-4 align-items-start">
+        <div class="col-lg-8 mb-4 mb-lg-0">
+          <div class="glass p-4 h-100">
+            <h3 style="font-weight:800;">About Me</h3>
+            <div style="color:#334155;">{{ about|safe }}</div>
+            <a href="{% if request.user.is_authenticated %}{% url 'user_profile_details' request.user.id %}{% else %}{% url 'user_profile_details' 1 %}{% endif %}" class="btn btn-brand mt-3">View Full Profile</a>
           </div>
-          <h5 class="testimonial-author">— {{ each_review.reviewer }}</h5>
         </div>
-      </li>
-	{% endfor %}
-	</ul>
-  </div>
+        <div class="col-lg-4">
+          <div class="glass p-4">
+            <h4 style="font-weight:800;">Need a premium build?</h4>
+            <p style="color:var(--muted);">From MVP to enterprise-grade platforms, I can help you move fast with clean architecture.</p>
+            <a href="{{ resume_url }}" target="_blank" class="btn btn-ghost btn-block">Download Resume</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- Pagination Dots -->
-  <div class="glide__bullets text-center mt-3" data-glide-el="controls[nav]">
-	  {% for each_review in customer_reviews %}
-	  	<button class="glide__bullet" data-glide-dir="={{forloop.counter0}}"></button>
-	  {% endfor %}
-  </div>
+  <!-- TESTIMONIAL -->
+  <section class="section-wrap pt-0">
+    <div class="container">
+      <div class="section-head mb-4">
+        <h2>Client Testimonials</h2>
+      </div>
+      <div class="row">
+        {% for each_review in customer_reviews %}
+          <div class="col-lg-6 mb-4">
+            <div class="glass testimonial h-100">
+              “{{ each_review.description|striptags }}”
+              <div class="mt-3" style="color:#2563eb; font-weight:700;">— {{ each_review.reviewer }}</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 </div>
-<!--================ End Testimonial Area =================-->
 {% endblock %}

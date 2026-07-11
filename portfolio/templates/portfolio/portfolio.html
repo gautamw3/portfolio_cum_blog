@@ -6,12 +6,21 @@
 	<section class="banner_area modern-banner">
 		<div class="banner_inner d-flex align-items-center justify-content-center">
 			<div class="container text-center">
-				<h1 class="display-4 text-white">My Portfolio</h1>
-				<nav class="breadcrumb-wrapper">
-					<a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
-					<span class="breadcrumb-separator">/</span>
-					<span class="breadcrumb-current">Portfolio</span>
-				</nav>
+				<div class="banner-panel">
+					<span class="banner-kicker">Capability Showcase</span>
+					<h1>My Portfolio</h1>
+					<p class="banner-subtitle">{{ headline }}</p>
+					<ul class="banner-skill-tags">
+						<li>Web Apps</li>
+						<li>Automation</li>
+						<li>Product Engineering</li>
+					</ul>
+					<nav class="breadcrumb-wrapper">
+						<a href="{% url 'index' %}" class="breadcrumb-link">Home</a>
+						<span class="breadcrumb-separator">/</span>
+						<span class="breadcrumb-current">Portfolio</span>
+					</nav>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -40,7 +49,7 @@
 		  {% for key, values in skills.items %}
 			{% for each_value in values %}
 			  {% for key_one, value_one in each_value.items %}
-				<div class="col-12 col-sm-6 col-md-4 mix {{ key|cut:' ' }} mb-4">
+				<div class="col-6 col-md-4 col-lg-3 mix {{ key|cut:' ' }} mb-3">
 				  <div class="portfolio-item">
 					  <div class="portfolio-img-wrapper">
 						<img src="{{ value_one.logo }}" alt="{{ key_one }}">

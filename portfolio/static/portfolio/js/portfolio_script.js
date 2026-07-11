@@ -1,6 +1,6 @@
-/**********************************
+/************************************
 * Configure toaster js notification *
-**********************************/
+*************************************/
 $(document).ready(function() {
 	toastr.options = {
 	  "closeButton": true,
@@ -86,31 +86,33 @@ $(document).ready(function() {
         }
     }
 
-      const swiper = new Swiper('.new-banner-slider', {
-		loop: true,
-		autoplay: {
-		  delay: 5000,
-		  disableOnInteraction: false,
-		},
-		effect: 'fade',
-		pagination: {
-		  el: '.swiper-pagination',
-		  clickable: true,
-		},
-		navigation: {
-		  nextEl: '.swiper-button-next',
-		  prevEl: '.swiper-button-prev',
-		},
-	  });
+      if (document.querySelector('.new-banner-slider')) {
+        const swiper = new Swiper('.new-banner-slider', {
+          loop: true,
+          autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+          },
+          effect: 'fade',
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      }
 
-      document.addEventListener('scroll', function () {
-        const header = document.querySelector('.custom-header');
-        if (window.scrollY > 50) {
-          header.style.background = 'rgba(0, 0, 0, 1)';
-        } else {
-          header.style.background = 'rgba(0, 0, 0, 0.9)';
-        }
-      });
+      const header = document.querySelector('.custom-header');
+      if (header) {
+        const updateHeaderState = function () {
+          header.classList.toggle('is-scrolled', window.scrollY > 24);
+        };
+        updateHeaderState();
+        document.addEventListener('scroll', updateHeaderState);
+      }
 });
 
 function showSignupModal() {
@@ -121,47 +123,6 @@ function showSignupModal() {
 function showLoginModal() {
     $("#portfolioSigninModal").modal('show');
     $("#portfolioSignupModal").modal('hide');
-}
-
-/*****************************
-* Loads user's basic details *
-*****************************/
-function loadUserBasicDetails() {
-  $.ajax({
-    type: 'POST',
-    url: SITE_ROOT + '/load-user-basic-details.php',
-    data: $.param({}),
-    dataType: 'html',
-    success:function(results) {
-      $("#dashboardLoader").attr("style", "display: none !important");
-      $("#dashboardContent").html(results).show();
-    2[yur4
-    ]}
-  });
-}
-
-function verifyMobile() {
-  let mobileOtp = $.trim($("#mobileOtp").val());
-  if(mobileOtp != '' && mobileOtp.length == 6) {
-    $("#verifyMobileBtn").addClass('active').attr('disabled', 'disabled').text("loading...");
-    $.ajax({
-      type: 'POST',
-      url: SITE_ROOT + '/verify-mobile.php',
-      data: $.param({'mobileOtp': mobileOtp}),
-      dataType: 'json',
-      success: function(results) {
-        toastr[results.response](results.responseMessage, results.responseMessageInfo);
-        if(results.response == 'success') {
-          $("#mobileVerifyDiv").html("<i class='fa fa-check fa-2x' aria-hidden='true' style='color: #48a868' title='Mobile Verified'></i>");
-        } else {
-          $("#verifyMobileBtn").removeClass('active').removeAttr('disabled').text('Verify');
-        }
-      }
-    });
-  } else {
-    alert('Invalid or null OTP received');
-    $("#mobileOtp").css('border', '1px solid orange').focus();
-  }
 }
 
 /*****************************************************************
@@ -447,45 +408,5 @@ function loginUser() {
         }
       }
     });
-  }
-}
-
-function submitNewClient() {
-    let new_client_email = $.trim($("#new_client_email").val());
-    let csrfmiddlewaretoken = $.trim($("input[name=csrfmiddlewaretoken]").val());
-    let isEmailValidated = false;
-    if(new_client_email == "") {
-        $("#new_client_email").css("border", "1px solid red").focus();
-    } else {
-        isEmailValidated = getValidateInputField(new_client_email, "new_client_email", true);
-        if(isEmailValidated) {
-          $("#new_client_email").css("border", ""), $("#new_client_email").next(alert).hide();
-          isEmailValidated = true;
-        } else {
-          $("#new_client_email").next(alert).show();
-        }
-    }
-    if(isEmailValidated) {
-        $("#new_lead_form_btn").addClass('active').attr('disabled', 'disabled').text('loading...');
-        $.ajax({
-          type: 'POST',
-          url: SITE_ROOT + '/new_client_feed/',
-          data: $.param({
-              'new_client_email': new_client_email,
-              'csrfmiddlewaretoken':csrfmiddlewaretoken
-          }),
-          dataType: 'json',
-          success: function(results) {
-            toastr[results.response](results.responseMessage, results.responseMessageInfo);
-            $("#new_lead_form_btn").removeClass('active');
-            $("#new_lead_form_btn").removeAttr('disabled');
-            $("#new_lead_form_btn").text('Subscribe');
-            if(results.response == 'success') {
-              $("#new_client_email").val('');
-            }
-          }
-        });
-  } else {
-    return false;
   }
 }

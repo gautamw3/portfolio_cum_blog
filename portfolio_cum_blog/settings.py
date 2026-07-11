@@ -50,7 +50,7 @@ else:
     STATICFILES_STORAGE = "portfolio_cum_blog.storage_backends.StaticStorage"
     DEFAULT_FILE_STORAGE = "portfolio_cum_blog.storage_backends.MediaStorage"
 
-    SSL Configuration
+    # SSL Configuration
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -221,7 +221,6 @@ customColorPalette = [
     },
 ]
 
-CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
 CKEDITOR_5_FILE_STORAGE = "portfolio_cum_blog.storage_backends.MediaStorage" # optional
 CKEDITOR_5_CONFIGS = {
     'default': {
