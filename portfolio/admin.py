@@ -1,7 +1,17 @@
 from django.contrib import admin
+
 from .models import (
-    PortfolioUser, SkillCategory, Skill, UserSkill, PortfolioUserSocialMediaLink,
-    Review, NewClient, PortfolioUserAddress, ClientLead, ClientProject, Resume
+    ClientLead,
+    ClientProject,
+    NewClient,
+    PortfolioUser,
+    PortfolioUserAddress,
+    PortfolioUserSocialMediaLink,
+    Resume,
+    Review,
+    Skill,
+    SkillCategory,
+    UserSkill,
 )
 
 # Register your models here.

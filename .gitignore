@@ -130,6 +130,10 @@ dmypy.json
 
 .idea/
 
+# Local tooling/cache/log output
+.ruff_cache/
+logs/
+
 media/
 
 staticfiles/
