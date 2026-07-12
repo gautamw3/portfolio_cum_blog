@@ -80,6 +80,7 @@ def get_user_skills(user_id):
     """
     Build the categorized skill payload for a given user.
     """
+    test_flag = False
     obj_user_skills = UserSkill.objects.filter(user__id=user_id)
     skills = {}
     for each_item in obj_user_skills:
@@ -123,6 +124,7 @@ def get_user_skills(user_id):
                         ),
                         "rating_out_of_five": rating * 20,
                         "progress_bar_color": progress_bar_color,
+                        "test_flag": test_flag,
                     }
                 }
             ]
