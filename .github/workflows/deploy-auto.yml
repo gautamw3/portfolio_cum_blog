@@ -1,11 +1,12 @@
-name: Django CI/CD via AWS SSM
+name: Django Auto CI/CD via AWS SSM
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
   deploy:
-    name: Test and Deploy
+    name: Test and Deploy (Auto)
     runs-on: ubuntu-latest
 
     env:

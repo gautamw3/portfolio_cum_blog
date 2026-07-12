@@ -1,10 +1,28 @@
 import pytest
-from portfolio.models import *
+from django.contrib.auth.models import User
+
+from portfolio.models import (
+    ClientLead,
+    ClientProject,
+    NewClient,
+    PortfolioUser,
+    PortfolioUserAddress,
+    PortfolioUserSocialMediaLink,
+    Review,
+    Skill,
+    SkillCategory,
+    UserSkill,
+)
 
 
 @pytest.mark.django_db
 def test_create_portfolio_user():
-    user = User.objects.create(username="testuser", first_name="Test", last_name="User", email="someone@abc.com")
+    user = User.objects.create(
+        username="testuser",
+        first_name="Test",
+        last_name="User",
+        email="someone@abc.com",
+    )
     portfolio_user = PortfolioUser.objects.create(
         user=user,
         role="Developer",
@@ -16,14 +34,19 @@ def test_create_portfolio_user():
         profile_photo="path/to/photo.jpg",
         work_days="1",
         work_shift="1",
-        is_blogger=True
+        is_blogger=True,
     )
     assert portfolio_user.user == user
 
 
 @pytest.mark.django_db
 def test_create_portfolio_user_address():
-    user = User.objects.create(username="testuser", first_name="Test", last_name="User", email="someone@abc.com")
+    user = User.objects.create(
+        username="testuser",
+        first_name="Test",
+        last_name="User",
+        email="someone@abc.com",
+    )
     portfolio_user = PortfolioUser.objects.create(
         user=user,
         role="Developer",
@@ -34,9 +57,14 @@ def test_create_portfolio_user_address():
         about="This is a test about section.",
         profile_photo="path/to/photo.jpg",
         work_days="1",
-        work_shift="1"
+        work_shift="1",
     )
-    address = PortfolioUserAddress.objects.create(user_id=portfolio_user.user.id, country="India", state="Karnataka", city="Bangalore")
+    address = PortfolioUserAddress.objects.create(
+        user_id=portfolio_user.user.id,
+        country="India",
+        state="Karnataka",
+        city="Bangalore",
+    )
     assert address.country == "India"
     assert address.state == "Karnataka"
     assert address.city == "Bangalore"
@@ -44,7 +72,12 @@ def test_create_portfolio_user_address():
 
 @pytest.mark.django_db
 def test_portfolio_user_social_links():
-    user = User.objects.create(username="testuser", first_name="Test", last_name="User", email="someone@example.com")
+    user = User.objects.create(
+        username="testuser",
+        first_name="Test",
+        last_name="User",
+        email="someone@example.com",
+    )
     portfolio_user = PortfolioUser.objects.create(
         user=user,
         role="Developer",
@@ -55,14 +88,14 @@ def test_portfolio_user_social_links():
         about="This is a test about section.",
         profile_photo="path/to/photo.jpg",
         work_days="1",
-        work_shift="1"
+        work_shift="1",
     )
     social_links = PortfolioUserSocialMediaLink.objects.create(
         user=portfolio_user,
         github="abc@github.com",
         linkedin="abc.linkedin.com",
         tweeter="abc.tweeter.com",
-        instagram="abc.instagram.com"
+        instagram="abc.instagram.com",
     )
     assert social_links.user == portfolio_user
     assert social_links.github == "abc@github.com"
@@ -90,17 +123,30 @@ def test_portfolio_skill():
     assert skill.category_item_name == "Python"
     assert skill.skill_category == skill_category
 
+
 @pytest.mark.django_db
 def test_portfolio_user_skill():
-    user = User.objects.create(username="testuser", first_name="Test", last_name="User", email="someone@example.com")
+    user = User.objects.create(
+        username="testuser",
+        first_name="Test",
+        last_name="User",
+        email="someone@example.com",
+    )
     portfolio_user_skill = UserSkill.objects.create(
         user=user,
-        skill_category= SkillCategory.objects.create(category_name="Programming Languages"),
-        skill=Skill.objects.create(skill_category=SkillCategory.objects.create(category_name="Programming Languages"), category_item_name="Python"),
+        skill_category=SkillCategory.objects.create(
+            category_name="Programming Languages"
+        ),
+        skill=Skill.objects.create(
+            skill_category=SkillCategory.objects.create(
+                category_name="Programming Languages"
+            ),
+            category_item_name="Python",
+        ),
         summary="Experienced in Python programming",
         rating_out_of_five=4.5,
         total_experience_in_year=5,
-        last_used= "2023-10-01",
+        last_used="2023-10-01",
     )
     assert portfolio_user_skill.user == user
     assert portfolio_user_skill.skill.category_item_name == "Python"
@@ -142,7 +188,12 @@ def test_client_lead():
 
 @pytest.mark.django_db
 def test_client_project():
-    user = User.objects.create(username="testuser", first_name="Test", last_name="User", email="someone@example.com")
+    user = User.objects.create(
+        username="testuser",
+        first_name="Test",
+        last_name="User",
+        email="someone@example.com",
+    )
     portfolio_user = PortfolioUser.objects.create(
         user=user,
         role="Developer",
@@ -153,13 +204,19 @@ def test_client_project():
         about="This is a test about section.",
         profile_photo="path/to/photo.jpg",
         work_days="1",
-        work_shift="1"
+        work_shift="1",
     )
     portfolio_user_skill = UserSkill.objects.create(
         user=user,
-        skill_category=SkillCategory.objects.create(category_name="Programming Languages"),
-        skill=Skill.objects.create(skill_category=SkillCategory.objects.create(category_name="Programming Languages"),
-                                   category_item_name="Python"),
+        skill_category=SkillCategory.objects.create(
+            category_name="Programming Languages"
+        ),
+        skill=Skill.objects.create(
+            skill_category=SkillCategory.objects.create(
+                category_name="Programming Languages"
+            ),
+            category_item_name="Python",
+        ),
         summary="Experienced in Python programming",
         rating_out_of_five=4.5,
         total_experience_in_year=5,
