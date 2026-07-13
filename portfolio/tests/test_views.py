@@ -1,11 +1,9 @@
 import json
 from datetime import date
 from types import SimpleNamespace
-from unittest.mock import Mock
 
 import pytest
 from django.contrib.auth.models import AnonymousUser, User
-from django.db import IntegrityError
 from django.test import RequestFactory
 
 from portfolio import views
@@ -175,105 +173,6 @@ def test_index_exception_branch(rf, rendered, monkeypatch, data_setup):
 
 
 @pytest.mark.django_db
-def test_user_signup_success_branch(rf, monkeypatch):
-    request = rf.post(
-        "/user_signup/",
-        {
-            "firstName": "A",
-            "lastName": "B",
-            "userMail": "signup@example.com",
-            "userMobile": "9876543210",
-            "password": "secret123",
-        },
-    )
-
-    fake_user = SimpleNamespace(first_name="", last_name="", save=lambda: None)
-    monkeypatch.setattr(
-        views.User.objects,
-        "create_user",
-        lambda **kwargs: fake_user,
-    )
-
-    class FakePortfolioUser:
-        def __init__(self, **kwargs):
-            self.kwargs = kwargs
-
-        def save(self):
-            return None
-
-    monkeypatch.setattr(views, "PortfolioUser", FakePortfolioUser)
-    monkeypatch.setattr(views, "authenticate", lambda **kwargs: object())
-    monkeypatch.setattr(views, "login", lambda request, user: None)
-
-    response = views.user_signup(request)
-    payload = json.loads(response.content.decode())
-    assert payload["response"] == "success"
-
-
-@pytest.mark.django_db
-def test_user_signup_invalid_method_and_error(rf, monkeypatch):
-    get_response = views.user_signup(rf.get("/user_signup/"))
-    get_payload = json.loads(get_response.content.decode())
-    assert get_payload["response"] == "error"
-
-    request = rf.post(
-        "/user_signup/",
-        {
-            "firstName": "A",
-            "lastName": "B",
-            "userMail": "dup@example.com",
-            "userMobile": "9876543210",
-            "password": "secret123",
-        },
-    )
-    monkeypatch.setattr(
-        views.User.objects,
-        "create_user",
-        lambda **kwargs: (_ for _ in ()).throw(IntegrityError("duplicate")),
-    )
-    response = views.user_signup(request)
-    payload = json.loads(response.content.decode())
-    assert payload["response"] == "error"
-
-
-@pytest.mark.django_db
-def test_user_login_branches(rf, monkeypatch):
-    request = rf.post(
-        "/user_login/",
-        {
-            "userMailSignIn": "login@example.com",
-            "passwordSignIn": "secret123",
-        },
-    )
-    monkeypatch.setattr(views, "authenticate", lambda **kwargs: object())
-    monkeypatch.setattr(views, "login", lambda request, user: None)
-
-    success_payload = json.loads(views.user_login(request).content.decode())
-    assert success_payload["response"] == "success"
-
-    monkeypatch.setattr(views, "authenticate", lambda **kwargs: None)
-    fail_payload = json.loads(views.user_login(request).content.decode())
-    assert fail_payload["response"] == "error"
-
-    method_payload = json.loads(views.user_login(rf.get("/user_login/")).content.decode())
-    assert method_payload["response"] == "error"
-
-
-@pytest.mark.django_db
-def test_user_logout_redirect(rf, data_setup, monkeypatch):
-    request = rf.get("/user_logout/")
-    request.user = data_setup.user
-
-    monkeypatch.setattr(views, "logout", lambda request: None)
-    monkeypatch.setattr(views, "reverse", lambda name: "/")
-    redirect_mock = Mock(return_value=SimpleNamespace(status_code=302))
-    monkeypatch.setattr(views, "redirect", redirect_mock)
-
-    response = views.user_logout(request)
-    assert response.status_code == 302
-
-
-@pytest.mark.django_db
 def test_tech_details_success_and_invalid_method(rf, rendered, data_setup):
     request = rf.get(f"/tech_details/{data_setup.skill.id}")
     request.user = data_setup.user
@@ -399,44 +298,6 @@ def test_user_profile_details_branches(rf, rendered, data_setup):
     missing_request.user = data_setup.user
     missing = views.user_profile_details(missing_request, 999999)
     assert "exception" in missing["context"]
-
-
-@pytest.mark.django_db
-def test_check_input_existence_branches(rf, data_setup):
-    invalid_method_payload = json.loads(
-        views.check_input_existence(rf.post("/check_input_existence/")).content.decode()
-    )
-    assert invalid_method_payload["response"] is False
-
-    missing_params_payload = json.loads(
-        views.check_input_existence(rf.get("/check_input_existence/")).content.decode()
-    )
-    assert missing_params_payload["response"] is False
-
-    email_request = rf.get(
-        "/check_input_existence/",
-        {"inputValue": data_setup.user.email, "inputField": "email"},
-    )
-    email_payload = json.loads(views.check_input_existence(email_request).content.decode())
-    assert email_payload["response"] is True
-
-    mobile_request = rf.get(
-        "/check_input_existence/",
-        {"inputValue": data_setup.portfolio_user.mobile, "inputField": "mobile"},
-    )
-    mobile_payload = json.loads(
-        views.check_input_existence(mobile_request).content.decode()
-    )
-    assert mobile_payload["response"] is True
-
-    invalid_type_request = rf.get(
-        "/check_input_existence/",
-        {"inputValue": "anything", "inputField": "unknown"},
-    )
-    invalid_type_payload = json.loads(
-        views.check_input_existence(invalid_type_request).content.decode()
-    )
-    assert invalid_type_payload["response"] is False
 
 
 @pytest.mark.django_db

@@ -10,7 +10,7 @@
         <div class="container text-center">
             <div class="banner-panel">
                 <span class="banner-kicker">Let’s Collaborate</span>
-                <h1>Contact Us</h1>
+                <h1>Contact Me</h1>
                 <p class="banner-subtitle">Share your requirements and get a practical, execution-ready technology solution.</p>
                 <ul class="banner-skill-tags">
                     <li>Consulting</li>
@@ -87,19 +87,34 @@
         </div>
       </div>
 
-      <!-- Client Leads Form -->
+      <!-- Contact Form -->
       <div class="col-lg-8 d-flex align-items-stretch">
         <div class="contact_info contact-form-shell w-100">
-          <h3 class="panel-title contact-card-title">Client Leads Form</h3>
-          <p class="text-muted mb-4">Kindly fill out the form below. We'll connect with you shortly!</p>
+          <h3 class="panel-title contact-card-title">Need Assistance?</h3>
+          <p class="text-muted mb-4">Kindly fill out the form below. I'll connect with you shortly!</p>
 
           <form class="row g-3" action="{% url 'contact_us' %}" method="post" enctype="multipart/form-data" id="contact_form">
             {% csrf_token %}
-            <div class="col-md-6">{{ form.client_name|as_crispy_field }}</div>
-            <div class="col-md-6">{{ form.client_email|as_crispy_field }}</div>
-            <div class="col-md-12">{{ form.subject|as_crispy_field }}</div>
-            <div class="col-md-12">{{ form.message|as_crispy_field }}</div>
-            <div class="col-md-12">{{ form.file_supporting_the_message|as_crispy_field }}</div>
+            <div class="col-md-6">
+              {{ form.client_name|as_crispy_field }}
+              <small class="text-muted d-block mt-1">Please share your full name.</small>
+            </div>
+            <div class="col-md-6">
+              {{ form.client_email|as_crispy_field }}
+              <small class="text-muted d-block mt-1">Use an email address where I can reach you.</small>
+            </div>
+            <div class="col-md-12">
+              {{ form.subject|as_crispy_field }}
+              <small class="text-muted d-block mt-1">Summarize your request in a short subject line.</small>
+            </div>
+            <div class="col-md-12">
+              {{ form.message|as_crispy_field }}
+              <small class="text-muted d-block mt-1">Share the project details, goals, or questions you have.</small>
+            </div>
+            <div class="col-md-12">
+              {{ form.file_supporting_the_message|as_crispy_field }}
+              <small class="text-muted d-block mt-1">Attach any brief, screenshot, or document that helps explain your needs.</small>
+            </div>
             <div class="col-md-12 text-start">
               <button type="submit" id="clientLeadSubmitBtn" class="btn btn-primary px-4 py-2">
                 <span>Send Message</span>

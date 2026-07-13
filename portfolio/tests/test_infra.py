@@ -25,8 +25,6 @@ def test_portfolio_urls_reverse_resolution():
         if getattr(pattern, "name", None)
     }
     assert "index" in names
-    assert "user_signup" in names
-    assert "user_login" in names
 
 
 def test_project_urls_are_loaded():

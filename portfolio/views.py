@@ -1,12 +1,11 @@
 import logging
 
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import EmailMessage
-from django.db import DatabaseError, IntegrityError
+from django.db import DatabaseError
 from django.http import JsonResponse
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import render
 from django.template.loader import get_template
 
 from portfolio_cum_blog import settings
@@ -67,7 +66,7 @@ def get_global_response(request):
     return response_data
 
 
-def get_global_user(request):
+def get_global_user(request=None):
     """
     Return the fallback user object configured by DEFAULT_USER.
     """
@@ -186,14 +185,8 @@ def index(request):
     """Render the landing page with user profile, skills, and reviews."""
     template = "portfolio/index.html"
     try:
-        if request.user.is_authenticated:
-            obj_user = User.objects.get(pk=request.user.id)
-            obj_portfolio_user = PortfolioUser.objects.get(
-                pk=obj_user.user_portfolio.id
-            )
-        else:
-            obj_user = get_global_user(request)
-            obj_portfolio_user = PortfolioUser.objects.get(
+        obj_user = get_global_user()
+        obj_portfolio_user = PortfolioUser.objects.get(
                 pk=obj_user.user_portfolio.id
             )
         email = obj_user.email
@@ -237,123 +230,123 @@ def index(request):
     return render(request, template, context)
 
 
-def user_signup(request):
-    """
-    Register a new user and associated portfolio profile.
-    """
-    response_data = get_global_response(request)
-    user_email = None
-    try:
-        if request.method == "POST":
-            first_name = request.POST.get("firstName")
-            last_name = request.POST.get("lastName")
-            user_email = request.POST.get("userMail")
-            user_mobile = request.POST.get("userMobile")
-            user_password = request.POST.get("password")
-            if (
-                first_name
-                and last_name
-                and user_email
-                and user_mobile
-                and user_password
-            ):
-                user = User.objects.create_user(
-                    username=user_email, email=user_email, password=user_password
-                )
-                user.first_name = first_name
-                user.last_name = last_name
-                user.save()
-                obj_portfolio_user = PortfolioUser(
-                    user=user,
-                    mobile=user_mobile,
-                )
-                obj_portfolio_user.save()
-                user = authenticate(username=user_email, password=user_password)
-                if user is not None:
-                    login(request, user)
-                logger.info("User registration successful for email=%s", user_email)
-                response_data["response"] = "success"
-                response_data["responseMessage"] = (
-                    "You have been registered successfully"
-                )
-                response_data["responseMessageInfo"] = "Redirecting to the dashboard"
-            else:
-                logger.warning("Registration rejected due to missing required fields")
-                response_data["response"] = "warning"
-                response_data["responseMessage"] = "Registration Failed"
-                response_data["responseMessageInfo"] = (
-                    "Invalid input/please check if each and every mandatory details"
-                    " were provided or not!"
-                )
-        else:
-            logger.warning(
-                "Registration endpoint called with invalid HTTP method=%s",
-                request.method,
-            )
-            response_data["response"] = "error"
-            response_data["responseMessage"] = "Registration Failed"
-            response_data["responseMessageInfo"] = (
-                f"Invalid HTTP method {request.method}"
-            )
-    except (IntegrityError, ValidationError, TypeError, ValueError) as err:
-        logger.exception("Registration failed for email=%s", user_email)
-        response_data["response"] = "error"
-        response_data["responseMessage"] = "Registration Failed"
-        response_data["responseMessageInfo"] = str(err)
-    return JsonResponse(response_data)
+# def user_signup(request):
+#     """
+#     Register a new user and associated portfolio profile.
+#     """
+#     response_data = get_global_response(request)
+#     user_email = None
+#     try:
+#         if request.method == "POST":
+#             first_name = request.POST.get("firstName")
+#             last_name = request.POST.get("lastName")
+#             user_email = request.POST.get("userMail")
+#             user_mobile = request.POST.get("userMobile")
+#             user_password = request.POST.get("password")
+#             if (
+#                 first_name
+#                 and last_name
+#                 and user_email
+#                 and user_mobile
+#                 and user_password
+#             ):
+#                 user = User.objects.create_user(
+#                     username=user_email, email=user_email, password=user_password
+#                 )
+#                 user.first_name = first_name
+#                 user.last_name = last_name
+#                 user.save()
+#                 obj_portfolio_user = PortfolioUser(
+#                     user=user,
+#                     mobile=user_mobile,
+#                 )
+#                 obj_portfolio_user.save()
+#                 user = authenticate(username=user_email, password=user_password)
+#                 if user is not None:
+#                     login(request, user)
+#                 logger.info("User registration successful for email=%s", user_email)
+#                 response_data["response"] = "success"
+#                 response_data["responseMessage"] = (
+#                     "You have been registered successfully"
+#                 )
+#                 response_data["responseMessageInfo"] = "Redirecting to the dashboard"
+#             else:
+#                 logger.warning("Registration rejected due to missing required fields")
+#                 response_data["response"] = "warning"
+#                 response_data["responseMessage"] = "Registration Failed"
+#                 response_data["responseMessageInfo"] = (
+#                     "Invalid input/please check if each and every mandatory details"
+#                     " were provided or not!"
+#                 )
+#         else:
+#             logger.warning(
+#                 "Registration endpoint called with invalid HTTP method=%s",
+#                 request.method,
+#             )
+#             response_data["response"] = "error"
+#             response_data["responseMessage"] = "Registration Failed"
+#             response_data["responseMessageInfo"] = (
+#                 f"Invalid HTTP method {request.method}"
+#             )
+#     except (IntegrityError, ValidationError, TypeError, ValueError) as err:
+#         logger.exception("Registration failed for email=%s", user_email)
+#         response_data["response"] = "error"
+#         response_data["responseMessage"] = "Registration Failed"
+#         response_data["responseMessageInfo"] = str(err)
+#     return JsonResponse(response_data)
 
 
-def user_login(request):
-    """
-    Authenticate and sign in a user.
-    """
-    response_data = get_global_response(request)
-    user_email = None
-    try:
-        if request.method == "POST":
-            user_email = request.POST.get("userMailSignIn")
-            user_password = request.POST.get("passwordSignIn")
-            if user_email and user_password:
-                user = authenticate(username=user_email, password=user_password)
-                if user is not None:
-                    login(request, user)
-                    logger.info("User login successful for email=%s", user_email)
-                    response_data["response"] = "success"
-                    response_data["responseMessage"] = "Login successful"
-                    response_data["responseMessageInfo"] = (
-                        "Redirecting to the dashboard"
-                    )
-                else:
-                    logger.warning("User login failed due to invalid credentials")
-                    response_data["response"] = "error"
-                    response_data["responseMessage"] = "Login failed"
-                    response_data["responseMessageInfo"] = "Invalid user"
-        else:
-            logger.warning(
-                "Login endpoint called with invalid HTTP method=%s",
-                request.method,
-            )
-            response_data["response"] = "error"
-            response_data["responseMessage"] = "Login failed"
-            response_data["responseMessageInfo"] = (
-                f"Invalid HTTP method {request.method}"
-            )
-    except (ValidationError, TypeError, ValueError) as err:
-        logger.exception("Login failed for email=%s", user_email)
-        response_data["response"] = "error"
-        response_data["responseMessage"] = "Login failed"
-        response_data["responseMessageInfo"] = str(err)
-    return JsonResponse(response_data)
+# def user_login(request):
+#     """
+#     Authenticate and sign in a user.
+#     """
+#     response_data = get_global_response(request)
+#     user_email = None
+#     try:
+#         if request.method == "POST":
+#             user_email = request.POST.get("userMailSignIn")
+#             user_password = request.POST.get("passwordSignIn")
+#             if user_email and user_password:
+#                 user = authenticate(username=user_email, password=user_password)
+#                 if user is not None:
+#                     login(request, user)
+#                     logger.info("User login successful for email=%s", user_email)
+#                     response_data["response"] = "success"
+#                     response_data["responseMessage"] = "Login successful"
+#                     response_data["responseMessageInfo"] = (
+#                         "Redirecting to the dashboard"
+#                     )
+#                 else:
+#                     logger.warning("User login failed due to invalid credentials")
+#                     response_data["response"] = "error"
+#                     response_data["responseMessage"] = "Login failed"
+#                     response_data["responseMessageInfo"] = "Invalid user"
+#         else:
+#             logger.warning(
+#                 "Login endpoint called with invalid HTTP method=%s",
+#                 request.method,
+#             )
+#             response_data["response"] = "error"
+#             response_data["responseMessage"] = "Login failed"
+#             response_data["responseMessageInfo"] = (
+#                 f"Invalid HTTP method {request.method}"
+#             )
+#     except (ValidationError, TypeError, ValueError) as err:
+#         logger.exception("Login failed for email=%s", user_email)
+#         response_data["response"] = "error"
+#         response_data["responseMessage"] = "Login failed"
+#         response_data["responseMessageInfo"] = str(err)
+#     return JsonResponse(response_data)
 
 
-def user_logout(request):
-    """
-    Sign out the current user.
-    """
-    user_id = request.user.id if request.user.is_authenticated else None
-    logger.info("User logout requested for user id=%s", user_id)
-    logout(request)
-    return redirect(reverse("index"))
+# def user_logout(request):
+#     """
+#     Sign out the current user.
+#     """
+#     user_id = request.user.id if request.user.is_authenticated else None
+#     logger.info("User logout requested for user id=%s", user_id)
+#     logout(request)
+#     return redirect(reverse("index"))
 
 
 def tech_details(request, tech_id):
@@ -367,16 +360,12 @@ def tech_details(request, tech_id):
         "page_details": {},
     }
     try:
+        obj_user = get_global_user()
         if request.method == "GET":
-            if request.user.is_authenticated:
-                user_id = request.user.id
-                obj_user = User.objects.get(pk=user_id)
-            else:
-                obj_user = get_global_user(request)
             obj_tech_details = UserSkill.objects.get(
                 user__id=obj_user.id, skill__id=tech_id
             )
-            obj_social_media_links = get_social_media_links(obj_user.user_portfolio.id)
+            obj_social_media_links = get_social_media_links(obj_tech_details.user.user_portfolio.id)
             context = embed_social_media_links_to_context(
                 context, obj_social_media_links
             )
@@ -495,6 +484,7 @@ def contact_us(request):
     template = "portfolio/contact_us.html"
     context = {"page_title": "Contact us"}
     try:
+        obj_user = get_global_user()
         if request.method == "POST":
             form = ContactUs(request.POST, request.FILES)
             if form.is_valid():
@@ -517,11 +507,6 @@ def contact_us(request):
                 context["response"] = "error"
         else:
             form = ContactUs()
-
-        if request.user.is_authenticated:
-            obj_user = User.objects.get(pk=request.user.id)
-        else:
-            obj_user = get_global_user(request)
         try:
             obj_user_address = PortfolioUserAddress.objects.get(
                 user_id=obj_user.user_portfolio.id
@@ -561,12 +546,8 @@ def about_me(request):
         "page_title": "About me",
     }
     try:
+        obj_user = get_global_user()
         if request.method == "GET":
-            if request.user.is_authenticated:
-                user_id = request.user.id
-                obj_user = User.objects.get(pk=user_id)
-            else:
-                obj_user = get_global_user(request)
             context["about"] = obj_user.user_portfolio.about
             context["role"] = obj_user.user_portfolio.role
             context["profile_photo"] = (
@@ -601,11 +582,8 @@ def user_portfolio(request):
     template = "portfolio/portfolio.html"
     context = {"page_title": "User Portfolio"}
     try:
+        obj_user = get_global_user()
         if request.method == "GET":
-            if request.user.is_authenticated:
-                obj_user = User.objects.get(pk=request.user.id)
-            else:
-                obj_user = get_global_user(request)
             obj_social_media_links = get_social_media_links(obj_user.user_portfolio.id)
             skills = get_user_skills(obj_user.id)
             context["heading"] = obj_user.user_portfolio.heading
@@ -626,18 +604,21 @@ def user_portfolio(request):
     return render(request, template, context)
 
 
-def user_profile_details(request, user_id):
+def user_profile_details(request, user_id=None):
     """
     Loads user profile details page
     """
     template = "portfolio/profile_details.html"
     context = {"page_title": "Profile details"}
+    obj_portfolio_user = None
     try:
+        obj_user = get_global_user()
         if request.method == "GET":
-            obj_portfolio_user = PortfolioUser.objects.get(user_id=user_id)
+            profile_user_id = user_id if user_id is not None else obj_user.id
+            obj_portfolio_user = PortfolioUser.objects.get(user_id=profile_user_id)
             obj_resume = Resume.objects.filter(user_id=obj_portfolio_user.id).first()
             obj_social_media_links = get_social_media_links(obj_portfolio_user.id)
-            skills = get_user_skills(user_id)
+            skills = get_user_skills(obj_portfolio_user.id)
             obj_client_projects = ClientProject.objects.filter(
                 user_id=obj_portfolio_user.id
             )
@@ -679,7 +660,7 @@ def user_profile_details(request, user_id):
             )
             context["error"] = "Invalid HTTP method detected"
     except PortfolioUser.DoesNotExist as err:
-        logger.exception("Profile details not found for user_id=%s", user_id)
+        logger.exception("Profile details not found for user_id=%s", request.user.id)
         context["exception"] = err.__str__()
     except (
         ObjectDoesNotExist,
@@ -689,64 +670,67 @@ def user_profile_details(request, user_id):
         TypeError,
         ValueError,
     ) as err:
-        logger.exception("Failed to render profile details for user_id=%s", user_id)
+        logger.exception(
+            "Failed to render profile details for user_id=%s",
+            getattr(obj_portfolio_user, "id", None),
+        )
         context["exception"] = err.__str__()
     return render(request, template, context)
 
 
-def check_input_existence(request):
-    """Validate whether an email or mobile value is already present."""
-    if request.method != "GET":
-        logger.warning(
-            "Input existence endpoint called with invalid HTTP method=%s",
-            request.method,
-        )
-        return JsonResponse(
-            {
-                "response": False,
-                "responseMessage": "Invalid HTTP method",
-                "responseMessageInfo": "Only GET requests are allowed",
-            }
-        )
-    try:
-        input_value = request.GET.get("inputValue")
-        input_type = request.GET.get("inputField")
-        if not input_value or not input_type:
-            logger.warning("Input existence check failed: missing parameters")
-            return JsonResponse(
-                {
-                    "response": False,
-                    "responseMessage": "Missing parameters",
-                    "responseMessageInfo": "inputValue and inputField are required",
-                }
-            )
-        if input_type == "email":
-            exists = User.objects.filter(email=input_value).exists()
-        elif input_type == "mobile":
-            exists = PortfolioUser.objects.filter(mobile=input_value).exists()
-        else:
-            logger.warning("Input existence check failed: invalid input type")
-            return JsonResponse(
-                {
-                    "response": False,
-                    "responseMessage": "Invalid input type",
-                    "responseMessageInfo": "inputField must be email or mobile",
-                }
-            )
-        return JsonResponse(
-            {
-                "response": exists,
-                "responseMessage": "Input existence checked successfully",
-            }
-        )
-    except (DatabaseError, TypeError, ValueError) as err:
-        logger.exception("Input existence check failed unexpectedly")
-        return JsonResponse(
-            {
-                "response": False,
-                "responseMessage": str(err),
-                "responseMessageInfo": (
-                    "An error occurred while checking input existence"
-                ),
-            }
-        )
+# def check_input_existence(request):
+#     """Validate whether an email or mobile value is already present."""
+#     if request.method != "GET":
+#         logger.warning(
+#             "Input existence endpoint called with invalid HTTP method=%s",
+#             request.method,
+#         )
+#         return JsonResponse(
+#             {
+#                 "response": False,
+#                 "responseMessage": "Invalid HTTP method",
+#                 "responseMessageInfo": "Only GET requests are allowed",
+#             }
+#         )
+#     try:
+#         input_value = request.GET.get("inputValue")
+#         input_type = request.GET.get("inputField")
+#         if not input_value or not input_type:
+#             logger.warning("Input existence check failed: missing parameters")
+#             return JsonResponse(
+#                 {
+#                     "response": False,
+#                     "responseMessage": "Missing parameters",
+#                     "responseMessageInfo": "inputValue and inputField are required",
+#                 }
+#             )
+#         if input_type == "email":
+#             exists = User.objects.filter(email=input_value).exists()
+#         elif input_type == "mobile":
+#             exists = PortfolioUser.objects.filter(mobile=input_value).exists()
+#         else:
+#             logger.warning("Input existence check failed: invalid input type")
+#             return JsonResponse(
+#                 {
+#                     "response": False,
+#                     "responseMessage": "Invalid input type",
+#                     "responseMessageInfo": "inputField must be email or mobile",
+#                 }
+#             )
+#         return JsonResponse(
+#             {
+#                 "response": exists,
+#                 "responseMessage": "Input existence checked successfully",
+#             }
+#         )
+#     except (DatabaseError, TypeError, ValueError) as err:
+#         logger.exception("Input existence check failed unexpectedly")
+#         return JsonResponse(
+#             {
+#                 "response": False,
+#                 "responseMessage": str(err),
+#                 "responseMessageInfo": (
+#                     "An error occurred while checking input existence"
+#                 ),
+#             }
+#         )
