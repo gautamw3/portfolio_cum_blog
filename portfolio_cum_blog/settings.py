@@ -59,11 +59,14 @@ else:
             "BACKEND": "portfolio_cum_blog.storage_backends.StaticStorage",
         },
     }
-
     # SSL Configuration
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    ENABLE_SSL = str(os.environ.get("ENABLE_SSL", "0")) == "1"
+
+    if ENABLE_SSL:
+        SECURE_SSL_REDIRECT = True
+        SESSION_COOKIE_SECURE = True
+        CSRF_COOKIE_SECURE = True
+
 
 # Application definition
 
