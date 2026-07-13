@@ -202,6 +202,7 @@ def index(request):
         skills = get_user_skills(obj_user.id)
         heading = obj_portfolio_user.heading
         headline = obj_portfolio_user.headline
+        profile_short_description = obj_portfolio_user.profile_short_description
         role = obj_portfolio_user.role
         about = obj_portfolio_user.about
         profile_photo = (
@@ -218,6 +219,7 @@ def index(request):
             "page_title": "Home",
             "heading": heading,
             "headline": headline,
+            "profile_short_description": profile_short_description,
             "role": role,
             "email": email,
             "mobile": mobile,
@@ -572,6 +574,8 @@ def about_me(request):
                 if obj_user.user_portfolio.profile_photo
                 else "#"
             )
+            obj_resume = Resume.objects.filter(user_id=obj_user.user_portfolio.id).first()
+            context["resume_url"] = obj_resume.resume_file.url if obj_resume else "#"
             customer_reviews = get_customer_reviews()
             obj_social_media_links = get_social_media_links(obj_user.user_portfolio.id)
             context = embed_social_media_links_to_context(
@@ -631,6 +635,7 @@ def user_profile_details(request, user_id):
     try:
         if request.method == "GET":
             obj_portfolio_user = PortfolioUser.objects.get(user_id=user_id)
+            obj_resume = Resume.objects.filter(user_id=obj_portfolio_user.id).first()
             obj_social_media_links = get_social_media_links(obj_portfolio_user.id)
             skills = get_user_skills(user_id)
             obj_client_projects = ClientProject.objects.filter(
@@ -662,6 +667,7 @@ def user_profile_details(request, user_id):
             context["about"] = obj_portfolio_user.about
             context["profile_photo"] = obj_portfolio_user.profile_photo.url
             context["user_first_name"] = obj_portfolio_user.user.first_name
+            context["resume_url"] = obj_resume.resume_file.url if obj_resume else "#"
             context["skills"] = skills
             context = embed_social_media_links_to_context(
                 context, obj_social_media_links
