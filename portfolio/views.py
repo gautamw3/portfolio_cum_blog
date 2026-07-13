@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import EmailMessage
 from django.db import DatabaseError
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 
@@ -13,6 +14,7 @@ from .constants import SUB_CLIENT_LEAD_EMAIL
 from .forms import ContactUs
 from .models import (
     ClientProject,
+    NewClient,
     PortfolioUser,
     PortfolioUserAddress,
     PortfolioUserSocialMediaLink,
@@ -64,16 +66,13 @@ def get_global_response(request):
     return response_data
 
 
-def get_global_user():
+def get_global_user(request=None):
     """
     Return the fallback user object configured by DEFAULT_USER.
     """
     global_user_obj = GlobalUser(User)
     obj_user = global_user_obj.get_user_obj()
     return obj_user
-
-
-obj_user = get_global_user()
 
 
 def get_user_skills(user_id):
@@ -186,6 +185,7 @@ def index(request):
     """Render the landing page with user profile, skills, and reviews."""
     template = "portfolio/index.html"
     try:
+        obj_user = get_global_user()
         obj_portfolio_user = PortfolioUser.objects.get(
                 pk=obj_user.user_portfolio.id
             )
@@ -360,6 +360,7 @@ def tech_details(request, tech_id):
         "page_details": {},
     }
     try:
+        obj_user = get_global_user()
         if request.method == "GET":
             obj_tech_details = UserSkill.objects.get(
                 user__id=obj_user.id, skill__id=tech_id
@@ -421,43 +422,43 @@ def tech_details(request, tech_id):
     return render(request, template, context)
 
 
-# def new_client_feed(request):
-#     """
-#     Stores the email address of the client who shown interest in
-#     submitting their email address
-#     """
-#     response_data = get_global_response(request)
-#     try:
-#         if request.method == "POST":
-#             client_email = request.POST.get("new_client_email")
-#             if client_email:
-#                 obj_new_client_email = NewClient(client_email=client_email)
-#                 obj_new_client_email.save()
-#                 logger.info("New client lead captured for email=%s", client_email)
-#                 response_data["response"] = "success"
-#                 response_data["responseMessage"] = "We got that"
-#                 response_data["responseMessageInfo"] = (
-#                     "Thanks for showing interest in availing our services"
-#                 )
-#             else:
-#                 logger.warning("New client feed submitted without email")
-#                 response_data["response"] = "error"
-#                 response_data["responseMessage"] = "Something went wrong"
-#                 response_data["responseMessageInfo"] = "Email is required"
-#         else:
-#             logger.warning(
-#                 "New client feed endpoint called with invalid HTTP method=%s",
-#                 request.method,
-#             )
-#             response_data["response"] = "error"
-#             response_data["responseMessage"] = "Something went wrong"
-#             response_data["responseMessageInfo"] = "Invalid HTTP request"
-#     except (ValidationError, DatabaseError, TypeError, ValueError) as err:
-#         logger.exception("Failed to save new client lead")
-#         response_data["response"] = "error"
-#         response_data["responseMessage"] = err.__str__()
-#         response_data["responseMessageInfo"] = "Please try after sometime"
-#     return JsonResponse(response_data)
+def new_client_feed(request):
+    """
+    Stores the email address of the client who shown interest in
+    submitting their email address
+    """
+    response_data = get_global_response(request)
+    try:
+        if request.method == "POST":
+            client_email = request.POST.get("new_client_email")
+            if client_email:
+                obj_new_client_email = NewClient(client_email=client_email)
+                obj_new_client_email.save()
+                logger.info("New client lead captured for email=%s", client_email)
+                response_data["response"] = "success"
+                response_data["responseMessage"] = "We got that"
+                response_data["responseMessageInfo"] = (
+                    "Thanks for showing interest in availing our services"
+                )
+            else:
+                logger.warning("New client feed submitted without email")
+                response_data["response"] = "error"
+                response_data["responseMessage"] = "Something went wrong"
+                response_data["responseMessageInfo"] = "Email is required"
+        else:
+            logger.warning(
+                "New client feed endpoint called with invalid HTTP method=%s",
+                request.method,
+            )
+            response_data["response"] = "error"
+            response_data["responseMessage"] = "Something went wrong"
+            response_data["responseMessageInfo"] = "Invalid HTTP request"
+    except (ValidationError, DatabaseError, TypeError, ValueError) as err:
+        logger.exception("Failed to save new client lead")
+        response_data["response"] = "error"
+        response_data["responseMessage"] = err.__str__()
+        response_data["responseMessageInfo"] = "Please try after sometime"
+    return JsonResponse(response_data)
 
 
 def send_new_client_lead_mail(email_data):
@@ -483,6 +484,7 @@ def contact_us(request):
     template = "portfolio/contact_us.html"
     context = {"page_title": "Contact us"}
     try:
+        obj_user = get_global_user()
         if request.method == "POST":
             form = ContactUs(request.POST, request.FILES)
             if form.is_valid():
@@ -544,6 +546,7 @@ def about_me(request):
         "page_title": "About me",
     }
     try:
+        obj_user = get_global_user()
         if request.method == "GET":
             context["about"] = obj_user.user_portfolio.about
             context["role"] = obj_user.user_portfolio.role
@@ -579,6 +582,7 @@ def user_portfolio(request):
     template = "portfolio/portfolio.html"
     context = {"page_title": "User Portfolio"}
     try:
+        obj_user = get_global_user()
         if request.method == "GET":
             obj_social_media_links = get_social_media_links(obj_user.user_portfolio.id)
             skills = get_user_skills(obj_user.id)
@@ -600,15 +604,18 @@ def user_portfolio(request):
     return render(request, template, context)
 
 
-def user_profile_details(request):
+def user_profile_details(request, user_id=None):
     """
     Loads user profile details page
     """
     template = "portfolio/profile_details.html"
     context = {"page_title": "Profile details"}
+    obj_portfolio_user = None
     try:
+        obj_user = get_global_user()
         if request.method == "GET":
-            obj_portfolio_user = PortfolioUser.objects.get(user_id=obj_user.user_portfolio.id)
+            profile_user_id = user_id if user_id is not None else obj_user.id
+            obj_portfolio_user = PortfolioUser.objects.get(user_id=profile_user_id)
             obj_resume = Resume.objects.filter(user_id=obj_portfolio_user.id).first()
             obj_social_media_links = get_social_media_links(obj_portfolio_user.id)
             skills = get_user_skills(obj_portfolio_user.id)
@@ -663,7 +670,10 @@ def user_profile_details(request):
         TypeError,
         ValueError,
     ) as err:
-        logger.exception("Failed to render profile details for user_id=%s", obj_portfolio_user.id)
+        logger.exception(
+            "Failed to render profile details for user_id=%s",
+            getattr(obj_portfolio_user, "id", None),
+        )
         context["exception"] = err.__str__()
     return render(request, template, context)
 

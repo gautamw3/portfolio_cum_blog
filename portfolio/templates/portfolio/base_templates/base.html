@@ -37,13 +37,6 @@
 						</div>
 					</li>
 					<li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'contact_us' %}active{% endif %}" href="{% url 'contact_us' %}">Contact</a></li>
-					<!-- {% if request.user.is_authenticated %}
-						<li class="nav-item"><span class="nav-link">Hi, {{ request.user.first_name }}</span></li>
-						<li class="nav-item"><a class="nav-link" href="{% url 'user_logout' %}">Logout</a></li>
-					{% else %}
-						<li class="nav-item"><a class="nav-link" onclick="return showSignupModal()" style="cursor:pointer;">Signup</a></li>
-						<li class="nav-item"><a class="nav-link" onclick="return showLoginModal()" style="cursor:pointer;">Signin</a></li>
-					{% endif %} -->
 					<li class="nav-item social-icons d-flex">
 						<a href="{{ github }}" class="nav-link" target="_blank" rel="noreferrer"><i class="fab fa-github"></i></a>
 						<a href="{{ linkedin }}" class="nav-link" target="_blank" rel="noreferrer"><i class="fab fa-linkedin-in"></i></a>
@@ -80,108 +73,5 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="{% static 'portfolio/js/portfolio_script.js' %}"></script>
 <script>var SITE_ROOT = "{{ request.scheme }}://{{ request.get_host }}";</script>
-
-<div class="modal fade" id="portfolioSignupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true" data-backdrop="static">
-	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-		<div class="modal-content shadow">
-			<div class="modal-header bg-dark text-white">
-				<h5 class="modal-title" id="signupModalLabel">Signup</h5>
-				<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="$('#portfolioSignupModal').modal('hide')"><span aria-hidden="true">&times;</span></button>
-			</div>
-			<div class="modal-body p-4">
-				<div class="alert alert-danger d-none" id="validationAlert"><strong>Error!</strong> Please fix the errors below.</div>
-				<div class="alert alert-danger d-none" id="existenceAlert"><strong>Error!</strong> <span id="existanceMessage"></span></div>
-				<form id="portfolioSignupForm">
-					{% csrf_token %}
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label for="firstName"><strong>First Name</strong></label>
-							<input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" required>
-						</div>
-						<div class="form-group col-md-6">
-							<label for="lastName"><strong>Last Name</strong></label>
-							<input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" required>
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label for="userMail"><strong>Email</strong></label>
-							<input type="email" class="form-control" id="userMail" name="userMail" placeholder="Your email address" autocomplete="off" onkeyup="getValidateInputField($.trim($('#userMail').val()), 'userMail', '')" onfocus="this.placeholder=''" onblur="this.placeholder='Your email address'" required>
-							<small id="alert-userMail" class="form-text text-danger d-none"><i class="fa fa-warning"></i> Not a valid email id</small>
-						</div>
-						<div class="form-group col-md-6">
-							<label for="userMobile"><strong>Mobile</strong></label>
-							<input type="text" class="form-control" id="userMobile" name="userMobile" placeholder="Enter Mobile *" maxlength="15" autocomplete="off" onkeyup="if (/\D/g.test(this.value)) this.value= this.value.replace(/\D/g,''); getValidateInputField($.trim($('#userMobile').val()), 'userMobile', '')" required>
-							<small id="alert-userMobile" class="form-text text-danger d-none"><i class="fa fa-warning"></i> Not a valid mobile number</small>
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label for="password"><strong>Password</strong></label>
-							<input type="password" class="form-control" id="password" name="password" placeholder="Enter password *" onkeyup="return getValidateInputField($.trim($('#password').val()), 'password', '')" required>
-							<small id="alert-password" class="form-text text-danger d-none"><i class="fa fa-warning"></i> Invalid Password</small>
-						</div>
-						<div class="form-group col-md-6">
-							<label for="passord_confirm"><strong>Confirm Password</strong></label>
-							<input type="password" class="form-control" id="passord_confirm" name="passord_confirm" placeholder="Confirm Password *" onkeyup="return getValidateInputField($.trim($('#passord_confirm').val()), 'passord_confirm', '')" required>
-							<small id="alert-passord_confirm" class="form-text text-danger d-none"><i class="fa fa-warning"></i> Password mismatch</small>
-						</div>
-					</div>
-					<button type="button" class="btn btn-primary btn-block mt-2" id="signupSubmit" onclick="return registerUser()">Submit</button>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="portfolioSigninModal" tabindex="-1" role="dialog" aria-labelledby="signinModalLabel" aria-hidden="true" data-backdrop="static">
-	<div class="modal-dialog modal-dialog-centered modal-md" role="document">
-		<div class="modal-content shadow">
-			<div class="modal-header bg-dark text-white">
-				<h5 class="modal-title" id="signinModalLabel">Sign In</h5>
-				<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="$('#portfolioSigninModal').modal('hide')"><span aria-hidden="true">&times;</span></button>
-			</div>
-			<div class="modal-body p-4">
-				<form id="portfolioSigninForm">
-					{% csrf_token %}
-					<div class="form-group">
-						<label for="userMailSignIn"><strong>Email</strong></label>
-						<input type="email" class="form-control" id="userMailSignIn" name="userMail" placeholder="Your email address" autocomplete="off" onkeyup="getValidateInputField($.trim($('#userMailSignIn').val()), 'userMailSignIn', '')" onfocus="this.placeholder=''" onblur="this.placeholder='Your email address'" required>
-						<small id="alert-userMailSignIn" class="form-text text-danger d-none"><i class="fa fa-warning"></i> Not a valid email ID</small>
-					</div>
-					<div class="form-group">
-						<label for="passwordSignIn"><strong>Password</strong></label>
-						<input type="password" class="form-control" id="passwordSignIn" name="password" placeholder="Enter password *" required>
-						<p class="mt-2 mb-0">Forgot password? <a href="javascript:void(0)" onclick="$('#portfolioSigninModal').modal('hide'); $('#forgotPasswordModal').modal('show')">Click here</a></p>
-					</div>
-					<button type="button" class="btn btn-primary btn-block mt-3" id="loginSubmit" onclick="return loginUser()">Login</button>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true" data-backdrop="static">
-	<div class="modal-dialog modal-dialog-centered modal-md" role="document">
-		<div class="modal-content shadow">
-			<div class="modal-header bg-dark text-white">
-				<h5 class="modal-title" id="forgotPasswordModalLabel">Password Reset</h5>
-				<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="$('#forgotPasswordModal').modal('hide')"><span aria-hidden="true">&times;</span></button>
-			</div>
-			<div class="modal-body p-4">
-				<div class="alert alert-danger d-none" id="validationAlertPassReset"><strong>Error!</strong> Wrong email or password.</div>
-				<form id="portfolioPassResetForm">
-					{% csrf_token %}
-					<div class="form-group">
-						<label for="userMailPassReset"><strong>Email</strong></label>
-						<input type="email" class="form-control" id="userMailPassReset" name="userMail" placeholder="Enter Email *" autocomplete="off" onkeyup="getValidateInputField($.trim($('#userMailPassReset').val()), 'userMailPassReset', '')" required>
-						<small id="alert-userMailPassReset" class="form-text text-danger d-none"><i class="fa fa-warning"></i> Not a valid email ID</small>
-					</div>
-					<button type="button" class="btn btn-primary btn-block mt-3" id="passwordResetLinkRequest" onclick="return sendPasswordResetLink()">Submit</button>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
 </body>
 </html>
