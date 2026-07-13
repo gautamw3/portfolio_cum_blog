@@ -120,9 +120,9 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-lg-7 mb-4 mb-lg-0">
-          <span class="pill">● Premium Portfolio Template · 2026 Edition</span>
+          <span class="pill">● Engineering Reliable Software . Scaling Intelligent Systems</span>
           <h1>Designing elite digital products that perform.</h1>
-          <p>{{ headline }}</p>
+          <p>{{ profile_short_description }}</p>
 
           <div class="hero-ctas mt-4 d-flex flex-wrap" style="gap:12px">
             <a href="{% url 'user_portfolio' %}" class="btn btn-brand">Explore Portfolio</a>
@@ -181,8 +181,8 @@
         <div class="col-lg-8 mb-4 mb-lg-0">
           <div class="glass p-4 h-100">
             <h3 style="font-weight:800;">About Me</h3>
-            <div style="color:#334155;">{{ about|safe }}</div>
-            <a href="{% if request.user.is_authenticated %}{% url 'user_profile_details' request.user.id %}{% else %}{% url 'user_profile_details' 1 %}{% endif %}" class="btn btn-brand mt-3">View Full Profile</a>
+            <div style="color:#334155;">{{ about|truncatechars:999|safe }}</div>
+            <a href="{% url 'about_me' %}" class="btn btn-brand mt-3">Read More</a>
           </div>
         </div>
         <div class="col-lg-4">

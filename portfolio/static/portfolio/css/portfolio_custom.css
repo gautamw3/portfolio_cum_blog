@@ -585,11 +585,22 @@ a:hover {
   border: 1px solid rgba(148, 163, 184, 0.36);
 }
 
-.about-home-social-rail {
-  width: 100%;
+.about-home-photo-cta {
   margin-top: 0.9rem;
   padding-top: 0.9rem;
   border-top: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.about-home-photo-cta .btn {
+  width: 100%;
+  padding: 0.68rem 1rem;
+  font-size: 0.93rem;
+  border-radius: 8px;
+}
+
+.about-home-social-rail {
+  width: 100%;
+  margin-top: 0.9rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -752,6 +763,17 @@ a:hover {
   height: 220px;
   object-fit: cover;
   border-radius: 12px;
+}
+
+.profile-home-photo-cta {
+  margin-top: 0.7rem;
+}
+
+.profile-home-photo-cta .btn {
+  width: 100%;
+  padding: 0.62rem 0.9rem;
+  font-size: 0.86rem;
+  border-radius: 8px;
 }
 
 .profile-home-role {
