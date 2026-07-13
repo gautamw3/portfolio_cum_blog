@@ -61,7 +61,7 @@
 					<div class="about-text mb-4">
 						{{ about|safe }}
 					</div>
-					<a href="{% if request.user.is_authenticated %}{% url 'user_profile_details' request.user.id %}{% else %}{% url 'user_profile_details' 1 %}{% endif %}" class="btn btn-primary">
+					<a href="{% url 'user_profile_details' %}" class="btn btn-primary">
 						More Info
 					</a>
 				</div>
